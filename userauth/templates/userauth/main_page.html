@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Django Blog</title>
+</head>
+<body>
+<h1>Welcome to Django Blog</h1>
+{% if user.username %}
+	<p>Welcome {{ user.username }}! Here you can store and share blog</p>
+{% else %}
+	<p>Welcome anonymous user! You need to <a href="userauth/user_login/">Login</a>before you can store and share blog</p>
+{% endif %}
+</body>
+</html>

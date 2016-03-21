@@ -1,11 +1,17 @@
+
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
-class registration(models.Model):
-	uname=models.CharField(max_length=200)
-	email=models.CharField(max_length=200)
-	pwd=models.CharField(max_length=200)
-	cfmpwd=models.CharField(max_length=200)
+
+class UserRegistration(models.Model):
+	user = models.OneToOneField(User)
+	birthday = models.DateField()
+	name = models.CharField(max_length=100)
 
 	def __unicode__(self):
-		return self.uname
+		return self.name
+
+
+
+

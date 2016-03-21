@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block body %}
+<div>
+    <h1 align="center">User Registrations Form</h1>
+	<form method="post" action="">{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Sign Up"></input>
+	</form>
+	<p><a href="userauth/user_logout/">Logout</a></p>
+</div>
+{% endblock %}
