@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block body %}
+
+<div>
+    <h1 align="center">Category Form</h1>
+	<form method="post" action="">{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Add Category"></input>
+	</form>
+</div>
+
+<div>
+   <h1>My New Category</h1>
+
+   {% for category in category_list %}
+   {{ category }}
+   <hr />
+   {% endfor %}
+</div>
+
+{% endblock %}

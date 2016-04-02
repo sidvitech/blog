@@ -1,0 +1,18 @@
+from __future__ import unicode_literals
+
+from django.db import models
+from django.contrib.auth.models import User
+from userblog.models import Blog
+
+# Create your models here.
+
+class Post(models.Model):
+	blog_name = models.ForeignKey(Blog)
+	title = models.CharField(max_length=100)
+   	date_created = models.DateField()
+	tag = models.CharField(max_length=200)
+	body = models.TextField()
+
+
+	def __unicode__(self):
+		return self.title
