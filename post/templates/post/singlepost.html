@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load body %}
+
+{% block title %}
+  {{ main_title }}: {{ post.title }}
+{% endblock %}
+
+{% block header1 %}
+  <a href="/blog/">{{ main_title }}</a>
+{% endblock %}
+
+{% block main %}
+  <h3>{{ post.title }}</h3>
+  {{ post.body }}
+  <hr>
+  <div class="post_footer">
+    {% ifnotequal post.date_modified.date post.date_created.date %}
+      Last modified: {{ post.date_modified.date }}<br>
+    {% endifnotequal %}
+    Date created: {{ post.date_created.date }}<br>
+    Tags: 
+    {% for tag in post.get_tag_list %}
+      <a href="/blog/tag/{{ tag }}/">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+  </div>
+  <br>
+  {% get_free_comment_list for myblogapp.post post.id as comment_list %}
+  {% get_free_comment_count for myblogapp.post post.id as comment_count %}
+  {% if comment_list %}
+    <h4>{{ comment_count }} Comment{{ comment_count|pluralize}}</h4>
+  {% endif %}
+  {% for comment in comment_list %}
+    <a href="#c{{ comment.id }}">#{{ forloop.counter }}</a>
+    <b>{{ comment.person_name|escape }}</b> commented, 
+      on {{ comment.submit_date|date:"F j, Y" }} at {{ comment.submit_date|date:"P" }}:
+    {{ comment.comment|escape|urlizetrunc:40|linebreaks }}
+  {% endfor %}
+  <br>
+  <h4>Post a comment</h4>
+  {% free_comment_form for myblogapp.post post.id %}
+
+{% endblock %}

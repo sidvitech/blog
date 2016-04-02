@@ -7,7 +7,7 @@ class BlogForm(forms.ModelForm):
 	
 	class Meta:
 		model = Blog
-		fields = ['blog_name', 'developer_name', 'category']
+		fields = ['category', 'blog_name', 'developer_name']
 		widgets = {
 			'blog_name': forms.TextInput(attrs={ 'required': 'required' }),
 		}

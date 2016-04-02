@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% load body %}
+
+{% block title %}
+  {{ main_title }}
+  {% if subtitle %}:{% endif %}
+  {{ subtitle }}
+{% endblock %}
+
+{% block header1 %}
+  {% if subtitle %}
+    <a href="/blog/">{{ main_title }}</a>
+  {% else %}
+    {{ main_title }}
+  {% endif %}
+{% endblock %}
+
+{% block header2 %}
+  {{ subtitle }}
+{% endblock %}
+
+{% block main %}
+  {% for post in post_list %}
+    <h3><a href="/blog/{{ post.date_created|date:"Y/m" }}/{{ post.slug }}/">
+        {{ post.title }}</a>
+    </h3>
+    {{ post.body }}
+    <hr>
+    <div class="post_footer">
+      {% ifnotequal post.date_modified.date post.date_created.date %}
+        Last modified: {{ post.date_modified.date }}<br>
+      {% endifnotequal %}
+      Date created: {{ post.date_created.date }}<br>
+      Tags: 
+      {% for tag in post.get_tag_list %}
+        <a href="/blog/tag/{{ tag }}/">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+      <br>
+      {% get_free_comment_count for myblogapp.post post.id as comment_count %}
+      <a href="{{ post.get_absolute_url }}">{{ comment_count }} Comment{{ comment_count|pluralize}}</a>
+    </div>
+    <br>
+  {% endfor %}
+{% endblock %}
