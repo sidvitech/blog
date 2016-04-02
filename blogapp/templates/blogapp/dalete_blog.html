@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Delete blog</title>
+	<h1>Delete blog</h1>
+</head>
+<script type='text/javascript'>
+	$('input[type="text"]').addClass('form-control');
+	$('textarea').addClass('form-control');
+</script>
+<body>
+	<form action="" method="post">
+	<h4 style="color:Green;">List of Blogs </h4>
+	<ul>
+		{% if blogs %}
+			{% for blog in blogs %}
+			<li>{{blog}}</li>
+            {% endfor %}
+        {% else %}
+            <div class='alert alert-warning'>No blogs yet!</div>
+        {% endif %}
+    </ul>
+    	<br/>
+    	<br/>
+    	<h4 style="color:Green;">Enter blog Name Which u want to delete</h4>
+		{% csrf_token %}
+		
+		{{form.as_p}}
+
+		<input type='submit' value='Delete blog' class='btn btn-primary btn-lg btn-block'/>
+	</form>
+</body>
+</html>

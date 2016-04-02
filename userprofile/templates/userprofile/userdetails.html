@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add deatils</title>
+	<h1>Add User Profile</h1>
+</head>
+<script type='text/javascript'>
+	$('input[type="text"]').addClass('form-control');
+	$('textarea').addClass('form-control');
+</script>
+<body>
+	<form action="" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{user_form.as_p}}
+		{{users_form.as_p}}
+		<input type='submit' value='Save' class='btn btn-primary btn-lg btn-block'/>
+		<!-- <input name="control" value="reset"/>
+		<input type='submit' value='Reset' class='btn btn-primary btn-lg btn-block'/> -->
+	</form>
+</body>
+</html>

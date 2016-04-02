@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add Comment</title>
+	<h1>Add Comment</h1>
+</head>
+<script type='text/javascript'>
+	$('input[type="text"]').addClass('form-control');
+	$('textarea').addClass('form-control');
+</script>
+<body>
+	<form action="" method="post" >
+		{% csrf_token %}
+		
+		{{form.as_p}}
+
+		<input type='submit' value='Add Comment' class='btn btn-primary btn-lg btn-block'/>
+	</form>
+</body>
+</html>

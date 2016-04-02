@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>create post</title>
+	<h1>create post</h1>
+</head>
+<script type='text/javascript'>
+	$('input[type="text"]').addClass('form-control');
+	$('textarea').addClass('form-control');
+</script>
+<body>
+	<form action="" method="post" enctype="multipart/form-data">
+		{% if posts %}
+			{% for post in posts %}
+			<h3>{{post.postname}}</h3>
+			{{post.blogname}}
+			<br/>
+			{{post.text}}
+			<br/>
+			{{post.visibility}}
+			{% endfor %}
+		{% endif %}	
+
+		{% for post in post_list %}
+		{{post}}
+		<br/>
+		{% endfor %}
+		<hr/>
+		{% csrf_token %}
+		
+		{{form.as_p}}
+
+		<input type='submit' value='create post' class='btn btn-primary btn-lg btn-block'/>
+	</form>
+</body>
+</html>
