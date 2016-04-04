@@ -20,6 +20,8 @@
     <![endif]-->
   </head>
   <body>
+  {% load staticfiles %}
+
   <div class="container">
   <ul class="nav nav-tabs">
     <li class="active"><a href="/">Home</a></li>
@@ -32,7 +34,8 @@
   </ul>
 
 </div>
-  
+
+
 
   <div id="doc" class="yui-t4">
     <div id="hd">
@@ -40,6 +43,16 @@
     </div>
 
     {% block body %}
+    <div class="row" style="padding-top: 30px;">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="panel panel-info">
+      <div class="panel-heading">Create New Note!</div>
+      <div class="panel-body">
+
+      </div>
+      </div>
+      </div>
+    </div>
   
   {% endblock body %}
   

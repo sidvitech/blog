@@ -2,10 +2,42 @@
 {% load staticfiles %}
 
 {% block body %}
+
+<div class="row" style="padding-top: 30px;">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="panel panel-info">
+      <div class="panel-heading">Create New Note!</div>
+      <div class="panel-body">
+
+      </div>
+      </div>
+      </div>
+    </div>
+
+  <div class="container">
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="/">Home</a></li>
+    <li><a href="{% url 'category:category' %}">Category</a></li>
+    <li><a href="{% url 'userblog:blog' %}">Blog</a></li>
+    <li><a href="{% url 'userauth:user_login' %}">Login</a></li>
+    <li><a href="{% url 'userauth:user_registration' %}">Registration</a></li>
+    <li><a href="{% url 'post:frontpage' %}">Post</a></li>
+
+  </ul>
+
+</div>
+  
+
+  <div id="doc" class="yui-t4">
+    <div id="hd">
+      <h1>Blog Site {{ VERSION }}</h1>
+    </div>
+
+
+
   <div class="container">
   <nav class="navbar navbar-inverse" role="navigation">
   <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
         <span class="sr-only">Toggle navigation</span>
@@ -16,7 +48,6 @@
       <a class="navbar-brand" href="/restricted/">Restricted Page</a>
     </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="active"><a href="/about/">About</a></li>
@@ -43,17 +74,16 @@
           </ul>
         </li>
       </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+    </div>
+  </div>
 </nav>
 </div>
 
-    <div class="container">
-  {% block content %}{% endblock content %}
+{% endblock %}
+
   </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="{% static 'js/jquery.js' %}"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static "js/rango-jquery.js" %}"></script>
-{% endblock %}

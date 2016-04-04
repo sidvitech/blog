@@ -6,10 +6,9 @@
 <div>
     <h1 align="center">Post Form</h1>
 	<form method="post" action="">{% csrf_token %}
-		{{ form.as_p }}
+		{{ user_form.as_p }}
 		<input type="submit" value="Add Post"></input>
-<!--         <li><a href="{% url 'post:frontview' %}">Post List</a></li>
- -->        <li><a href="{% url 'post:commentview' %}">Comment Post</a></li>
+        <li><a href="{% url 'post:commentview' %}">Comment List</a></li>
 
 	</form>
 </div>

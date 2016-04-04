@@ -45,6 +45,11 @@ INSTALLED_APPS = [
     'post',
 ]
 
+COMMENTS_APP = "django_comments_xtd"
+COMMENTS_XTD_MODEL = 'post.models.MyComment'
+COMMENTS_XTD_FORM_CLASS = 'post.forms.MyCommentForm'
+
+
 EMAIL_HOST = 'stmp.gmail.com'
 EMAIL_HOST_USER = 'kihyuck.hong@gmail.com'
 EMAIL_HOST_PASSWORD = 'Password'
@@ -131,7 +136,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/var/www/souldeux/static'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
     )

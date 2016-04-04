@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block body %}
+<form method="{% if edit %}POST{% else %}GET{% endif %}" 
+      action="{% url 'user_detail' object.pk %}">
+  
+  <button type="submit">
+    {% if edit %}SAVE{% else %}EDIT{% endif %}
+  </button>
+  
+  {% if edit %}
+    <a class="cancel" href="{% url 'user_detail' object.pk %}">
+      CANCEL
+    </a>
+    {% csrf_token %}
+  {% else %}
+    <input name="edit" type="hidden" value="1">
+  {% endif %}
+  
+  <table>
+    {% for field in form %}
+    <tr>
+      <th>{{ field.label }}</th>
+      <td>
+        {% if edit %}
+          {{ field.errors }}{{ field }}
+        {% else %}
+          {{ field.value }}
+        {% endif %}
+      </td>
+      {% if edit %}
+      <td>{{ field.help_text }}</td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </table>
+  
+</form>
+
+{% endblock %}

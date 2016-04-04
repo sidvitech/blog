@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.db import models
 from django.contrib.auth.models import User
 from userblog.models import Blog
@@ -16,5 +14,13 @@ class Post(models.Model):
 	def get_absolute_url(self):
 		return "/blog/%d%02d%s/" % (self.date_created.month)
 		
+	def __unicode__(self):
+		return self.title
+
+
+class MyComment(models.Model):
+	post_name = models.ForeignKey(Post, on_delete=models.CASCADE)
+	title = models.CharField(max_length=250)
+
 	def __unicode__(self):
 		return self.title

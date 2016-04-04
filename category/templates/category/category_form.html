@@ -9,16 +9,8 @@
 	<form method="post" action="">{% csrf_token %}
 		{{ form.as_p }}
 		<input type="submit" value="Add Category"></input>
-	</form>
-</div>
-
-<div>
-   <h1>My New Category</h1>
-
-   {% for category in category_list %}
-   {{ category }}
-   <hr />
-   {% endfor %}
+    <li><a href="{% url 'category:category_delete' %}">Delete Category</a></li>
+</form>
 </div>
 
 {% endblock %}
