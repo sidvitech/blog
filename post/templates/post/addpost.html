@@ -12,19 +12,22 @@
 	<form action="" method="post" enctype="multipart/form-data">
 		{% if posts %}
 			{% for post in posts %}
-			<h3>{{post.postname}}</h3>
-			{{post.blogname}}
-			<br/>
+			<h3 style="color:orange;">{{post.postname}}</h3>
+			<h4 style="color:green;">{{post.blogname}}</h5>
 			{{post.text}}
 			<br/>
-			{{post.visibility}}
+			{% if post.picture %}
+				<img src='{{ post.picture.url }}'/><!-- height="200" width="200" border="1"/>-->
+			{% endif %}	
+			<br/>
+			<h4 style="color:green;">{{post.visibility}}</h5>
 			{% endfor %}
 		{% endif %}	
 
-		{% for post in post_list %}
+		<!-- {% for post in post_list %}
 		{{post}}
 		<br/>
-		{% endfor %}
+		{% endfor %} -->
 		<hr/>
 		{% csrf_token %}
 		

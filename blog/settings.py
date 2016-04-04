@@ -88,7 +88,8 @@ DATABASES = {
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
-MEDIA_ROOT = '/home/avhaleraj/akshata/blog/blog/media/'
+MEDIA_ROOT = '/home/avhaleraj/d/blog/blog/blog/media/'
+# MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_cdn")
 MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR),"media_cdn")
 LANGUAGE_CODE = 'en-us'
@@ -111,3 +112,4 @@ STATIC_ROOT = '/var/www/souldeux/static'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
     )
+ 

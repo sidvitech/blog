@@ -111,6 +111,8 @@ def edit_profile(request):
 def update_pic(request):
 	user = request.user
 	profile = user.userprofile
+	print user
+	print profile
 	print '1'
 	if request.method == "POST":
 		user_form = UpdatepicForm(data = request.POST,instance = profile)

@@ -15,11 +15,17 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^userprofile/', include('userprofile.urls')),
     url(r'^category/',include('category.urls')),
     url(r'^blogapp/',include('blogapp.urls')),
-    url(r'^post/',include('post.urls')),
+    url(r'^post/',include('post.urls', namespace ='post')),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)        
