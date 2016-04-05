@@ -2,7 +2,13 @@
 {% load staticfiles %}
 
 {% block body %}
-
+<form method="post" action="">{% csrf_token %}
+{% if data %}
+<button type="submit">Unlike</button>{{ like_count }}
+{% else %}
+<button type="submit">Like</button>{{ like_count }}
+{% endif %}
+</form>
 <div>
    <h1>My New Post</h1>
 

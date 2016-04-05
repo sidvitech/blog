@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash, views
 from django.contrib import messages
 from django.contrib.auth.models import User
+from userauth.models import UserRegistration
 
 # Create your views here.
 
@@ -20,7 +21,7 @@ def user_registration(request):
 	else:
 		user_form = UserRegistrationForm()
 
-	return render(request, "userauth/user_registration_form.html", { 'form': user_form })
+	return render(request, "userauth/user_registration_form.html", { 'form': user_form})
 
 def user_login(request):
 	if not request.user.is_authenticated():
@@ -78,6 +79,12 @@ def user_reset_password(request):
 	else:
 		user_form = UserPasswordResetForm()
 	return render(request, "userauth/password_reset_confirm.html", {'form': user_form})
+
+def image(request): 
+	image = UserRegistration.objects.all().order_by("name")
+	context={'image': image}
+	return render_to_response('userauth/image.html',context, )
+
 
 # def password_change(request):
 # 	if request.method == 'POST':

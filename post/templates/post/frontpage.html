@@ -9,8 +9,12 @@
 		{{ form.as_p }}
 		<input type="submit" value="Add Post"></input>
 <!--         <li><a href="{% url 'post:frontview' %}">Post List</a></li>
- -->        <li><a href="{% url 'post:commentview' %}">Comment Post</a></li>
+ -->        <li><a href="{% url 'post:mycomment'%}">Comment Post</a></li>
 
+	</form>
+	<form method="GET" action=''>
+		<input type="text" name="q" placeholder="Search" />
+		<input type="submit" value="Search" />
 	</form>
 </div>
 

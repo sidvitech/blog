@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 
 class UserRegistrationForm(forms.ModelForm):
+	image = forms.FileField(label=(u'Image'))
 	password1 = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={'requied': 'required'}))
 	password2 = forms.CharField(label="Confirm Password", widget=forms.PasswordInput(attrs={'required': 'required'}))
 

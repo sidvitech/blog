@@ -7,7 +7,7 @@ class PostForm(forms.ModelForm):
 	
 	class Meta:
 		model = Post
-		fields = ['blog_name','title', 'date_created', 'tag', 'body']
+		fields = ['blog_name','image','title', 'date_created', 'tag', 'body']
 		widgets = {
 			'title': forms.TextInput(attrs={ 'required': 'required' }),
 		}

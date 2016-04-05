@@ -6,6 +6,7 @@ from userblog.models import Blog
 
 class Post(models.Model):
 	blog_name = models.ForeignKey(Blog)
+	image = models.FileField(upload_to="images/",blank=True,null=True)
 	title = models.CharField(max_length=100)
    	date_created = models.DateField()
 	tag = models.CharField(max_length=200)
@@ -24,3 +25,11 @@ class MyComment(models.Model):
 
 	def __unicode__(self):
 		return self.title
+
+class Like(models.Model):
+	user = models.OneToOneField(User)
+	like = models.BooleanField(default=False)
+
+	def __unicode__(self):
+		return self.user.username
+
