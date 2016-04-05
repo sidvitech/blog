@@ -3,9 +3,9 @@ from blogapp.models import Blogapp
 from django.contrib.auth.models import User
 # Create your models here.
 class PostAdd(models.Model):
-	username = models.ForeignKey(User)
+	user = models.ForeignKey(User)
 	blogname=models.ForeignKey(Blogapp)
-	postname = models.CharField(max_length = 200) 
+	postname = models.CharField(max_length = 200,unique =True) 
 	# choice = models.CharField(max_length =200)
 	text = models.TextField()
 	picture = models.FileField(null=True, blank=True)	
@@ -15,6 +15,7 @@ class PostAdd(models.Model):
 		return self.postname
 
 class CommentAdd(models.Model):
+	# serializer_class = CommentSerializer
 	postname = models.ForeignKey(PostAdd)
 	comment = models.TextField()
 

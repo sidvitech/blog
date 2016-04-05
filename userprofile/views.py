@@ -123,6 +123,7 @@ def update_pic(request):
 			print '3'
 			try:
 				u = User.objects.get(username=username)
+				print u
 			except:
 				return HttpResponse('username not found....')
 

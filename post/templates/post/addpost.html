@@ -10,19 +10,6 @@
 </script>
 <body>
 	<form action="" method="post" enctype="multipart/form-data">
-		{% if posts %}
-			{% for post in posts %}
-			<h3 style="color:orange;">{{post.postname}}</h3>
-			<h4 style="color:green;">{{post.blogname}}</h5>
-			{{post.text}}
-			<br/>
-			{% if post.picture %}
-				<img src='{{ post.picture.url }}'/><!-- height="200" width="200" border="1"/>-->
-			{% endif %}	
-			<br/>
-			<h4 style="color:green;">{{post.visibility}}</h5>
-			{% endfor %}
-		{% endif %}	
 
 		<!-- {% for post in post_list %}
 		{{post}}

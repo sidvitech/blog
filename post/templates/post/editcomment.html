@@ -2,18 +2,19 @@
 <html>
 <head>
 	<title>Edit Comment</title>
-	<h1 style="color:blue;">Edit Comment</h1>
-	<hr/>
+	<h1>Edit Comment</h1>
 </head>
 <script type='text/javascript'>
 	$('input[type="text"]').addClass('form-control');
 	$('textarea').addClass('form-control');
 </script>
 <body>
-	<!-- <form action="" method="post" >
+	<form action="" method="post" >
+		{% csrf_token %}
 		
-	
+		{{user_form.as_p}}
 
-	</form> -->
+		<input type='submit' value='Edit Comment' class='btn btn-primary btn-lg btn-block'/>
+	</form>
 </body>
 </html>

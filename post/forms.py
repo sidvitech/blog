@@ -23,10 +23,23 @@ class PostAddForm(ModelForm):
 	choice = forms.ChoiceField(choices = choicess)
 	class Meta:
 		model = PostAdd
-		fields = ('username','blogname','postname','text','visibility','picture')
+		fields = ('user','blogname','postname','text','visibility','picture')
 
 class CommentAddForm(ModelForm):
 	class Meta:
 		model = CommentAdd
 		fields = ('postname','comment')
-		
+
+class CommentEditForm(ModelForm):
+	class Meta:
+		model = CommentAdd
+		fields = ('comment',)
+		# exclude = ('postname',)		
+
+def clean_comment(self):
+			comment = self.cleaned_data['comment']
+			try:
+					CommentAdd.objects.get(name = comment)
+			except CommentAdd.DoesNotExist:
+					return comment
+			raise forms.ValidationError("Enter new comment")		
