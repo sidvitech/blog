@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -45,19 +45,48 @@ def comment_view(request):
 
 def comment_edit(request):
 	queryset = CommentAdd.objects.all()
+	# comment1= str(queryset.comment)
+	id = request.GET.get('id',None)
+	print id
+	if id is not  None:
+		userid = get_object_or_404(CommentAdd,id=id)
+	else:
+		userid = None	
+
 	if request.method == "POST":
 		user_form = CommentEditForm(data = request.POST)
 		if user_form.is_valid():
+			postname = user_form.cleaned_data['postname']
+			print postname
 			comment = user_form.cleaned_data['comment']
-			CommentAdd.objects.filter(id=2).update(
+			CommentAdd.objects.filter(postname=postname).update(
 				comment=comment,
 			)
 			return HttpResponseRedirect('/post/commentview/')
 		else:
-			print form.errors
+			print user_form.errors
 		
 	else:
 		user_form=CommentEditForm()			
 	return render(request,'post/editcomment.html',{'user_form':user_form})	
-	# return HttpResponse("post app")		
+		
 
+def comment_ed(request):
+	user = request.user
+	profile = user.userprofile
+	if request.method == "POST":
+		user_form = CommentEditForm(data = request.POST,instance = profile)
+		if user_form.is_valid():
+			# postname = user_form.cleaned_data['postname']
+			# comment = user_form.cleaned_data['comment']
+			# try:
+
+				u = CommentAdd.objects.get(user=request.user)
+				u=user_form.save(commit = False)
+				u.save()
+			# except:
+			# 	return HttpResponse('postname not found')
+				print u
+	else:
+		user_form = CommentEditForm(instance = profile)
+	return render(request,'post/editcomment.html',{'user_form':user_form})		

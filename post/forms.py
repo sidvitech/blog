@@ -31,15 +31,15 @@ class CommentAddForm(ModelForm):
 		fields = ('postname','comment')
 
 class CommentEditForm(ModelForm):
+	# username = forms.CharField(label=(u'User Name of Post'))
+	# postname = forms.CharField(label=(u'Post name'))
 	class Meta:
 		model = CommentAdd
-		fields = ('comment',)
+		fields = ('postname','comment')
 		# exclude = ('postname',)		
 
 def clean_comment(self):
 			comment = self.cleaned_data['comment']
-			try:
-					CommentAdd.objects.get(name = comment)
-			except CommentAdd.DoesNotExist:
-					return comment
-			raise forms.ValidationError("Enter new comment")		
+					
+def clean_postname(self):
+			postname = self.cleaned_data['postname']			

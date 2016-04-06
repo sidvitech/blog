@@ -117,27 +117,27 @@ def update_pic(request):
 	if request.method == "POST":
 		user_form = UpdatepicForm(data = request.POST,instance = profile)
 		print '2'
-		if user_form.is_valid():
-			username = user_form.cleaned_data['username']
-			picture = user_form.cleaned_data['picture']
-			print '3'
-			try:
-				u = User.objects.get(username=username)
-				print u
-			except:
-				return HttpResponse('username not found....')
+		# if user_form.is_valid():
+		# 	username = user_form.cleaned_data['username']
+		# 	picture = user_form.cleaned_data['picture']
+		# 	print '3'
+		# 	try:
+		# 		u = User.objects.get(username=username)
+		# 		print u
+		# 	except:
+		# 		return HttpResponse('username not found....')
 
-			print '4'	
-			p = user_form.save(commit = False)
-			print '5'
-			if 'picture' in request.FILES:
-			 	p.picture=request.FILES['picture']
+		# 	print '4'	
+		# 	p = user_form.save(commit = False)
+		# 	print '5'
+		# 	if 'picture' in request.FILES:
+		# 	 	p.picture=request.FILES['picture']
 
-				p.save()	
-				print '6'
-			else:
-				print user_form.errors
-				print '7'	
+		# 		p.save()	
+		# 		print '6'
+		# 	else:
+		# 		print user_form.errors
+		# 		print '7'	
 	else:
 		user_form=UpdatepicForm(instance = profile)			
 	return render(request,'userprofile/update_pic.html',{'user_form':user_form})			
