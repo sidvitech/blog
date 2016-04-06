@@ -6,12 +6,12 @@ from django.contrib.auth.models import User
 
 class UserRegistration(models.Model):
 	user = models.OneToOneField(User)
-	image = models.FileField(upload_to="images/",blank=True,null=True)
 	birthday = models.DateField()
 	name = models.CharField(max_length=100)
+	view = models.BooleanField(default=False)
 
 	def __unicode__(self):
-		return self.name
+		return self.user.username
 
 class View(models.Model):
 	user = models.OneToOneField(User)

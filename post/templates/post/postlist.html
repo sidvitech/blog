@@ -4,8 +4,10 @@
 {% block body %}
 <form method="post" action="">{% csrf_token %}
 {% if data %}
+<input type="hidden" name="unlike" value="True"></input>
 <button type="submit">Unlike</button>{{ like_count }}
 {% else %}
+<input type="hidden" name="like" value="True"></input>
 <button type="submit">Like</button>{{ like_count }}
 {% endif %}
 </form>
@@ -18,4 +20,4 @@
    {% endfor %}
 </div>
 
-{% endblock %}
+{% endblock body%}

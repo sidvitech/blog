@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 
 
 # Create your models here.
-# 	DEFAULT_COUNTRY_ID = id # id of Israel
 class Category(models.Model):
 	user_register_name = models.ForeignKey(User)
 	name = models.CharField(max_length=100)

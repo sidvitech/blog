@@ -10,6 +10,17 @@ from userauth.models import UserRegistration
 
 
 def user_registration(request):
+	data = False
+	view_count = UserRegistration.objects.filter(user=True).count()
+	if request.user.is_authenticated():
+		try:
+			obj, condition = UserRegistration.objects.get_or_create(user=request.user)
+			print user
+			data = obj.view
+		except:
+			pass
+			
+
 	if request.method == "POST":
 		user_form = UserRegistrationForm(request.POST)
 		if user_form.is_valid():
@@ -21,9 +32,9 @@ def user_registration(request):
 	else:
 		user_form = UserRegistrationForm()
 
-	return render(request, "userauth/user_registration_form.html", { 'form': user_form})
+	return render(request, "userauth/user_registration_form.html", { 'form': user_form, 'view_count': view_count})
 
-def user_login(request):
+def user_login(request):			
 	if not request.user.is_authenticated():
 
 		if request.method == "POST":

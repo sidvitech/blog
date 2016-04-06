@@ -26,11 +26,11 @@
 
 <div>
 <form action="" method="post">
-{% csrf_token %}
-{% if form.errors %}
-    <p>Please correct the following fields:</p>
-{% endif %}
-<div class="register_div">
+        {% csrf_token %}
+        {% if form.errors %}
+        <p>Please correct the following fields:</p>
+        {% endif %}
+    <div class="register_div">
         {% if form.username.errors %}
 
         <p class="error">
@@ -40,9 +40,9 @@
         <p><label for="username"{% if form.username.errors %} class="error"{% endif %}>Username:
         </label></p>
         <p>{{ form.username }}</p>
-</div>
+    </div>
 
-<div class="register_div">
+    <div class="register_div">
         {% if form.password.errors %}
 
         <p class="error">
@@ -52,12 +52,12 @@
         
         <p><label for="password"{% if form.password.errors %} class="error"{% endif %}>Password:</label></p>
         <p>{{ form.password }}</p>
-</div>
-    <ul>
-        <li><input type="submit" value="Login" /></li>{{ like_count }}
-        <li><a href="{% url 'userauth:user_logout' %}">Logout</a></li>
-        <li>Forgot your password? <a href="/userauth/user_reset_password/">Reset it!</a></li>
-    </ul>
+    </div>
+        <ul>
+            <li><input type="submit" value="Login" /></li>{{ view_count }}
+            <li><a href="{% url 'userauth:user_logout' %}">Logout</a></li>
+            <li>Forgot your password? <a href="/userauth/user_reset_password/">Reset it!</a></li>
+        </ul>
 </form>
 </div>
 {% endblock %}

@@ -11,6 +11,7 @@ class Post(models.Model):
    	date_created = models.DateField()
 	tag = models.CharField(max_length=200)
 	body = models.TextField()
+	like = models.BooleanField(default=False)
 
 	def get_absolute_url(self):
 		return "/blog/%d%02d%s/" % (self.date_created.month)

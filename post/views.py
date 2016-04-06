@@ -9,14 +9,17 @@ from .forms import PostForm, MyCommentForm
 
 def frontpage(request):
 	if request.method == "POST":
-		form = PostForm(request.POST)
+		form = PostForm(request.POST, request.FILES)
 		if form.is_valid():
+			print request.FILES
 			form.save()
 
 	else:
 		form = PostForm()
 
-	return render(request, "post/frontpage.html", { 'form': form })
+	post = Post.objects.all()
+	post_list =  [post for post in post]
+	return render(request, "post/frontpage.html", { 'form': form, 'post_list': post_list })
 
 def frontview(request):
 	post = Post.objects.all()
@@ -45,15 +48,23 @@ def commentview(request):
 			pass
 
 	if request.method == "POST":
+		unlike = request.POST.get('unlike')
+		like = request.POST.get('like')
 		if request.user.is_authenticated():
-			user, condition = Like.objects.get_or_create(user=request.user)
-			if condition:
+			if like:
+				user, condition = Like.objects.get_or_create(user=request.user)
 				user.like = True
 				user.save()
 				return HttpResponseRedirect('/post/commentview/')
+			if unlike:
+				like_obj = Like.objects.get(user=request.user)
+				like_obj.like = False
+				like_obj.save()
+				return HttpResponseRedirect('/post/commentview/')
 		else:
-			return HttpResponseRedirect('/userauth/user_login/')	
+			return HttpResponseRedirect('/userauth/user_login/')
+
 	post = MyComment.objects.all()
 	post_list =  [post for post in post]
-	print data
+
 	return render(request, "post/postlist.html", {'post_list': post_list, 'data': data, 'like_count':like_count })

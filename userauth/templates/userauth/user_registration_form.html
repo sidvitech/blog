@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+	{% extends "base.html" %}
 {% load staticfiles %}
 
 {% block body %}
@@ -10,7 +10,7 @@
 		<input type="submit" value="Sign Up"></input>
 	</form>
 	<p><a href="{% url 'userauth:user_login' %}">Login</a></p>
-
+	<h1>View Count</h1>{{ view_count }}
 </div>
 
 {% endblock %}

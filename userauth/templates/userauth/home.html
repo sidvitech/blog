@@ -5,12 +5,14 @@
 
 <div class="container">
   <h1>Welcome to Blog</h1>
+  
     {% if user.username %}
-      <p>Welcome {{ user.username }}! Here you can store and share blog</p>
+        <p>Welcome {{ user.username }}! Here you can store and share blog</p>
     {% else %}
-      <p>Welcome anonymous user! You need to <a href="{% url 'userauth:user_login' %}">Login</a>before you can store and share blog</p>
+        <p>Welcome anonymous user! You need to <a href="{% url 'userauth:user_login' %}">Login</a>before you can store and share blog</p>
     {% endif %}
-            <li><a href="{% url 'userauth:user_logout' %}">Logout</a></li>
+
+    <li><a href="{% url 'userauth:user_logout' %}">Logout</a></li>
 
 </div>
 

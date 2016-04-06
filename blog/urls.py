@@ -17,17 +17,16 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from userauth import views
-# from category import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^userauth/', include('userauth.urls', namespace="userauth")),
     url(r'^$', views.home, name='home'),
+    # url(r'^$', views.home, name='home'),
     url(r'^category/', include('category.urls', namespace="category")),
-    # url(r'^userblog/', include('userblog.urls', namespace="userblog")),
     url(r'^userblog/', include('userblog.urls', namespace="userblog")),
     url(r'^post/', include('post.urls', namespace="post")),
 
-    # url(r'^$', views.category, name='category'),
-
 ]
+
+

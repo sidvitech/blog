@@ -4,6 +4,7 @@ from category.models import Category
 
 # Register your models here.
 
+
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'user_name')
 

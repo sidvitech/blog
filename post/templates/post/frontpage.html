@@ -1,21 +1,36 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-{% block body %}
+ {% block content %}
+<div class="row">
+	<div  class="col-sm-4 bg-info ">
+	    <h1 align="center">Post Form</h1>
+		<form method="post" action="" enctype="multipart/form-data">{% csrf_token %}
+			{{ form.as_p }}
+			<input type="submit" value="Add Post"></input>
+	<!--         <li><a href="{% url 'post:frontview' %}">Post List</a></li>
+	 -->        <li><a href="{% url 'post:mycomment'%}">Comment Post</a></li>
 
+		</form>
+		<form method="GET" action=''>
+			<input type="text" name="q" placeholder="Search" />
+			<input type="submit" value="Search" />
+		</form>
+	</div>
 <div>
-    <h1 align="center">Post Form</h1>
-	<form method="post" action="">{% csrf_token %}
-		{{ form.as_p }}
-		<input type="submit" value="Add Post"></input>
-<!--         <li><a href="{% url 'post:frontview' %}">Post List</a></li>
- -->        <li><a href="{% url 'post:mycomment'%}">Comment Post</a></li>
+	<div  class="col-sm-4 bg-info" >
 
+	</div>
+	<div  class="col-sm-4 bg-info ">
+	   <h1>List Of All Post</h1>
+
+	   {% for post in post_list %}
+	   {{ post }}
+	   <hr />
+	   {% endfor %}
 	</form>
-	<form method="GET" action=''>
-		<input type="text" name="q" placeholder="Search" />
-		<input type="submit" value="Search" />
-	</form>
+
+</div>
 </div>
 
-{% endblock %}
+ {% endblock content %}
