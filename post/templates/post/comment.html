@@ -9,6 +9,7 @@
 		{{ user_form.as_p }}
 		<input type="submit" value="Add Post"></input>
         <li><a href="{% url 'post:commentview' %}">Comment List</a></li>
+        <li><a href="{% url 'post:comment_delete' %}">Delete Comment</a></li>
 
 	</form>
 </div>

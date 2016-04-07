@@ -6,6 +6,7 @@ frontpage,
 frontview,
 mycomment,
 commentview,
+comment_delete,
 )
 
 
@@ -14,6 +15,7 @@ urlpatterns = [
     url(r'^frontview/', frontview, name="frontview"),
     url(r'^mycomment/', mycomment, name="mycomment"),
     url(r'^commentview/', commentview, name="commentview"),
+    url(r'^comment_delete/', comment_delete, name="comment_delete"),
 
 
 ]

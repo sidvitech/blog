@@ -6,8 +6,6 @@ from django.contrib.auth.models import User
 
 class UserRegistration(models.Model):
 	user = models.OneToOneField(User)
-	birthday = models.DateField()
-	name = models.CharField(max_length=100)
 	view = models.BooleanField(default=False)
 
 	def __unicode__(self):

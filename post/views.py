@@ -2,7 +2,7 @@ from django.shortcuts import render
 from post.models import Post, MyComment, Like
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
-from .forms import PostForm, MyCommentForm
+from .forms import PostForm, MyCommentForm, UserDeleteComment
 # Create your views here.
 
 
@@ -31,6 +31,7 @@ def mycomment(request):
 		user_form = MyCommentForm(request.POST)
 		if user_form.is_valid():
 			user_form.save()
+			return HttpResponseRedirect('/post/mycomment/')
 
 	else:
 		user_form = MyCommentForm()
@@ -68,3 +69,25 @@ def commentview(request):
 	post_list =  [post for post in post]
 
 	return render(request, "post/postlist.html", {'post_list': post_list, 'data': data, 'like_count':like_count })
+
+def comment_delete(request):
+	if request.user.is_authenticated():
+		title = request.POST.get('title')
+		if request.method == "POST":
+			form = UserDeleteComment(request.POST)
+			if form.is_valid():
+				try:
+					n = MyComment.objects.get(title=title)
+					n.delete()
+					return HttpResponseRedirect('/post/comment_delete/')
+				except MyComment.DoesNotExist:
+					return HttpResponse("Category name not match. Plz check category name ")
+				# except Category.MultipleObjectsReturned:
+				# 	return HttpResponse("Category does not exist")
+
+		else:
+			form = UserDeleteComment()
+
+		post = MyComment.objects.all()
+		comment_list =  [post for post in post]
+	return render(request, "post/comment_delete.html", { 'form': form, 'comment_list': comment_list })

@@ -10,17 +10,8 @@ from userauth.models import UserRegistration
 
 
 def user_registration(request):
-	data = False
-	view_count = UserRegistration.objects.filter(user=True).count()
-	if request.user.is_authenticated():
-		try:
-			obj, condition = UserRegistration.objects.get_or_create(user=request.user)
-			print user
-			data = obj.view
-		except:
-			pass
-			
-
+	view_count = UserRegistration.objects.filter(view=True).count()
+	
 	if request.method == "POST":
 		user_form = UserRegistrationForm(request.POST)
 		if user_form.is_valid():
@@ -28,6 +19,10 @@ def user_registration(request):
 			password = user_form.cleaned_data["password1"]
 			user.set_password(password)
 			user.save()
+			us = UserRegistration(user=user)
+			us.view = True
+			us.save()
+			return HttpResponseRedirect('/userauth/user_registration/')
 
 	else:
 		user_form = UserRegistrationForm()

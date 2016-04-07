@@ -21,3 +21,11 @@ class MyCommentForm(forms.ModelForm):
 		widgets = {
 			'title': forms.TextInput(attrs={ 'required': 'required' }),
 		}
+
+class UserDeleteComment(forms.ModelForm):
+	class Meta:
+		model = MyComment
+		fields = ['title']
+		widgets = {
+			'title': forms.TextInput(attrs={ 'required': 'required' }),
+	}
