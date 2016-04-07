@@ -10,8 +10,43 @@ from userprofile.models import UserProfile
 def post_view(request):
 	posts = PostAdd.objects.all()
 	post_body_list = [post.text for post in posts]
-	# return HttpResponse("post app")
-	return render(request, 'post/viewpost.html', {'posts':posts, 'post_list':post_body_list})
+	comments = CommentAdd.objects.all()
+	if request.method == "POST":
+		print 1
+		form = 	CommentAddForm(request.POST)
+		print 2
+		if form.is_valid():
+			print 3
+			form.save(commit = False)
+			print 4
+		else:
+			print form.errors
+			print 4
+	else:
+		form = CommentAddForm()
+		print 5
+	# if posts != None:
+	# 	if comments != None:
+	# 		for post in posts:
+	# 			var =str(post.postname)
+	# 			p = PostAdd.objects.filter(postname=var)
+	# 			for comment in comments:
+	# 				var1=str(comment.postname)
+	# 				print var,var1
+	# 				if var == var1:
+	# 					print 1
+	# 					c = CommentAdd.objects.filter(postname=var1)
+	# 					print c
+	# 					return render(request, 'post/viewpost.html', {'p':p, 'c':c})
+	# 				else:
+	# 					print 2
+	# 					return render(request, 'post/viewpost.html', {'p':p})
+
+	# 	else:
+	# 		return render(request, 'post/viewpost.html', {'posts':posts})			
+
+	
+	return render(request, 'post/viewpost.html', {'form': form, 'posts':posts, 'post_list':post_body_list, 'comments':comments})
 
 def post_create(request):
 	if request.method == "POST":
@@ -59,6 +94,8 @@ def comment_edit(request):
 			postname = user_form.cleaned_data['postname']
 			print postname
 			comment = user_form.cleaned_data['comment']
+			c = CommentAdd.objects.filter(postname=postname)
+			print c
 			CommentAdd.objects.filter(postname=postname).update(
 				comment=comment,
 			)

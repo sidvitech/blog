@@ -15,6 +15,34 @@
 			
 			{% for post in posts %}
 			<ul>
+			<h2 style="color:orange;"><i>{{post.postname}}</i></h2>
+			<li><h4 style="color:green;"><u>Blog Title</u> : {{post.blogname}}</h4></li>
+			<li><h4 style="color:green;"><u>Tag </u>: {{post.text}}</h4></li>
+			<li><h4 style="color:green;"><u>Image</u> :
+			{% if post.picture %}
+				<img src="{{ post.picture.url }}" height="200" width="200" border="1"/>
+			{% endif %}	</h4></li>
+			<li><h4 style="color:green;"><u>Visibility </u>: {{post.visibility}}</h4></li>
+			<h3 style="color:orange;">Add comment on post</h3>
+			<!-- <li><a href="/post/commentcreate/">comment</a></li> -->
+			{% csrf_token %}
+		
+			{{form.as_p}}
+
+			<input type='submit' value='Comment' class='btn btn-primary btn-lg btn-block'/></li>
+			</ul>
+
+			<hr/>
+
+			{% endfor %}
+		{% endif %}
+
+
+
+		<!-- {% if p %}
+			
+			{% for post in p %}
+			<ul>
 			<h3 style="color:orange;"><i>{{post.postname}}</i></h3>
 			<li><h4 style="color:green;">{{post.blogname}}</h4></li>
 			<li><h4 style="color:green;">{{post.text}}</h4></li>
@@ -27,8 +55,18 @@
 			<hr/>
 
 			{% endfor %}
-		{% endif %}	
-	
+		{% endif %} -->
+		<h2>comments on post</h2>	
+		{% if comments %}
+			{% for comment in comments %}
+				<ul>
+				<li><h3 style="color:blue;"><i>{{comment.postname}}</i></h3></li>
+				<li><h4 style="color:blue;"><i>{{comment.comment}}</i></h4></li>
+				</ul>
+			{% endfor %}
+		{% endif %}		
+
+		
 	</form>
 </body>
 </html>
