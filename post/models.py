@@ -6,7 +6,7 @@ from userblog.models import Blog
 
 class Post(models.Model):
 	blog_name = models.ForeignKey(Blog)
-	image = models.FileField(upload_to="images/",blank=True,null=True)
+	image = models.ImageField(upload_to="images/",blank=True,null=True)
 	title = models.CharField(max_length=100)
    	date_created = models.DateField()
 	tag = models.CharField(max_length=200)
@@ -21,6 +21,7 @@ class Post(models.Model):
 
 
 class MyComment(models.Model):
+	user = models.ForeignKey(User)
 	post_name = models.ForeignKey(Post, on_delete=models.CASCADE)
 	title = models.CharField(max_length=250)
 

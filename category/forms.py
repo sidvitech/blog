@@ -7,7 +7,7 @@ class UserCategoryForm(forms.ModelForm):
 	
 	class Meta:
 		model = Category
-		fields = ['user_register_name', 'name', 'user_name']
+		fields = ['name', 'user_name']
 		widgets = {
 			'name': forms.TextInput(attrs={ 'required': 'required' }),
 		}

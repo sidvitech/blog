@@ -18,8 +18,8 @@ def frontpage(request):
 		form = PostForm()
 
 	post = Post.objects.all()
-	post_list =  [post for post in post]
-	return render(request, "post/frontpage.html", { 'form': form, 'post_list': post_list })
+	image_list =  [post for post in post]
+	return render(request, "post/frontpage.html", { 'form': form, 'image_list': image_list })
 
 def frontview(request):
 	post = Post.objects.all()
@@ -30,7 +30,9 @@ def mycomment(request):
 	if request.method == "POST":
 		user_form = MyCommentForm(request.POST)
 		if user_form.is_valid():
-			user_form.save()
+			comment = user_form.save(commit=False)
+			comment.user = request.user
+			comment.save()
 			return HttpResponseRedirect('/post/mycomment/')
 
 	else:
@@ -77,11 +79,11 @@ def comment_delete(request):
 			form = UserDeleteComment(request.POST)
 			if form.is_valid():
 				try:
-					n = MyComment.objects.get(title=title)
+					n = MyComment.objects.get(user=request.user, title=title)
 					n.delete()
 					return HttpResponseRedirect('/post/comment_delete/')
 				except MyComment.DoesNotExist:
-					return HttpResponse("Category name not match. Plz check category name ")
+					return HttpResponse("Category name not match. or user does not match. Plz check category name ")
 				# except Category.MultipleObjectsReturned:
 				# 	return HttpResponse("Category does not exist")
 
@@ -91,3 +93,22 @@ def comment_delete(request):
 		post = MyComment.objects.all()
 		comment_list =  [post for post in post]
 	return render(request, "post/comment_delete.html", { 'form': form, 'comment_list': comment_list })
+
+
+def delete_comment(request, pk):
+	try:
+		comment = MyComment.objects.get(user=request.user, pk=pk)
+		comment.delete()
+		return HttpResponseRedirect('/post/comment_delete/')
+	except:
+		return HttpResponse("user does not match. or comment does not exist.")
+
+def post_image(request):
+	if request.method == 'POST':
+		form = PostForm(request.POST, request.FILES, instance=request.user.get_profile())
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect('/')
+		else:
+			form = PostForm(instance=request.user.get_profile())
+		return render(request, "post/post_image.html", {'user': request.user, 'from': form})

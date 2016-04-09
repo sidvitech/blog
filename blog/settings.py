@@ -43,7 +43,10 @@ INSTALLED_APPS = [
     'category',
     'userblog',
     'post',
+    'ckeditor',
+    'django_wysiwyg',
 ]
+DJANGO_WYSIWYG_FLAVOR = "ckeditor"
 
 COMMENTS_APP = "django_comments_xtd"
 COMMENTS_XTD_MODEL = 'post.models.MyComment'

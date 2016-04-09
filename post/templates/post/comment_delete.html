@@ -3,18 +3,25 @@
 
 {% block body %}
 <div>
-   <h1>My All Comment Title</h1>
-
-   {% for post in comment_list %}
-   {{ post }}
-   <hr />
-   {% endfor %}
-</div>
-<div>
+<h1>My All Comment Title</h1>
+	<div class="col-md-3">
+		<h3 class="page-header" align="left">Comment</h3>
+		{% if comment_list %}
+		<ul>
+			{% for post in comment_list %}
+			<li>{{ post }}<a href="{% url 'post:delete_comment' post.pk %}"> Delete</a></li>
+			<hr />
+		</ul>
+			{% endfor %}
+		{% else %}
+				<div class="alert alert-warning">No Comment yet</div>
+		{% endif %}
+	<div>
 	<form method="post" action="">{% csrf_token %}
 		{{ form.as_p }}
 		<input type="submit" value="Delete Comment"></input>
 	</form>
+	</div>
+	</div>
 </div>
-<div>
 {% endblock %}

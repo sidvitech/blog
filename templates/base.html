@@ -20,18 +20,9 @@
     <![endif]-->
   </head>
   <body>
+  {%  include "navbar.html" %}
   {% load staticfiles %}
 
-  <div class="container">
-  <ul class="nav nav-tabs">
-    <li class="active"><a href="/">Home</a></li>
-    <li><a href="{% url 'category:category' %}">Category</a></li>
-    <li><a href="{% url 'userblog:blog' %}">Blog</a></li>
-    <li><a href="{% url 'userauth:user_login' %}">Login</a></li>
-    <li><a href="{% url 'userauth:user_registration' %}">Registration</a></li>
-    <li><a href="{% url 'post:frontpage' %}">Post</a></li>
-
-  </ul>
 
 
 

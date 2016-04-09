@@ -9,8 +9,10 @@ def category(request):
 	if request.method == "POST":
 		form = UserCategoryForm(request.POST)
 		if form.is_valid():
-			form.save()
-
+			us = form.save(commit=False)
+			us.user_register_name = request.user
+			us.save()
+			return HttpResponseRedirect('/category/category/')	
 	else:
 		form = UserCategoryForm()
 
@@ -25,6 +27,7 @@ def category_delete(request):
 				n = Category.objects.get(name=name)
 				n.delete()
 				print "hi"
+				return HttpResponseRedirect('/category/category_delete/')
 			except Category.DoesNotExist:
 				return HttpResponse("Category name not match. Plz check category name ")
 			# except Category.MultipleObjectsReturned:

@@ -3,10 +3,22 @@
 
  {% block content %}
 <div class="row">
+<!-- 
+<div class="row" style="margin-top: 30px;">
+  <div class="col-sm-6 col-sm-offset-3">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Add New Tag!</div>
+      <div class="panel-body"> -->
+
 	<div  class="col-sm-4 bg-info ">
 	    <h1 align="center">Post Form</h1>
 		<form method="post" action="" enctype="multipart/form-data">{% csrf_token %}
+		{% load wysiwyg %}
+		{% wysiwyg_setup %}
+
+
 			{{ form.as_p }}
+			{% wysiwyg_editor "id_body" %}
 			<input type="submit" value="Add Post"></input>
 	<!--         <li><a href="{% url 'post:frontview' %}">Post List</a></li>
 	 -->        <li><a href="{% url 'post:mycomment'%}">Comment Post</a></li>
@@ -21,16 +33,23 @@
 	<div  class="col-sm-4 bg-info" >
 
 	</div>
-	<div  class="col-sm-4 bg-info ">
-	   <h1>List Of All Post</h1>
+	<div class="row">
+	<div  class="col-sm-8 bg-info ">
+		<div class="col-md-3">
+		<h3 class="page-header" align="left">List Of All Post</h3>
+		{% if image_list %}
+			<ul>
+			<li>{% for post in image_list %}</li>
+			<li>{{ post }}<p><a href="{% url 'post:mycomment'%}">comment</a></p></li>
+			</ul>
+			<hr />
+			{% endfor %}
+		{% else %}
 
-	   {% for post in post_list %}
-	   {{ post }}
-	   <hr />
-	   {% endfor %}
-	</form>
-
-</div>
+		{% endif %}
+		</div>
+	</div>
+	</div>
 </div>
 
  {% endblock content %}
