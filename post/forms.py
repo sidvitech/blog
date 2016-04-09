@@ -28,7 +28,7 @@ class PostAddForm(ModelForm):
 class CommentAddForm(ModelForm):
 	class Meta:
 		model = CommentAdd
-		fields = ('postname','comment')
+		fields = ('comment',)
 
 class CommentEditForm(ModelForm):
 	# username = forms.CharField(label=(u'User Name of Post'))

@@ -41,7 +41,11 @@ INSTALLED_APPS = (
     'blogapp',
     'category',
     'post',
+    'ckeditor',
+    'django_wysiwyg',
 )
+
+DJANGO_WYSIWYG_FLAVOR = "ckeditor"
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

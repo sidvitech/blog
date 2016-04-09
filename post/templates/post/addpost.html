@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+
+
 <html>
 <head>
 	<title>create post</title>
@@ -10,15 +12,13 @@
 </script>
 <body>
 	<form action="" method="post" enctype="multipart/form-data">
-
-		<!-- {% for post in post_list %}
-		{{post}}
-		<br/>
-		{% endfor %} -->
-		<hr/>
 		{% csrf_token %}
-		
-		{{form.as_p}}
+		{% load wysiwyg %}
+		{% wysiwyg_setup %}
+
+
+			{{form.as_p}}
+			{% wysiwyg_editor "id_text" %}
 
 		<input type='submit' value='create post' class='btn btn-primary btn-lg btn-block'/>
 	</form>

@@ -17,6 +17,7 @@ class PostAdd(models.Model):
 class CommentAdd(models.Model):
 	# serializer_class = CommentSerializer
 	# user = models.ForeignKey(User)
+	user = models.ForeignKey(User)
 	postname = models.ForeignKey(PostAdd,null=True,blank=True)
 	comment = models.TextField(blank=True)
 
