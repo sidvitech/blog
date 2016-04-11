@@ -8,7 +8,7 @@ mycomment,
 commentview,
 comment_delete,
 delete_comment,
-post_image,
+contact,
 )
 
 
@@ -19,7 +19,7 @@ urlpatterns = [
     url(r'^commentview/', commentview, name="commentview"),
     url(r'^comment_delete/', comment_delete, name="comment_delete"),
     url(r'^delete_comment/(?P<pk>[0-9]+)', delete_comment, name="delete_comment"),
-    url(r'^post_image/', post_image, name="post_image"),
+    url(r'^contact/', contact, name="contact"),
 
 
 ]

@@ -9,6 +9,7 @@ class Blog(models.Model):
 	category = models.ForeignKey(Category)
 	blog_name = models.CharField(max_length=100)
 	developer_name = models.CharField(max_length=100)
+	view = models.BooleanField(default=False)
 
 	def __unicode__(self):
 		return self.blog_name

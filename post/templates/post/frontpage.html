@@ -29,27 +29,6 @@
 			<input type="submit" value="Search" />
 		</form>
 	</div>
-<div>
-	<div  class="col-sm-4 bg-info" >
 
-	</div>
-	<div class="row">
-	<div  class="col-sm-8 bg-info ">
-		<div class="col-md-3">
-		<h3 class="page-header" align="left">List Of All Post</h3>
-		{% if image_list %}
-			<ul>
-			<li>{% for post in image_list %}</li>
-			<li>{{ post }}<p><a href="{% url 'post:mycomment'%}">comment</a></p></li>
-			</ul>
-			<hr />
-			{% endfor %}
-		{% else %}
-
-		{% endif %}
-		</div>
-	</div>
-	</div>
-</div>
 
  {% endblock content %}

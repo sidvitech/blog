@@ -1,13 +1,13 @@
 from django import forms
 from django.contrib.auth.models import User
-from post.models import Post, MyComment
+from post.models import Post, MyComment, Contact
 
 
 class PostForm(forms.ModelForm):
 	
 	class Meta:
 		model = Post
-		fields = ['blog_name','image','title', 'date_created', 'tag', 'body']
+		fields = ['blog_name','title', 'image', 'date_created', 'tag', 'body']
 		widgets = {
 			'title': forms.TextInput(attrs={ 'required': 'required' }),
 		}
@@ -17,7 +17,7 @@ class MyCommentForm(forms.ModelForm):
 	
 	class Meta:
 		model = MyComment
-		fields = ['post_name', 'title']
+		fields = ['title']
 		widgets = {
 			'title': forms.TextInput(attrs={ 'required': 'required' }),
 		}
@@ -29,3 +29,19 @@ class UserDeleteComment(forms.ModelForm):
 		widgets = {
 			'title': forms.TextInput(attrs={ 'required': 'required' }),
 	}
+
+
+class ContactForm(forms.Form):
+	class Meta:
+		model = Contact
+		fields = ['contact_name', 'contact_email', 'content']
+		widgets = {
+			'contact_name': forms.TextInput(attrs={ 'required': 'required' }),
+			'contact_email': forms.TextInput(attrs={ 'required': 'required' }),
+	}
+	    # contact_name = forms.CharField(required=True)
+	    # contact_email = forms.EmailField(required=True)
+	    # content = forms.CharField(
+	    #     required=True,
+	    #     widget=forms.Textarea
+	    # )
