@@ -21,11 +21,11 @@ class profilepic(models.Model):
 	picture = models.ImageField(upload_to='profile_images', blank=True)		
 
 class UserProfile(models.Model):
-	user = models.OneToOneField(User)
+	user = models.OneToOneField(User,null=True)
 	# user= models.ForeignKey(User, related_name='uploaded_by')
-	gender = models.CharField(max_length=200,default='female')
-	mobileno=models.IntegerField(default=0,blank=True)
-	picture = models.ImageField(upload_to='profile_images', blank=True)	
+	gender = models.CharField(max_length=200,default='female',null=True,blank=True)
+	mobileno=models.IntegerField(default=0,blank=True,null=True)
+	picture = models.ImageField(upload_to='profile_images', blank=True,null=True)	
 
 	def __unicode__(self):
 		return self.user.username

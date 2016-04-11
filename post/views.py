@@ -60,6 +60,8 @@ def post_create(request):
 
 def comment_edit(request):
 	queryset = CommentAdd.objects.all()
+	title = request.POST.get('comment')
+	print title
 	if request.user.is_authenticated():	
 		if request.method == "POST":
 			user_form = CommentEditForm(data = request.POST)

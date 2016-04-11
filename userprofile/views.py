@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, render_to_response
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from userprofile.models import userprof, profilepic, UserProfile
-from userprofile.forms import userprofForm, profilepicForm, UserForm, UserForm1, UpdatepicForm
+from userprofile.forms import userprofForm, profilepicForm, UserForm, UserForm1, UpdatepicForm,updateprofileform
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -45,6 +45,36 @@ def adduserprof_view(request):
 
 	return render(request,'userprofile/userdetails.html',{'user_form':user_form, 'users_form':users_form,'userid':userid,},)	
 
+def updateuserprof_view(request):
+	if request.method == 'POST':
+		user_form = updateprofileform(data=request.POST)
+		users_form = UserForm1(data=request.POST)
+		if user_form.is_valid() :
+			username = user_form.cleaned_data['username']
+			email = user_form.cleaned_data['email']
+			first_name = user_form.cleaned_data['first_name'] 
+			last_name = user_form.cleaned_data['last_name']
+			
+			mobileno = request.POST.get('mobileno')
+			gender = request.POST.get('gender')
+
+			User.objects.filter(username=username).update(
+					email=email,
+					first_name=first_name,
+					last_name=last_name,
+					
+				)
+			UserProfile.objects.filter(user=username).update(
+					mobileno=mobileno,
+					gender=gender,
+				)	
+		else:
+			print user_form.errors
+	else:
+		user_form= updateprofileform()
+		users_form=UserForm1()		
+	return render(request,'userprofile/updateprofile.html',{'user_form':user_form,'users_form':users_form})
+					
 def updateprofile_view(request):
 	id = request.GET.get('id', None)
 	if id is not None:

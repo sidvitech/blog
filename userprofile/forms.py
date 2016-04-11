@@ -14,13 +14,6 @@ class profilepicForm(ModelForm):
 		fields = ('picture',)
 
 class UserForm(ModelForm):
-	# username = forms.CharField(label=(u'User Name'))
-	
-	# mobileno=forms.IntegerField(label=(u'Mobile No'))
-	# gender= forms.CharField(label=(u'Gender'))
-	# email = forms.EmailField(label=(u'Email Address'))
-	# first_name=forms.CharField(label=(u'First Name'))
-	# last_name=forms.CharField(label=(u'Last Name'))
 	# mobileno=forms.IntegerField(label=(u'Mobile No'))
 	
 	class Meta:
@@ -30,19 +23,36 @@ class UserForm(ModelForm):
 
 	def clean_username(self):
 			username = self.cleaned_data['username']
-			try:
-					User.objects.get(username=username)
-			except User.DoesNotExist:
-					return username
-			raise forms.ValidationError("That username is already taken please select another.")
+			# try:
+			# 		User.objects.get(username=username)
+			# except User.DoesNotExist:
+			# 		return username
+			# raise forms.ValidationError("That username is already taken please select another.")
 
+	def clean_email(self):
+			email = self.cleaned_data['email']	
+
+	def clean_first_name(self):
+			first_name = self.cleaned_data['first_name']
+
+	def clean_last_name(self):
+			last_name = self.cleaned_data['last_name']
+					
 class UserForm1(forms.ModelForm):
 	class Meta:
 		model = UserProfile
 		fields =('mobileno','gender','picture')
 
+					
 class UpdatepicForm(forms.ModelForm):
 	username = forms.CharField(label=(u'User Name'))
 	class Meta:
 		model = UserProfile
 		fields =('picture',)
+
+class updateprofileform(forms.ModelForm):
+	username = forms.CharField(label=(u'User Name'))
+	class Meta:
+		model = User
+		fields = ('first_name','last_name','email')
+
