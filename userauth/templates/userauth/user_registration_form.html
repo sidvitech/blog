@@ -1,20 +1,28 @@
-	{% extends "base.html" %}
 {% load staticfiles %}
 
 {% block body %}
 
 <div class="row">
+<div class="row" style="padding-top: 30px;">
+<div class="container">
+	<ul class="nav nav-tabs">
+		<li><a href="{% url 'userauth:user_login' %}">Login</a></li>
+		<li><a href="{% url 'userauth:user_registration' %}">Registration</a></li>
+	</ul>
+
 	<div class="col-sm-6 col-sm-offset-3">
-    <div class="panel panel-primary">    
-	    <h1 align="center">User Registrations Form</h1>
+	<div class="panel panel-primary">    
+		<h1 align="center">User Registrations Form</h1>
 		<form method="post" action="">{% csrf_token %}
-			{{ form.as_p }}
-			<input type="submit" value="Sign Up"></input>
+		{{ form.as_p }}
+		<input type="submit" value="Sign Up"></input>
 		</form>
 		<p><a href="{% url 'userauth:user_login' %}">Login</a></p>
 		<h1>View Count</h1>{{ view_count }}
 	</div>
 	</div>
+</div>
+</div>
 </div>
 
 {% endblock %}

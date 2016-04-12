@@ -1,6 +1,8 @@
 {% extends "base.html" %}
+{% load customs_tags %}
 {% load staticfiles %}
 {% block body %}
+
 <div>
     <div  class="col-sm-4 bg-info" >
 
@@ -16,22 +18,25 @@
             <li>{% for post in image_list %}</li><p>Post Name:-</p>
 
             <li>{{ post }} <p>
+
               {% for post in image_display %}
-              {{ post }} 
+              {{ post }}     <img src="{{ image.image.url }}">
                 <br />
               {% endfor %}
                 <br /><p>Comments:-</p>
-              {% for post in post_list %}
+              {% for post in post.title|get_post  %}
               {{ post }}<a href="{% url 'post:delete_comment' post.pk %}"> Delete</a></li></p>
                 <hr />
-              {% endfor %} <p><a href="{% url 'post:mycomment'%}?postname={{ post.title }}">comment</a></p>
-                      <form method="post" action="">{% csrf_token %}
-                      {{ user_form.as_p }}
-                      <input type="submit" value="Comment"></input>
+                
+              {% endfor %}<!--  <p><a href="{% url 'post:mycomment'%}?postname={{ post.title }}">comment</a></p> -->
+              <form method="post" action="">{% csrf_token %}
+              {{ user_form.as_p }}
+              <input type="hidden" name="post_name" value="{{ post.title }}"></input>
+              <input type="submit" value="Comment"></input>
                 <!--           <li><a href="{% url 'post:commentview' %}">Comment List</a></li>
                           <li><a href="{% url 'post:comment_delete' %}">Delete Comment</a></li> -->
 
-                      </form>
+              </form>
             </li>
           </ul>
           <hr />

@@ -7,7 +7,7 @@ from userblog.models import Blog
 class Post(models.Model):
 	blog_name = models.ForeignKey(Blog)
 	title = models.CharField(max_length=100)
-	image = models.ImageField(upload_to="/media/images/",blank=True,null=True)
+	image = models.ImageField(upload_to="images/",blank=True,null=True)
    	date_created = models.DateField()
 	tag = models.CharField(max_length=200)
 	body = models.TextField()
@@ -37,9 +37,10 @@ class Like(models.Model):
 
 
 class Contact(models.Model):
+	user_name = models.OneToOneField(User)
 	contact_name = models.CharField(max_length=200)
 	contact_email = models.CharField(max_length=200)
-	contact = models.TextField()
+	content = models.TextField()
 
 	def __unicode__(self):
 		return self.contact_name

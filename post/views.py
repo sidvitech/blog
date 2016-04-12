@@ -1,8 +1,11 @@
-from django.shortcuts import render
-from post.models import Post, MyComment, Like
+from django.shortcuts import render, render_to_response, redirect
+from post.models import Post, MyComment, Like, Contact
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 from .forms import PostForm, MyCommentForm, UserDeleteComment, ContactForm
+from django.template.loader import get_template
+from django.core.mail import EmailMessage
+from django.template import RequestContext, Context
 # Create your views here.
 
 
@@ -30,13 +33,13 @@ def mycomment(request):
 	if request.method == "POST":
 		user_form = MyCommentForm(request.POST)
 		if user_form.is_valid():
-			post_name = request.GET.get('postname')
+			post_name = request.POST.get('post_name')	
 			if post_name:
 				post = Post.objects.get(title=post_name)
-			comment = user_form.save(commit=False)
-			comment.user = request.user
-			comment.post_name = post
-			comment.save()
+				comment = user_form.save(commit=False)
+				comment.user = request.user
+				comment.post_name = post
+				comment.save()
 			return HttpResponseRedirect('/post/mycomment/')
 
 	else:
@@ -52,6 +55,15 @@ def mycomment(request):
 	post_list =  [post for post in post]
 
 	return render(request, "post/comment.html", {'user_form': user_form, 'image_list': image_list, 'image_display':image_display, 'post_list': post_list})
+
+def image(request):
+    image = Post()
+    variables = RequestContext(request,{
+        'image':image
+    })
+    return render_to_response('post/image.html',variables)
+
+
 
 def commentview(request):
 	data = False
@@ -116,44 +128,56 @@ def delete_comment(request, pk):
 		return HttpResponse("user does not match. or comment does not exist.")
 
 
-def contact(request):
-    form_class = ContactForm
-    
-    #   # new logic!
-    # if request.method == 'POST':
-    #     form = form_class(data=request.POST)
+def contact(request):  
+	# if request.method == "POST":
+	# 	user_form = MyCommentForm(request.POST)
+	# 	if user_form.is_valid():
+	# 		post_name = request.POST.get('post_name')	
+	# 		if post_name:
+	# 			post = Post.objects.get(title=post_name)
+	# 			comment = user_form.save(commit=False)
+	# 			comment.user = request.user
+	# 			comment.post_name = post
+	# 			comment.save()
+	# 		return HttpResponseRedirect('/post/mycomment/')
 
-    #     if form.is_valid():
-    #         contact_name = request.POST.get(
-    #             'contact_name'
-    #         , '')
-    #         contact_email = request.POST.get(
-    #             'contact_email'
-    #         , '')
-    #         form_content = request.POST.get('content', '')
+	# else:
+	# 	user_form = MyCommentForm()
 
-    #         # Email the profile with the 
-    #         # contact information
-    #         template = 
-    #             get_template('contact_template.txt')
-    #         context = Context({
-    #             'contact_name': contact_name,
-    #             'contact_email': contact_email,
-    #             'form_content': form_content,
-    #         })
-    #         content = template.render(context)
-
-    #         email = EmailMessage(
-    #             "New contact form submission",
-    #             content,
-    #             "Your website" +'',
-    #             ['youremail@gmail.com'],
-    #             headers = {'Reply-To': contact_email }
-    #         )
-    #         email.send()
-    #         return redirect('contact')
-
-            
-    return render(request, 'post/contact.html', {
-        'form_class': form_class,
-    })
+      # new logic!
+	if request.user.is_authenticated():
+		user_name = request.POST.get('user_name')
+		print user_name
+		if request.method == 'POST':
+			form_class = ContactForm(request.POST)
+			if form_class.is_valid():
+				contact_name = request.POST.get('contact_name', '')
+				contact_email = request.POST.get('contact_email', '')
+				form_content = request.POST.get('content', '')
+				# Email the profile with the 
+				# contact information
+				template = get_template('contact_template.txt')
+				context = Context({'contact_name': contact_name,
+					'contact_email': contact_email,
+				    'form_content': form_content,
+				})
+				print "Hi...."
+				print contact_name
+				print contact_email
+				print form_content
+				content = template.render(context)
+				email = EmailMessage(
+				    "New contact form submission",
+				    content,
+				    "Your website" +'',
+				    ['youremail@gmail.com'],
+				    headers = {'Reply-To': contact_email }
+				)
+				email.send()
+				return redirect('/post/contact/')
+		else:
+			form_class=ContactForm()
+	 		# pass
+	else:
+		return HttpResponseRedirect('/userauth/user_login/')
+ 	return render(request, 'post/contact.html', {'form_class': form_class})
