@@ -24,7 +24,7 @@ urlpatterns = [
     url(r'^userprofile/', include('userprofile.urls')),
     url(r'^category/',include('category.urls')),
     url(r'^blogapp/',include('blogapp.urls')),
-    url(r'^post/',include('post.urls', namespace ='post')),
+    url(r'^post/',include('post.urls', namespace='post', app_name='post')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

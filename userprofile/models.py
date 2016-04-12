@@ -2,6 +2,7 @@ from django.db import models
 # from PIL import Image
 from django.db.models import signals
 from django.contrib.auth.models import User
+from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 
@@ -24,7 +25,7 @@ class UserProfile(models.Model):
 	user = models.OneToOneField(User,null=True)
 	# user= models.ForeignKey(User, related_name='uploaded_by')
 	gender = models.CharField(max_length=200,default='female',null=True,blank=True)
-	mobileno=models.IntegerField(default=0,blank=True,null=True)
+	mobileno=PhoneNumberField(default=0,blank=True,null=True)
 	picture = models.ImageField(upload_to='profile_images', blank=True,null=True)	
 
 	def __unicode__(self):
