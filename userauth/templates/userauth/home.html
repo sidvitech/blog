@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block body %}
+<div class="container">
+    <h1>Welcome to Blog</h1>
+  
+    {% if user.username %}
+        <p>Welcome {{ user.username }}! Here you can store and share blog</p>
+    {% else %}
+        <p>Welcome anonymous user! You need to <a href="{% url 'userauth:user_login' %}">Login</a>before you can store and share blog</p>
+    {% endif %}
+
+    <li><a href="{% url 'userauth:user_logout' %}">Logout</a></li>
+
+</div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static "js/rango-jquery.js" %}"></script>
+
+{% endblock body %}

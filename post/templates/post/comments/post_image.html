@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+ {% block body %}
+
+    {% for field in form %}
+      {% if field.name != "profile_pic" %}
+        <!-- display regular fields -->
+        {{ field.label_tag }}{{ field }}
+      {% else %}
+        <!-- display the user photo -->
+        <img src="{{ MEDIA_URL }}{{ field.url }}" />
+      {% endif %}
+    {% endfor %}
+
+ {% endblock body %}
