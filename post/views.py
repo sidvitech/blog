@@ -20,11 +20,14 @@ def post_view(request):
 				print 3
 				postname = request.POST.get('postname')
 				post = PostAdd.objects.get(postname=postname)
+				print post
 				comment = form.save(commit = False)
 				comment.user = request.user
 				comment.postname = post
 				comment.save()
 				print form.cleaned_data['comment']
+				count = CommentAdd.objects.filter(postadds__postname=postname)
+				print count
 				return HttpResponseRedirect('/post/')
 				print 4
 			else:

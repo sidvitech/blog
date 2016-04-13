@@ -18,7 +18,7 @@ class CommentAdd(models.Model):
 	# serializer_class = CommentSerializer
 	# user = models.ForeignKey(User)
 	user = models.ForeignKey(User)
-	postname = models.ForeignKey(PostAdd,null=True,blank=True)
+	postname = models.ForeignKey(PostAdd,null=True,blank=True, related_name="postadds")
 	comment = models.TextField(blank=True)
 
 	def __unicode__(self):

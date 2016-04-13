@@ -10,7 +10,20 @@ from django.template import RequestContext
 # Create your views here.
 
 def userprof_view(request):
-	return HttpResponse("testing blog")
+	username = request.user
+	uname=request.user.get_username()
+	fullname=request.user.get_full_name()
+	fname=request.user.get_short_name()
+	lname=request.user.last_name
+	email=request.user.email
+	mobileno=username.userprofile.mobileno
+	gender=username.userprofile.gender
+	pic = username.userprofile.picture
+	u = User.objects.get(username=username)
+	
+	
+	return render(request,'userprofile/view_profile.html',{'fullname':fullname,'uname':uname,'fname':fname,'lname':lname,'email':email,'gender':gender,'pic':pic,'mobileno':mobileno})
+	# return HttpResponse("testing blog")
 
 
 def adduserprof_view(request):	
