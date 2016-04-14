@@ -7,11 +7,10 @@ from userblog.models import Blog
 class Post(models.Model):
 	blog_name = models.ForeignKey(Blog)
 	title = models.CharField(max_length=100)
-	image = models.ImageField(upload_to="images/",blank=True,null=True)
-   	date_created = models.DateField()
+	image = models.ImageField(upload_to="images/",blank=True, null=True)
+   	created = models.DateTimeField(auto_now=False, auto_now_add=True)
 	tag = models.CharField(max_length=200)
-	body = models.TextField()
-	like = models.BooleanField(default=False)
+	body = models.TextField()	
 
 	def get_absolute_url(self):
 		return "/blog/%d%02d%s/" % (self.date_created.month)
@@ -30,6 +29,7 @@ class MyComment(models.Model):
 
 class Like(models.Model):
 	user = models.OneToOneField(User)
+	post = models.ForeignKey(Post)
 	like = models.BooleanField(default=False)
 
 	def __unicode__(self):
@@ -37,7 +37,7 @@ class Like(models.Model):
 
 
 class Contact(models.Model):
-	user_name = models.OneToOneField(User)
+	user_name = models.ForeignKey(User)
 	contact_name = models.CharField(max_length=200)
 	contact_email = models.CharField(max_length=200)
 	content = models.TextField()

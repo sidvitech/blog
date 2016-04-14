@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 from .forms import PostForm, MyCommentForm, UserDeleteComment, ContactForm
 from django.template.loader import get_template
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, send_mail
 from django.template import RequestContext, Context
 # Create your views here.
 
@@ -29,32 +29,37 @@ def frontview(request):
 	return render(request, "post/frontview.html", {'post_list': post_body_list})
 
 def mycomment(request):
+	context = {}
+	post_list = Post.objects.all()
+	is_like = False
 
 	if request.method == "POST":
-		user_form = MyCommentForm(request.POST)
-		if user_form.is_valid():
-			post_name = request.POST.get('post_name')	
-			if post_name:
-				post = Post.objects.get(title=post_name)
-				comment = user_form.save(commit=False)
-				comment.user = request.user
-				comment.post_name = post
-				comment.save()
-			return HttpResponseRedirect('/post/mycomment/')
+		like = request.POST.get('like')
+		unlike = request.POST.get('unlike')
+		if like:
+			post_name = request.POST.get('post_name')
+			post = Post.objects.get(title=post_name)
+			try:
+				like_obj, cond = Like.objects.get_or_create(user=request.user, post=post)
+				like_obj.like = True
+				like_obj.save()
+			except:
+				pass
+		elif unlike:
+			post_name = request.POST.get('post_name')
+			post = Post.objects.get(title=post_name)
+			try:
+				like_obj = Like.objects.get(user=request.user, post=post)
+				like_obj.like=False
+				like_obj.save()
+			except:
+				pass
+		else:
+			pass
 
-	else:
-		user_form = MyCommentForm()
-
-	post = Post.objects.all()
-	image_list =  [post for post in post]
-
-	post = Post.objects.all()
-	image_display =  [post.image for post in post]
-
-	post = MyComment.objects.all()
-	post_list =  [post for post in post]
-
-	return render(request, "post/comment.html", {'user_form': user_form, 'image_list': image_list, 'image_display':image_display, 'post_list': post_list})
+	context["is_like"] = is_like
+	context["post_list"] = post_list	
+	return render(request, "post/comment.html", context)
 
 def image(request):
     image = Post()
@@ -67,30 +72,30 @@ def image(request):
 
 def commentview(request):
 	data = False
-	like_count = Like.objects.filter(like=True).count()
-	if request.user.is_authenticated():
-		try:
-			obj = Like.objects.get(user=request.user)
-			data = obj.like
-		except:
-			pass
+	# like_count = Like.objects.filter(like=True).count()
+	# if request.user.is_authenticated():
+	# 	try:
+	# 		obj = Like.objects.get(user=request.user)
+	# 		data = obj.like
+	# 	except:
+	# 		pass
 
-	if request.method == "POST":
-		unlike = request.POST.get('unlike')
-		like = request.POST.get('like')
-		if request.user.is_authenticated():
-			if like:
-				user, condition = Like.objects.get_or_create(user=request.user)
-				user.like = True
-				user.save()
-				return HttpResponseRedirect('/post/commentview/')
-			if unlike:
-				like_obj = Like.objects.get(user=request.user)
-				like_obj.like = False
-				like_obj.save()
-				return HttpResponseRedirect('/post/commentview/')
-		else:
-			return HttpResponseRedirect('/userauth/user_login/')
+	# if request.method == "POST":
+	# 	unlike = request.POST.get('unlike')
+	# 	like = request.POST.get('like')
+	# 	if request.user.is_authenticated():
+	# 		if like:
+	# 			user, condition = Like.objects.get_or_create(user=request.user)
+	# 			user.like = True
+	# 			user.save()
+	# 			return HttpResponseRedirect('/post/commentview/')
+	# 		if unlike:
+	# 			like_obj = Like.objects.get(user=request.user)
+	# 			like_obj.like = False
+	# 			like_obj.save()
+	# 			return HttpResponseRedirect('/post/commentview/')
+	# 	else:
+	# 		return HttpResponseRedirect('/userauth/user_login/')
 
 
 
@@ -129,22 +134,8 @@ def delete_comment(request, pk):
 
 
 def contact(request):  
-	# if request.method == "POST":
-	# 	user_form = MyCommentForm(request.POST)
-	# 	if user_form.is_valid():
-	# 		post_name = request.POST.get('post_name')	
-	# 		if post_name:
-	# 			post = Post.objects.get(title=post_name)
-	# 			comment = user_form.save(commit=False)
-	# 			comment.user = request.user
-	# 			comment.post_name = post
-	# 			comment.save()
-	# 		return HttpResponseRedirect('/post/mycomment/')
-
-	# else:
-	# 	user_form = MyCommentForm()
-
-      # new logic!
+	user = User.objects.get(id=2)
+	user_email = user.email
 	if request.user.is_authenticated():
 		user_name = request.POST.get('user_name')
 		print user_name
@@ -166,14 +157,8 @@ def contact(request):
 				print contact_email
 				print form_content
 				content = template.render(context)
-				email = EmailMessage(
-				    "New contact form submission",
-				    content,
-				    "Your website" +'',
-				    ['youremail@gmail.com'],
-				    headers = {'Reply-To': contact_email }
-				)
-				email.send()
+				send_mail(contact_name, form_content, user_email,
+    			[contact_email], fail_silently=False)
 				return redirect('/post/contact/')
 		else:
 			form_class=ContactForm()

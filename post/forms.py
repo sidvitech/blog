@@ -7,7 +7,7 @@ class PostForm(forms.ModelForm):
 	
 	class Meta:
 		model = Post
-		fields = ['blog_name','title', 'image', 'date_created', 'tag', 'body']
+		fields = ['blog_name','title', 'image', 'tag', 'body']
 		widgets = {
 			'title': forms.TextInput(attrs={ 'required': 'required' }),
 		}
@@ -32,15 +32,6 @@ class UserDeleteComment(forms.ModelForm):
 
 
 class ContactForm(forms.Form):
-	# class Meta:
-	# 	model = Contact
-	# 	fields = ['contact_name', 'contact_email', 'content']
-	# 	widgets = {
-	# 		'contact_name': forms.TextInput(attrs={ 'required': 'required' }),
-	# 		'contact_email': forms.TextInput(attrs={ 'required': 'required' }),
-	# 		'content': forms.TextInput(attrs={ 'required': 'required' }),
-
-	# }
 	contact_name = forms.CharField(required=True)
 	contact_email = forms.EmailField(required=True)
 	content = forms.CharField(
