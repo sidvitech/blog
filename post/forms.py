@@ -23,7 +23,7 @@ class PostAddForm(ModelForm):
 	choice = forms.ChoiceField(choices = choicess)
 	class Meta:
 		model = PostAdd
-		fields = ('user','blogname','postname','text','visibility','picture')
+		fields = ('user','blogname','postname','text','visibility','picture','video')
 
 class CommentAddForm(ModelForm):
 	class Meta:

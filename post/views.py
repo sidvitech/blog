@@ -11,6 +11,9 @@ def post_view(request):
 	posts = PostAdd.objects.all()
 	post_body_list = [post.text for post in posts]
 	comments = CommentAdd.objects.all()
+	# postname='skn'
+	# count = CommentAdd.objects.filter(_CommentAdd__postname=postname).count()
+	# print count
 	if request.user.is_authenticated():
 		if request.method == "POST":
 			print 1
@@ -26,8 +29,7 @@ def post_view(request):
 				comment.postname = post
 				comment.save()
 				print form.cleaned_data['comment']
-				count = CommentAdd.objects.filter(postadds__postname=postname)
-				print count
+				
 				return HttpResponseRedirect('/post/')
 				print 4
 			else:
@@ -45,11 +47,13 @@ def post_view(request):
 
 def post_create(request):
 	if request.method == "POST":
-		form = PostAddForm(request.POST)
+		form = PostAddForm(request.POST, request.FILES)
 		if form.is_valid():
 			profile = form.save(commit = False)
 			if 'picture' in request.FILES:
 				profile.picture = request.FILES['picture']
+			if 'video' in request.FILES:
+				profile.video = request.FILES['video']	
 			profile.save()
 			form = PostAddForm()
 		else:
