@@ -11,9 +11,6 @@ def post_view(request):
 	posts = PostAdd.objects.all()
 	post_body_list = [post.text for post in posts]
 	comments = CommentAdd.objects.all()
-	# postname='skn'
-	# count = CommentAdd.objects.filter(_CommentAdd__postname=postname).count()
-	# print count
 	if request.user.is_authenticated():
 		if request.method == "POST":
 			print 1
@@ -22,6 +19,7 @@ def post_view(request):
 			if form.is_valid():
 				print 3
 				postname = request.POST.get('postname')
+				print postname
 				post = PostAdd.objects.get(postname=postname)
 				print post
 				comment = form.save(commit = False)
@@ -38,12 +36,36 @@ def post_view(request):
 		else:
 			form = CommentAddForm()
 			print 5
-	else:
-		return HttpResponse("You are not authorised person.")
+	# else:
+	# 	return HttpResponse("You are not authorised person.")
 	
-
 	
-	return render(request, 'post/viewpost.html', {'form': form, 'posts':posts, 'post_list':post_body_list, 'comments':comments})
+		if request.method == "POST":
+			user_form = CommentEditForm(data = request.POST)
+			if user_form.is_valid():
+				postname = request.POST.get('postname')
+				print postname
+				post = PostAdd.objects.get(postname=postname)
+				print post
+				oldcomment =request.POST.get('oldcomment')
+				print oldcomment
+				chkcomment = request.POST.get('chkcomment')
+				print chkcomment
+				chkcomment1 = CommentAdd.objects.get(comment=chkcomment1)
+				print chkcomment1
+				comment1 = user_form.cleaned_data['comment']
+				
+				CommentAdd.objects.filter(postname=post,comment=chkcomment1).update(
+					comment=comment1,
+				)
+				return HttpResponseRedirect('/post/commentview/')
+			else:
+				print user_form.errors
+		else:
+			user_form=CommentEditForm()			
+			
+	
+	return render(request, 'post/viewpost.html', {'user_form':user_form, 'form': form, 'posts':posts, 'post_list':post_body_list, 'comments':comments})
 
 def post_create(request):
 	if request.method == "POST":

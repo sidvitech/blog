@@ -46,15 +46,15 @@ class UserForm1(forms.ModelForm):
 
 	def clean_mobileno(self):
 			mobileno = self.cleaned_data['mobileno']    
-			try:
-				if not (mobileno.isalpha()):
-					min_length=10
-					max_length=13
-					ph_length = str(mobileno)
-					if len(ph_length) < min_length or len(ph_length) > max_length:
-						raise ValidationError('Phone number length not valid')
-			except (ValueError, TypeError):
-				raise ValidationError('Please enter a valid phone number')
+			# try:
+			# 	if not (mobileno.isalpha()):
+			# 		min_length=10
+			# 		max_length=13
+			# 		ph_length = str(mobileno)
+			# 		if len(ph_length) < min_length or len(ph_length) > max_length:
+			# 			raise ValidationError('Phone number length not valid')
+			# except (ValueError, TypeError):
+			# 	raise ValidationError('Please enter a valid phone number')
 			return mobileno
 				
 class UpdatepicForm(forms.ModelForm):

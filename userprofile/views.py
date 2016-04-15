@@ -40,7 +40,7 @@ def adduserprof_view(request):
 		if user_form.is_valid() and users_form.is_valid() :
 			user = user_form.save()
 			user.save()
-			profile = users_form.save(commit = False)
+			profile = users_form.save()
 			profile.user = user
 			if 'picture' in request.FILES:
 				profile.picture = request.FILES['picture']

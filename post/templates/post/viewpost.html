@@ -24,6 +24,8 @@
 			<li><h4 style="color:green;"><u>Image</u> :
 			{% if post.picture %}
 				<img src="{{ post.picture.url }}" height="200" width="200" border="1"/>
+			{% else %}
+				No image uploaded	
 			{% endif %}	</h4></li>
 			<li><h4 style="color:green;"><u>Video</u> :
 			{% if post.video %}
@@ -31,17 +33,27 @@
 				  <source src="{{ post.video.url }}" type="video/mp4">
 				  Your browser does not support HTML5 video.
 				</video>
+			{% else %}
+				<h4 style="color:green;">No video uploaded</h4>	
 			{% endif %}	</h4></li>
 			<li><h4 style="color:green;"><u>Visibility </u>: {{post.visibility}}</h4></li>
 			</ul>
-			<h3 style="color:orange;">Comment on post</h3>
+			<h3 style="color:orange;">Comments on post (<small>{{ post.postname|comment_count}}</small>)</h3>
 			<div>
 				{% for comment in post.postname|get_post %}
 				<ul>
 					<h4 style="color:violet;"><li><i><u>{{ comment.user.get_full_name }}</u></i> : {{ comment.comment }}</li></h4>
+					
 				</ul>
+				<form action="" method="post" >{% csrf_token %}
+				{{user_form.as_p}}
+				<input type="hidden" name="postname" value="{{ post.postname }}">
+				<input type="hidden" name="oldcomment" value="{{ comment.comment }}">
+				<button type ="submit">Edit Comment</button>
+				</form>
 				{% endfor %}
 			</div>
+			
 			<h3 style="color:orange;">Add comment on post</h3>
 			
 			
@@ -77,23 +89,7 @@
 
 
 
-		<!-- {% if p %}
-			
-			{% for post in p %}
-			<ul>
-			<h3 style="color:orange;"><i>{{post.postname}}</i></h3>
-			<li><h4 style="color:green;">{{post.blogname}}</h4></li>
-			<li><h4 style="color:green;">{{post.text}}</h4></li>
-			{% if post.picture %}
-				<img src="{{ post.picture.url }}" height="200" width="200" border="1"/>
-			{% endif %}	
-			<li><h4 style="color:green;">{{post.visibility}}</h4></li>
-			<li><a href="/post/commentcreate/">comment</a></li>
-			</ul>
-			<hr/>
-
-			{% endfor %}
-		{% endif %} -->
+		
 		<h2>comments on post</h2>	
 		{% if comments %}
 			{% for comment in comments %}

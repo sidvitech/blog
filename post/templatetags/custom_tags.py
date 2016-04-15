@@ -12,3 +12,11 @@ def get_post(value):
 	return data
 
 register.filter('get_post', get_post)
+
+def comment_count(value):
+	count = 0
+	if value:
+		post_obj = PostAdd.objects.get(postname=value)
+		count = CommentAdd.objects.filter(postname=post_obj).count()
+	return count
+register.filter('comment_count',comment_count)		

@@ -21,6 +21,7 @@ class CommentAdd(models.Model):
 	user = models.ForeignKey(User)
 	postname = models.ForeignKey(PostAdd,null=True,blank=True)
 	comment = models.TextField(blank=True)
+	# date = models.DateTimeField(auto_now=False, auto_now_add=True)
 
 	def __unicode__(self):
 		return self.comment
