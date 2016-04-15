@@ -1,6 +1,7 @@
+{% extends "base.html" %}
 {% load staticfiles %}
 
-{% block body %}
+{% block content %}
 
 <!-- <div class="row">
     <div class="col-sm-6 col-sm-offset-3" style="background-color: #876ff5; padding: 20px;">
@@ -25,10 +26,10 @@
 
 <div class="row" style="padding-top: 30px;">
 <div class="container">
-    <ul class="nav nav-tabs">
+<!--     <ul class="nav nav-tabs">
         <li><a href="{% url 'userauth:user_login' %}">Login</a></li>
         <li><a href="{% url 'userauth:user_registration' %}">Registration</a></li>
-    </ul>
+    </ul> -->
     <form action="" method="post">
             {% csrf_token %}
             {% if form.errors %}

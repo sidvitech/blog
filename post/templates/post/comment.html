@@ -12,9 +12,7 @@
       <img src="{{ post.image.url }}" alt="{{ post.title }}">
       <div class="caption">
         <h3>{{ post.title }}</h3>
-        <p>{{ post.body }}</p>
-        <p></p>
-        <p>
+        {{ post.body }}
         <form method="post" action="">{% csrf_token %}
         <input type="hidden" name="post_name" value="{{ post.title }}"></input>
         {% if post.title|check_like:request.user %}
@@ -26,8 +24,20 @@
           <button type="submit" class="btn btn-primary">Like</button><small> {{ post.title|like_count }}</small>
         {% endif %}
         </form>
-        <a href="#" class="btn btn-default" role="button">Comment</a></p>
-      </div>
+						<ul>
+							{% for post in comment_display %}
+								<li>{{ post }}<a href="{% url 'post:delete_comment' post.pk %}"> Delete</a></li></p>
+						</ul>
+							{% endfor %}
+        <form method="post" action="">
+          {{ user_form.as_p }}
+          <input type="hidden" name="post_name" value="{{ post.title }}"></input>
+          <input type="submit" value="Comment"></input>
+            <!--           <li><a href="{% url 'post:commentview' %}">Comment List</a></li>
+                      <li><a href="{% url 'post:comment_delete' %}">Delete Comment</a></li> -->
+        </form>
+<!--         <a href="#" class="btn btn-default" role="button">Comment</a></p>
+ -->      </div>
     </div>
   </div>
 </div>
@@ -36,5 +46,4 @@
 {% endif %}
 
 
-
-{% endblock %}
+{% endblock  %}

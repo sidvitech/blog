@@ -29,37 +29,61 @@ def frontview(request):
 	return render(request, "post/frontview.html", {'post_list': post_body_list})
 
 def mycomment(request):
-	context = {}
-	post_list = Post.objects.all()
-	is_like = False
+  context = {}
+  post_list = Post.objects.all()
+  is_like = False
 
-	if request.method == "POST":
-		like = request.POST.get('like')
-		unlike = request.POST.get('unlike')
-		if like:
-			post_name = request.POST.get('post_name')
-			post = Post.objects.get(title=post_name)
-			try:
-				like_obj, cond = Like.objects.get_or_create(user=request.user, post=post)
-				like_obj.like = True
-				like_obj.save()
-			except:
-				pass
-		elif unlike:
-			post_name = request.POST.get('post_name')
-			post = Post.objects.get(title=post_name)
-			try:
-				like_obj = Like.objects.get(user=request.user, post=post)
-				like_obj.like=False
-				like_obj.save()
-			except:
-				pass
-		else:
-			pass
+  # comment Like
 
-	context["is_like"] = is_like
-	context["post_list"] = post_list	
-	return render(request, "post/comment.html", context)
+  if request.method == "POST":
+    like = request.POST.get('like')
+    unlike = request.POST.get('unlike')
+    if like:
+      post_name = request.POST.get('post_name')
+      post = Post.objects.get(title=post_name)
+      try:
+        like_obj, cond = Like.objects.get_or_create(user=request.user, post=post)
+        like_obj.like = True
+        like_obj.save()
+      except:
+        pass
+    elif unlike:
+      post_name = request.POST.get('post_name')
+      post = Post.objects.get(title=post_name)
+      try:
+        like_obj = Like.objects.get(user=request.user, post=post)
+        like_obj.like=False
+        like_obj.save()
+      except:
+        pass
+    else:
+      pass
+
+   # comment post
+
+  if request.method == "POST":
+    user_form = MyCommentForm(request.POST)
+    if user_form.is_valid():
+      post_name = request.POST.get('post_name') 
+      if post_name:
+        post = Post.objects.get(title=post_name)
+        comment = user_form.save(commit=False)
+        comment.user = request.user
+        comment.post_name = post
+        comment.save()
+        return HttpResponseRedirect('/post/mycomment/')
+
+  else:
+    user_form = MyCommentForm()
+
+  post = MyComment.objects.all()
+  comment_display =  [post for post in post]
+
+  context["comment_display"] = comment_display
+  context["user_form"] = user_form
+  context["is_like"] = is_like
+  context["post_list"] = post_list  
+  return render(request, "post/comment.html", context)
 
 def image(request):
     image = Post()
