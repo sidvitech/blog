@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,20 +11,7 @@
 </script>
 <body>
 	<form action="" method="post" enctype="multipart/form-data">
-		<!-- {% if profiles %}
-		{% if u %}
-			{% for profile in profiles%}	
-				{{profile.username}}
-				<div>
-					{% for comment in User.username|get_profile %}
-					<ul>
-						<h4 style="color:violet;">{{ comment.gender }}</li></h4>
-					</ul>
-					{% endfor %}
-				</div>
-			{% endfor %}	
-		{% endif %}	
-		{% endif %} -->
+		
 		{% if pic %}
 			<img src="{{ pic.url }}" height="200" width="200" border="1"/>
 		{% endif %}

@@ -18,8 +18,8 @@ class UserForm(ModelForm):
 	# mobileno=forms.IntegerField(label=(u'Mobile No'))
 	
 	class Meta:
-		model=User
-		fields =('username','email','first_name','last_name')
+		model = User
+		fields = ['username','email','first_name','last_name']
 		# exclude =('user1',)
 
 	def clean_username(self):
@@ -29,20 +29,11 @@ class UserForm(ModelForm):
 			except User.DoesNotExist:
 					return username
 			raise forms.ValidationError("That username is already taken please select another.")
-
-	def clean_email(self):
-			email = self.cleaned_data['email']  
-
-	def clean_first_name(self):
-			first_name = self.cleaned_data['first_name']
-
-	def clean_last_name(self):
-			last_name = self.cleaned_data['last_name']
 					
 class UserForm1(forms.ModelForm):
 	class Meta:
 		model = UserProfile
-		fields =('mobileno','gender','picture')
+		fields = ['mobileno','gender','picture']
 
 	def clean_mobileno(self):
 			mobileno = self.cleaned_data['mobileno']    

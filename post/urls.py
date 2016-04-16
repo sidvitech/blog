@@ -11,6 +11,8 @@ urlpatterns = [
 	url(r'^commentcreate/$',views.comment_create, name= 'commentcreate'),
 	url(r'^commentview/$',views.comment_view, name = 'commentview'),
 	url(r'^commentedit/$',views.comment_edit, name='commentedit'),
+	url(r'^postlist/$',views.post_list, name='postlist'),
+	url(r'^(?P<pk>[0-9]+)/$',views.post_detail, name='post_detail'),
 	]
 if settings.DEBUG:
 	urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

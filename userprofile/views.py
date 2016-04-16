@@ -35,12 +35,11 @@ def adduserprof_view(request):
 		userid = None	
 	
 	if request.method == 'POST':
-		user_form = UserForm(data = request.POST)
-		users_form = UserForm1(data = request.POST, instance = userid)
+		user_form = UserForm(request.POST)
+		users_form = UserForm1(request.POST, request.FILES)
 		if user_form.is_valid() and users_form.is_valid() :
 			user = user_form.save()
-			user.save()
-			profile = users_form.save()
+			profile = users_form.save(commit=False)
 			profile.user = user
 			if 'picture' in request.FILES:
 				profile.picture = request.FILES['picture']
