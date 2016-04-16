@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response, redirect
+from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 from post.models import Post, MyComment, Like, Contact
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
@@ -7,6 +7,29 @@ from django.template.loader import get_template
 from django.core.mail import EmailMessage, send_mail
 from django.template import RequestContext, Context
 # Create your views here.
+
+
+def post_list(request, pk):
+	context = {}
+	post_list = get_object_or_404(Post, pk=pk)
+
+	# comment Like
+
+	if comment:
+		post = Post.objects.get(title=post_name)
+		try:
+			com_obj = MyComment(user=request.user, post_name=post)
+			com_obj.title = comment
+			com_obj.save()
+			return HttpResponseRedirect('/post/mycomment/')
+		except:
+			HttpResponse("hi")
+	post = MyComment.objects.all()
+	comment_display =  [post for post in post]
+
+	context["comment_display"] = comment_display
+	context["post_list"] = post_list  
+	return render(request, "post/post_list.html", context)
 
 
 
@@ -38,6 +61,8 @@ def mycomment(request):
   if request.method == "POST":
     like = request.POST.get('like')
     unlike = request.POST.get('unlike')
+    post_name = request.POST.get('post_name')
+    comment = request.POST.get('comment')
     if like:
       post_name = request.POST.get('post_name')
       post = Post.objects.get(title=post_name)
@@ -59,28 +84,7 @@ def mycomment(request):
     else:
       pass
 
-   # comment post
-
-  if request.method == "POST":
-    user_form = MyCommentForm(request.POST)
-    if user_form.is_valid():
-      post_name = request.POST.get('post_name') 
-      if post_name:
-        post = Post.objects.get(title=post_name)
-        comment = user_form.save(commit=False)
-        comment.user = request.user
-        comment.post_name = post
-        comment.save()
-        return HttpResponseRedirect('/post/mycomment/')
-
-  else:
-    user_form = MyCommentForm()
-
-  post = MyComment.objects.all()
-  comment_display =  [post for post in post]
-
-  context["comment_display"] = comment_display
-  context["user_form"] = user_form
+ 
   context["is_like"] = is_like
   context["post_list"] = post_list  
   return render(request, "post/comment.html", context)

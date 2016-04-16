@@ -3,22 +3,24 @@ from django import template
 register = template.Library()
 from post.models import Post, MyComment, Like
 
-# def get_post(value):
-# 	try:
-# 		post = Post.objects.get(title=value)
-# 		data = MyComment.objects.filter(post_name=post)
-# 	except:
-# 		data = []
-# 	return data
+def get_post(value):
+	try:
+		post = Post.objects.get(title=value)
+		data = MyComment.objects.filter(post_name=post)
+	except:
+		data = []
+	return data
 
-# register.filter('get_post', get_post)
+register.filter('get_post', get_post)
 
 def check_like(value, user):
 	is_like = False;
 	print value, user
 	try:
-		like = Like.objects.get(user=user)
+		post = Post.objects.get(title=value)
+		like = Like.objects.get(user=user, post=post)
 		is_like = like.like
+		print is_like
 	except:
 		pass
  	return is_like

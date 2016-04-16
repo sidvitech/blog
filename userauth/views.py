@@ -54,7 +54,7 @@ def user_login(request):
 
 def user_logout(request):
 	logout(request)
-	return HttpResponseRedirect('/')
+	return HttpResponseRedirect('/userauth/user_login')
 
 def main_page(request):
 	return render_to_response('userauth/main_page.html', {'user': request.user})

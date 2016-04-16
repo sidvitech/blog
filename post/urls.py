@@ -9,6 +9,7 @@ comment_delete,
 delete_comment,
 contact,
 image,
+post_list,
 )
 
 
@@ -21,7 +22,7 @@ urlpatterns = [
     url(r'^delete_comment/(?P<pk>[0-9]+)', delete_comment, name="delete_comment"),
     url(r'^contact/', contact, name="contact"),
     url(r'^image/', image, name="image"),
-
+    url(r'^(?P<pk>[0-9]+)/', post_list, name="post_list"),
 
 ]
 

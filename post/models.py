@@ -9,7 +9,7 @@ class Post(models.Model):
 	title = models.CharField(max_length=100)
 	image = models.ImageField(upload_to="images/",blank=True, null=True)
    	created = models.DateTimeField(auto_now=False, auto_now_add=True)
-	tag = models.CharField(max_length=200)
+	author = models.CharField(max_length=200)
 	body = models.TextField()	
 
 	def get_absolute_url(self):

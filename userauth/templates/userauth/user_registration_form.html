@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-{% block content %}
+{% block body %}
 
 <div class="row">
 <div class="row" style="padding-top: 30px;">
@@ -19,6 +19,7 @@
 		<input type="submit" value="Sign Up"></input>
 		</form>
 		<p><a href="{% url 'userauth:user_login' %}">Login</a></p>
+    	<li><a href="{% url 'userauth:user_logout' %}">Logout</a></li>
 		<h1>View Count</h1>{{ view_count }}
 	</div>
 	</div>
@@ -26,4 +27,4 @@
 </div>
 </div>
 
-{% endblock content %}
+{% endblock %}
