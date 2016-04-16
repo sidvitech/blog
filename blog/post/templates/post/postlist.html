@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Post List</title>
+	<h1>List</h1>
+</head>
+<script type='text/javascript'>
+	$('input[type="text"]').addClass('form-control');
+	$('textarea').addClass('form-control');
+</script>
+<body>
+	<form action="" method="post" >
+		<div class="container" style="margin-top: 50px;">
+		{% if post_list %}
+			{% for post in post_list %}
+				<h2>{{post.postname}}</h2>
+				<p><a href="{% url 'post:post_detail' post.pk %}" class="btn btn-primary" role="button">View</a></p>
+			{% endfor %}	
+		{% endif %}	
+		</div>
+	</form>
+</body>
+</html>

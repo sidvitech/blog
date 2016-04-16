@@ -1,0 +1,53 @@
+from django import forms
+from django.forms import ModelForm
+from django.contrib.auth.models import User
+from userprofile.models import UserProfile
+
+class UserForm(ModelForm):
+	class Meta:
+		model = User
+		fields = ['username','email','first_name','last_name']
+		
+
+	def clean_username(self):
+			username = self.cleaned_data['username']
+			try:
+					User.objects.get(username=username)
+			except User.DoesNotExist:
+					return username
+			raise forms.ValidationError("That username is already taken please select another.")
+					
+class UserForm1(forms.ModelForm):
+	class Meta:
+		model = UserProfile
+		fields = ['mobileno','gender','picture']
+
+	def clean_mobileno(self):
+			mobileno = self.cleaned_data['mobileno']    
+			# try:
+			# 	if not (mobileno.isalpha()):
+			# 		min_length=10
+			# 		max_length=13
+			# 		ph_length = str(mobileno)
+			# 		if len(ph_length) < min_length or len(ph_length) > max_length:
+			# 			raise ValidationError('Phone number length not valid')
+			# except (ValueError, TypeError):
+			# 	raise ValidationError('Please enter a valid phone number')
+			return mobileno
+				
+class UpdatepicForm(forms.ModelForm):
+	username = forms.CharField(label=(u'User Name'))
+	class Meta:
+		model = UserProfile
+		fields =('picture',)
+
+class updateprofileform(forms.ModelForm):
+	username = forms.CharField(label=(u'User Name'))
+	class Meta:
+		model = User
+		fields = ('first_name','last_name','email')
+
+class updateprofileform1(forms.ModelForm):
+	class Meta:
+		model = UserProfile
+		fields =('mobileno','gender')

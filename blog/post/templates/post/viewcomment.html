@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Comment Details</title>
+	<h1 style="color:blue;">Comment Details</h1>
+	<hr/>
+</head>
+<script type='text/javascript'>
+	$('input[type="text"]').addClass('form-control');
+	$('textarea').addClass('form-control');
+</script>
+<body>
+	<form action="" method="post" >
+		{% if comments %}
+			{% for comm in comments %}
+			<ul>
+				<h3 style="color:orange;"><i>{{comm.postname}}</i></h3>
+				<li>
+					<h4 style="color:green;">{{comm.comment}}</h4>
+					<a href="/post/commentedit/">edit comment</a>
+				</li>
+			</ul>
+
+			{% endfor %}
+		{% endif %}	
+
+		<!-- {% if comments %}
+			{% if b %}
+				{% for comm in comments %}
+					{% for b1 in b %}
+						{{comm.postname}}
+						
+						{% if comm.postname = b.postname %}
+							{{b.username}}
+						{% endif %}	
+					{% endfor %}	
+				{% endfor %}
+
+			{% endif %}	
+		{% endif %}	 -->
+	</form>
+</body>
+</html>

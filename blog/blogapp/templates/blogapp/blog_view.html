@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Blog Details</title>
+	<h1>Blog Details</h1>
+	<hr/>
+</head>
+<script type='text/javascript'>
+	$('input[type="text"]').addClass('form-control');
+	$('textarea').addClass('form-control');
+</script>
+<body>
+<div>
+{% if blog_list %}
+	{% for blog in blog_list %}
+		<h2 style="color:Green;"><B>{{blog.blogname}}</B></h2>
+		<h4 style="color:violet;">
+		<ul><li>belongs to  <i><u> {{blog.category}} </u></i> Category</li></ul>		
+		<ul><li>Created by : {{blog.user}}</li></ul>
+		</h4>
+	{% endfor %}
+{% endif %}	
+</div>
+</body>
+</html>

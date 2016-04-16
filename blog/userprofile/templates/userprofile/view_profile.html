@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>View Profile</title>
+	<h2 style="color:green;">My Profile</h2>
+	</hr>
+</head>
+<script type='text/javascript'>
+	$('input[type="text"]').addClass('form-control');
+	$('textarea').addClass('form-control');
+</script>
+<body>
+	<form action="" method="post" enctype="multipart/form-data">
+		
+		{% if pic %}
+			<img src="{{ pic.url }}" height="200" width="200" border="1"/>
+		{% endif %}
+		<h3 style="color:orange;"><i><b><u>User Name</u> : {{uname}}</b></i></h3>
+		<h3 style="color:orange;"><i><b><u>Full Name</u> : {{fullname}}</b></i></h3>
+		<h3 style="color:orange;"><i><b><u>First Name</u> : {{fname}}</b></i></h3>
+		<h3 style="color:orange;"><i><b><u>Last Name</u> : {{lname}}</b></i></h3>
+		<h3 style="color:orange;"><i><b><u>Email Address</u> : {{email}}</b></i></h3>
+		<h3 style="color:orange;"><i><b><u>Mobile No</u> : {{mobileno}}</b></i></h3>
+		<h3 style="color:orange;"><i><b><u>Gender</u> : {{gender}}</b></i></h3>
+
+		
+		
+	</form>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+
+<html>
+<head>
+	<title>create post</title>
+	<h1>create post</h1>
+</head>
+<script type='text/javascript'>
+	$('input[type="text"]').addClass('form-control');
+	$('textarea').addClass('form-control');
+</script>
+<body>
+	<form action="" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		{% load wysiwyg %}
+		{% wysiwyg_setup %}
+
+
+			{{form.as_p}}
+			{% wysiwyg_editor "id_text" %}
+
+		<input type='submit' value='create post' class='btn btn-primary btn-lg btn-block'/>
+	</form>
+</body>
+</html>
