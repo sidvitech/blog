@@ -4,14 +4,12 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash, views
 from django.contrib import messages
 from django.contrib.auth.models import User
-from userauth.models import UserRegistration
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
 
-def user_registration(request):
-	view_count = UserRegistration.objects.filter(view=True).count()
-	
+def user_registration(request):	
 	if request.method == "POST":
 		user_form = UserRegistrationForm(request.POST)
 		if user_form.is_valid():
@@ -19,15 +17,14 @@ def user_registration(request):
 			password = user_form.cleaned_data["password1"]
 			user.set_password(password)
 			user.save()
-			us = UserRegistration(user=user)
-			us.view = True
-			us.save()
 			return HttpResponseRedirect('/userauth/user_registration/')
+		else:
+			HttpResponse("user form is not valid")
 
 	else:
 		user_form = UserRegistrationForm()
 
-	return render(request, "userauth/user_registration_form.html", { 'form': user_form, 'view_count': view_count})
+	return render(request, "userauth/user_registration_form.html", { 'form': user_form})
 
 def user_login(request):			
 	if not request.user.is_authenticated():
@@ -46,22 +43,28 @@ def user_login(request):
 							messages.error(request, "Your account is not active.")
 				else:
 						messages.error(request, "username or password were incorrect.")
+			else:
+				HttpResponse("user form is not valid")
 		else:
 				user_form = UserLoginForm()
 	else:
 			return HttpResponseRedirect("/")
 	return render(request, "userauth/user_login.html", {'form': user_form})
 
+@login_required(login_url='/userauth/user_login/')
 def user_logout(request):
 	logout(request)
 	return HttpResponseRedirect('/userauth/user_login')
 
-def main_page(request):
+@login_required(login_url='/userauth/user_login/')
+def user_homepage(request):
 	return render_to_response('userauth/main_page.html', {'user': request.user})
 
+@login_required(login_url='/userauth/user_login/')
 def home(request):
 	return render(request, "userauth/home.html")
 
+@login_required(login_url='/userauth/user_login/')
 def user_reset_password(request):
 	if request.method == "POST":
 		user_form = UserPasswordResetForm(request.POST)
@@ -82,24 +85,8 @@ def user_reset_password(request):
 				return HttpResponseRedirect('/userauth/user_login/')
 			else:
 				return HttpResponse("old password incorrect......")
+		else:
+			HttpResponse("user form is not valid")
 	else:
 		user_form = UserPasswordResetForm()
 	return render(request, "userauth/password_reset_confirm.html", {'form': user_form})
-
-def image(request): 
-	image = UserRegistration.objects.all().order_by("name")
-	context={'image': image}
-	return render_to_response('userauth/image.html',context, )
-
-
-# def password_change(request):
-# 	if request.method == 'POST':
-# 		form = PasswordChangeForm(user=request.user, data=request.POST)
-# 	if form.is_valid():
-# 		form.save()
-# 		update_session_auth_hash(request, form.user)
-# 	else:
-
-# def change_password(request):
-# 	template_response = views.password_change(request)
-# 	return template_response

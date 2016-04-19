@@ -13,6 +13,8 @@ def category(request):
 			us.user_register_name = request.user
 			us.save()
 			return HttpResponseRedirect('/category/category/')	
+		else:
+			HttpResponse("orm is not valid ")
 	else:
 		form = UserCategoryForm()
 
@@ -30,9 +32,8 @@ def category_delete(request):
 				return HttpResponseRedirect('/category/category_delete/')
 			except Category.DoesNotExist:
 				return HttpResponse("Category name not match. Plz check category name ")
-			# except Category.MultipleObjectsReturned:
-			# 	return HttpResponse("Category does not exist")
-
+		else:
+			HttpResponse("form is not valid")
 	else:
 		form = UserDeleteCategory()
 

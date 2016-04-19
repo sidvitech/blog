@@ -14,20 +14,7 @@ def post_list(request, pk):
 	post_list = get_object_or_404(Post, pk=pk)
 
 	# comment Like
-
-	if comment:
-		post = Post.objects.get(title=post_name)
-		try:
-			com_obj = MyComment(user=request.user, post_name=post)
-			com_obj.title = comment
-			com_obj.save()
-			return HttpResponseRedirect('/post/mycomment/')
-		except:
-			HttpResponse("hi")
-	post = MyComment.objects.all()
-	comment_display =  [post for post in post]
-
-	context["comment_display"] = comment_display
+    
 	context["post_list"] = post_list  
 	return render(request, "post/post_list.html", context)
 
@@ -84,6 +71,19 @@ def mycomment(request):
     else:
       pass
 
+    if comment:
+        post = Post.objects.get(title=post_name)
+        try:
+            com_obj = MyComment(user=request.user, post_name=post)
+            com_obj.title = comment
+            com_obj.save()
+            return HttpResponseRedirect('/post/mycomment/')
+        except:
+            HttpResponse("hi")
+    post = MyComment.objects.all()
+    comment_display =  [post for post in post]
+
+    context["comment_display"] = comment_display
  
   context["is_like"] = is_like
   context["post_list"] = post_list  
