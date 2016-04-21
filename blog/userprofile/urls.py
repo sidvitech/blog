@@ -4,8 +4,8 @@ from userprofile import views
 
 urlpatterns = [
 	url(r'^$',views.viewuserprofile, name='home'),
-	url(r'^create/$', views.adduserprof_view, name='create_userprofile'),
-	url(r'^update/$', views.updateuserprof_view, name='update_userprofile'),
-	url(r'^editprofile/$',views.edit_profile, name='editprofile'),
-	url(r'^updatepic/$',views.update_pic, name='updatepic'),
+	url(r'^create/$', views.adduserprofile, name='create_userprofile'),
+	url(r'^update/$', views.updateuserprofile, name='update_userprofile'),
+	url(r'^edit/$',views.edit_profile, name='edit_userprofile'),
+	url(r'^picture/update/$',views.update_pic, name='update_pic'),
 	]

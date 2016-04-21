@@ -7,8 +7,10 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
+@login_required(login_url='/admin/login/')
 def viewuserprofile(request):
 	username = request.user
 	uname=request.user.get_username()
@@ -20,16 +22,15 @@ def viewuserprofile(request):
 	gender=username.userprofile.gender
 	pic = username.userprofile.picture
 	u = User.objects.get(username=username)
-	
-	
 	return render(request,'userprofile/view_profile.html',{'fullname':fullname,'uname':uname,'fname':fname,'lname':lname,'email':email,'gender':gender,'pic':pic,'mobileno':mobileno})
 
 
-
-def adduserprof_view(request):	
+@login_required(login_url='/admin/login/')
+def adduserprofile(request):	
 	if request.method == 'POST':
 		user_form = UserForm(request.POST)
 		users_form = UserForm1(request.POST, request.FILES)
+		print users_form
 		if user_form.is_valid() and users_form.is_valid() :
 			user = user_form.save()
 			profile = users_form.save(commit=False)
@@ -43,7 +44,8 @@ def adduserprof_view(request):
 			users_form=UserForm1()
 			
 		else:
-			print user_form.errors,users_form.errors
+			HttpResponse('errors availabe on same page...goto the same page again.')
+			# print user_form.errors,users_form.errors
 				
 	else:
 		user_form= UserForm()
@@ -51,7 +53,8 @@ def adduserprof_view(request):
 
 	return render(request,'userprofile/userdetails.html',{'user_form':user_form, 'users_form':users_form,},)	
 
-def updateuserprof_view(request):
+@login_required(login_url='/admin/login/')
+def updateuserprofile(request):
 	user = request.user
 	profile = user.userprofile
 	if request.method == 'POST':
@@ -78,6 +81,7 @@ def updateuserprof_view(request):
 			user_form= updateprofileform()
 			users_form=updateprofileform1()			
 		else:
+			HttpResponse('errors availabe on same page...goto the same page again.')
 			print user_form.errors,users_form.errors
 	else:
 		user_form= updateprofileform()
@@ -85,7 +89,7 @@ def updateuserprof_view(request):
 	return render(request,'userprofile/updateprofile.html',{'user_form':user_form,'users_form':users_form})
 					
 
-
+@login_required(login_url='/admin/login/')
 def edit_profile(request):
 	user = request.user
 	profile = user.userprofile
@@ -101,6 +105,7 @@ def edit_profile(request):
 
 	return render (request,'userprofile/editprofile.html', {'user_form':user_form, 'profile_form':profile_form})			
 
+@login_required(login_url='/admin/login/')
 def update_pic(request):
 	user = request.user
 	profile = user.userprofile
@@ -113,9 +118,7 @@ def update_pic(request):
 				u = User.objects.get(username=username)
 			except:
 				return HttpResponse('username not found....')
-			# UserProfile.objects.filter(user__username=username).update(
-			# 		picture=picture,
-			# 	)	
+				
 			p = user_form.save(commit = False)
 			if 'picture' in request.FILES:
 			 	p.picture=request.FILES['picture']
@@ -123,7 +126,9 @@ def update_pic(request):
 				p.save()	
 			else:
 				print user_form.errors
-			user_form=UpdatepicForm()	
+				user_form=UpdatepicForm()	
+		else:
+			HttpResponse('errors availabe on same page...goto the same page again.')	
 	else:
 		user_form=UpdatepicForm(instance = profile)			
 	return render(request,'userprofile/update_pic.html',{'user_form':user_form})	
