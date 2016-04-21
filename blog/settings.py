@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'post',
     'ckeditor',
     'django_wysiwyg',
+    'crispy_forms',
 ]
 DJANGO_WYSIWYG_FLAVOR = "ckeditor"
 

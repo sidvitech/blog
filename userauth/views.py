@@ -1,30 +1,13 @@
 from django.shortcuts import render, render_to_response
-from .forms import UserRegistrationForm, UserLoginForm,  UserPasswordResetForm
+from .forms import UserLoginForm
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash, views
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-
+from django.views import generic
+from django.contrib.auth.forms import UserCreationForm
 # Create your views here.
-
-
-def user_registration(request):	
-	if request.method == "POST":
-		user_form = UserRegistrationForm(request.POST)
-		if user_form.is_valid():
-			user = user_form.save(commit=False)
-			password = user_form.cleaned_data["password1"]
-			user.set_password(password)
-			user.save()
-			return HttpResponseRedirect('/userauth/user_registration/')
-		else:
-			HttpResponse("user form is not valid")
-
-	else:
-		user_form = UserRegistrationForm()
-
-	return render(request, "userauth/user_registration_form.html", { 'form': user_form})
 
 def user_login(request):			
 	if not request.user.is_authenticated():
@@ -55,14 +38,6 @@ def user_login(request):
 def user_logout(request):
 	logout(request)
 	return HttpResponseRedirect('/userauth/user_login')
-
-@login_required(login_url='/userauth/user_login/')
-def user_homepage(request):
-	return render_to_response('userauth/main_page.html', {'user': request.user})
-
-@login_required(login_url='/userauth/user_login/')
-def home(request):
-	return render(request, "userauth/home.html")
 
 @login_required(login_url='/userauth/user_login/')
 def user_reset_password(request):
