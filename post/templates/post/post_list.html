@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load customs_tags %}
+{% load staticfiles %}
+
+{% block jquery %}
+
+{% endblock jquery %}
+
+{% block body %}
+
+<div class="col-sm-6 col-sm-offset-3">
+{% if post_list.image.url %}
+<img src="{{ post_list.image.url }}" class="img-responsive">
+{% endif %}
+<h1>{{ title }}<small>{% if post_list.user %}<span style='color:red;'>Draft</span>{% endif %}{{ post_list.created }}</small></h1>
+<p><span style='color:blue;'>Title: {{ post_list.title|safe }}</span></p>
+<p>Author: {{ post_list.author|safe }}</p>
+<p>{{ post_list.body|safe }}</p>
+
+<p>
+<div class="fb-like" data-href="{{ request.build_absolute_uri }}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+</p>
+
+<p>
+<a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
+Facebook
+</a>
+
+<a href='https://plus.google.com/share?url={{ request.build_absolute_uri }}'>Google+ </a>
+
+
+</div>
+
+
+
+{% endblock  %}

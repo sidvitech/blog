@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<div class="row" style="padding-top: 30px;">
+<div class="container"> 
+    <form action="" method="post">
+            {% csrf_token %}
+            {% if form.errors %}
+            <p>Please correct the following fields:</p>
+            {% endif %}
+        <div class="register_div">
+            {% if form.username.errors %}
+
+            <p class="error">
+            {{ form.username.errors }}
+            </p>{% endif %}
+
+            <p><label for="username"{% if form.username.errors %} class="error"{% endif %}>Username:
+            </label></p>
+            <p>{{ form.username }}</p>
+        </div>
+
+        <div class="register_div">
+            {% if form.password.errors %}
+
+            <p class="error">
+            {{ form.password.errors }}
+            </p>
+            {% endif %}
+            
+            <p><label for="password"{% if form.password.errors %} class="error"{% endif %}>Password:</label></p>
+            <p>{{ form.password }}</p>
+        </div>
+            <ul>
+                <li><input type="submit" value="Login" /></li>{{ view_count }}
+                <li><a href="{% url 'userauth:user_logout' %}">Logout</a></li>
+                <li>Forgot your password? <a href="/userauth/user_reset_password/">Reset it!</a></li>
+            </ul>
+    </form>
+</div>
+</div>
+</body>
+</html>

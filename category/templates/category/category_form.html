@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block body %}
+
+<div>
+    <h1 align="center">Category Form</h1>
+    <p>Select the User Register Name <b><u>{{ user.username }}</u></b></p>
+	<form method="post" action="">{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Add Category"></input>
+	    <li><a href="{% url 'category:category_delete' %}">Delete Category</a></li>
+	</form>
+</div>
+
+{% endblock %}

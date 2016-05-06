@@ -1,0 +1,174 @@
+<div class="row">
+  <div  class=col-sm-2 bg-info style=" background-color: red; ">
+
+  </div>
+  <div  class="col-sm-8 bg-info ">
+    <h3 class="page-header" align="left">List Of All Post</h3>
+      {% if image_display %}
+        <ul>
+          <li>{% for post in image_list %}</li><p>Post Name:-</p>
+
+          <li>{{ post }} <p>
+
+            {% for post in image_display %}
+            {{ post }}     <img src="{{ image.image.url }}">
+               <br />
+            {% endfor %}
+              <br /><p>Comments:-</p>
+            {% for post in post.title|get_post  %}
+            {{ post }}<a href="{% url 'post:delete_comment' post.pk %}"> Delete</a></li></p>
+              <hr />
+              
+            {% endfor %}<a href="{% url 'post:contact' %}"> Follow</a></li></p><!--  <p><a href="{% url 'post:mycomment'%}?postname={{ post.title }}">comment</a></p> -->
+
+            <!-- { LIke POst Code } -->
+
+            <form method="post" action="">{% csrf_token %}
+              {% if data %}
+              <input type="hidden" name="unlike" value="True"></input>
+              <button type="submit">Unlike</button>{{ like_count }}
+              {% else %}
+              <input type="hidden" name="like" value="True"></input>
+              <button type="submit">Like</button>{{ like_count }}
+              {% endif %}
+            </form>
+
+            <!-- {Post Comment Code} -->
+
+            <form method="post" action="">{% csrf_token %}
+              {{ user_form.as_p }}
+              <input type="hidden" name="post_name" value="{{ post.title }}"></input>
+              <input type="submit" value="Comment"></input>
+                <!--           <li><a href="{% url 'post:commentview' %}">Comment List</a></li>
+                          <li><a href="{% url 'post:comment_delete' %}">Delete Comment</a></li> -->
+            </form>
+          </li>
+        </ul>
+        <hr />
+            {% endfor %}
+      {% else %}
+
+      {% endif %}
+                <li><a href="{% url 'post:comment_delete' %}">Delete Comment</a></li>
+
+  </div>
+</div>
+
+
+
+data = False
+  like_count = Like.objects.filter(like=True).count()
+  if request.user.is_authenticated():
+    try:
+      obj = Like.objects.get(user=request.user)
+      data = obj.like
+    except:
+      pass
+
+  if request.method == "POST":
+    unlike = request.POST.get('unlike')
+    like = request.POST.get('like')
+    if request.user.is_authenticated():
+      if like:
+        user, condition = Like.objects.get_or_create(user=request.user)
+        user.like = True
+        user.save()
+        return HttpResponseRedirect('/post/mycomment/')
+      if unlike:
+        like_obj = Like.objects.get(user=request.user)
+        like_obj.like = False
+        like_obj.save()
+        return HttpResponseRedirect('/post/mycomment/')
+    else:
+      return HttpResponseRedirect('/userauth/user_login/')
+
+  # if request.method == "POST":
+    user_form = MyCommentForm(request.POST)
+    if user_form.is_valid():
+      post_name = request.POST.get('post_name') 
+      if post_name:
+        post = Post.objects.get(title=post_name)
+        comment = user_form.save(commit=False)
+        comment.user = request.user
+        comment.post_name = post
+        comment.save()
+      return HttpResponseRedirect('/post/mycomment/')
+
+  else:
+    user_form = MyCommentForm()
+
+  post = Post.objects.all()
+  image_list =  [post for post in post]
+
+  post = Post.objects.all()
+  image_display =  [post.image for post in post]
+
+  post = MyComment.objects.all()
+  post_list =  [post for post in post]
+return render(request, "post/comment.html", {'user_form': user_form, 'data': data, 'like_count': like_count, 'image_list': image_list, 'image_display':image_display, 'post_list': post_list})
+
+
+
+
+
+
+
+
+def mycomment(request):
+  context = {}
+  post_list = Post.objects.all()
+  is_like = False
+
+  if request.method == "POST":
+    like = request.POST.get('like')
+    unlike = request.POST.get('unlike')
+    if like:
+      post_name = request.POST.get('post_name')
+      post = Post.objects.get(title=post_name)
+      try:
+        like_obj, cond = Like.objects.get_or_create(user=request.user, post=post)
+        like_obj.like = True
+        like_obj.save()
+      except:
+        pass
+    elif unlike:
+      post_name = request.POST.get('post_name')
+      post = Post.objects.get(title=post_name)
+      try:
+        like_obj = Like.objects.get(user=request.user, post=post)
+        like_obj.like=False
+        like_obj.save()
+      except:
+        pass
+    else:
+      pass
+   
+  if request.method == "POST":
+    user_form = MyCommentForm(request.POST)
+    if user_form.is_valid():
+      post_name = request.POST.get('post_name') 
+      if post_name:
+        post = Post.objects.get(title=post_name)
+        comment = user_form.save(commit=False)
+        comment.user = request.user
+        comment.post_name = post
+        comment.save()
+        return HttpResponseRedirect('/post/mycomment/')
+
+  else:
+    user_form = MyCommentForm()
+
+
+  context["user_form"] = user_form
+  context["is_like"] = is_like
+  context["post_list"] = post_list  
+  return render(request, "post/comment.html", context)
+
+
+          <form method="post" action="">{% csrf_token %}
+          {{ user_form.as_p }}
+          <input type="hidden" name="post_name" value="{{ post.title }}"></input>
+          <input type="submit" value="Comment"></input>
+            <!--           <li><a href="{% url 'post:commentview' %}">Comment List</a></li>
+                      <li><a href="{% url 'post:comment_delete' %}">Delete Comment</a></li> -->
+        </form>

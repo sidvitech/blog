@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block body %}
+<h1>Contact</h1>
+<form role="form" action="" method="post">
+    {% csrf_token %}
+    {{ form_class.as_p }}
+    <button type="submit">Submit</button>
+
+</form>
+<!-- <div>
+    <h1 align="center">Contact Form</h1>
+  <form method="post" action="">{% csrf_token %}
+    {{ form_class.as_p }}
+    <input type="submit" value="Submit"></input>
+  </form>
+</div> -->
+{% endblock body %}

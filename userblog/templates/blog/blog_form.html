@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block body %}
+
+<div>
+    <h1 align="center">Blog Form</h1>
+    <h1>View Count</h1>{{ view_count }}
+      <p>Select the User Category Name <b><u>{{ category.user_name }}</u></b></p>
+	<form method="post" action="">{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Add Blog"></input>
+	<li><a href="{% url 'userblog:blog_delete' %}">Delete Blog</a></li>
+	</form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load customs_tags %}
+{% load staticfiles %}
+
+{% block jquery %}
+
+{% endblock jquery %}
+
+{% block body %}
+<div class="container" style="margin-top: 50px;">
+{% if post_list %}
+{% for post in post_list %}
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="thumbnail">
+      <img src="{{ post.image.url }}" alt="{{ post.title }}">
+      <div class="caption">
+        <h3>{{ post.title|safe }}</h3>
+        {{ post.body|safe }}
+        <form method="post" action="" name="{{ post.title }}" id="{{ post.title }}">{% csrf_token %}
+        <input type="hidden" name="post_name" value="{{ post.title }}"></input>
+        {% if post.title|check_like:request.user %}
+          <input type="hidden" name="unlike" value="True"></input>
+          <button type="submit" class="btn btn-primary">Unlike</button><small> {{ post.title|like_count }}</small>
+          
+        {% else %}
+          <input type="hidden" name="like" value="True"></input>
+          <button type="submit" class="btn btn-primary">Like</button><small> {{ post.title|like_count }}</small>
+        {% endif %}
+        </form>
+						<ul>
+							{% for post in post.title|get_post %}
+								<li>{{ post }}<a href="{% url 'post:delete_comment' post.pk %}"> Delete</a></li></p>
+						</ul>
+							{% endfor %}
+        <form method="post" action="">{% csrf_token %}
+          <textarea name="comment" rows="4" cols="15" ></textarea>
+          <input type="hidden" name="post_name" value="{{ post.title }}"></input>
+          <input type="submit" value="Comment"></input>
+            <!--           <li><a href="{% url 'post:commentview' %}">Comment List</a></li>
+                      <li><a href="{% url 'post:comment_delete' %}">Delete Comment</a></li> -->
+        </form>
+       <a href="{% url 'post:post_list' post.pk %}"> view</a></li></p>      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endfor %}
+{% endif %}
+
+
+{% endblock  %}
+
+

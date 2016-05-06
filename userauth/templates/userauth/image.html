@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block body %}
+
+    {%for image in images %}
+    	<p><a href="/userauth/user_registration/{{image.slug}}/"><img scr="{{userauth.user_registration.url}}">{{image}}</a></p>
+	{% endfor%}
+
+{% endblock body %}

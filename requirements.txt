@@ -1,0 +1,7 @@
+Django==1.9.4
+argparse==1.2.1
+django-bootstrap-toolkit==2.15.0
+django-extensions==1.6.1
+django-registration-redux==1.4
+six==1.10.0
+wsgiref==0.1.2
