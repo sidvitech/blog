@@ -89,15 +89,6 @@ def mycomment(request):
   context["post_list"] = post_list  
   return render(request, "post/comment.html", context)
 
-def image(request):
-    image = Post()
-    variables = RequestContext(request,{
-        'image':image
-    })
-    return render_to_response('post/image.html',variables)
-
-
-
 def commentview(request):
 	data = False
 	# like_count = Like.objects.filter(like=True).count()

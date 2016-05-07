@@ -2,62 +2,67 @@
 {% load staticfiles %}
 
 {% block body %}
-
-       <div class="login-container login-v2" style="background-color: DarkGray; padding: 210px;">
-       <div class="row">
-        <div class="col-sm-6 col-sm-offset-3">
-            <div class="login-box animated fadeInDown">
-                <div class="login-body">
-                    <div class="login-title"><strong>Welcome</strong>, Please login.</div>
-                    <form action="" class="form-horizontal" method="post">{% csrf_token %}
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <span class="glyphicon glyphicon-user"></span>
-                                </div>
-                                <input type="text" class="form-control" placeholder="Username"/>
-                            </div>
+        {% if user.username %}
+        <p>Welcome {{ user.username }}! Here you can store and share blog</p>
+    {% else %}
+        <p>Welcome anonymous user! You need to <a href="{% url 'userauth:user_login' %}">Login</a>before you can store and share blog</p>
+    {% endif %}
+ <div class="registration-container registration-extended">            
+            <div class="registration-box animated fadeInDown">
+                <div class="registration-logo"></div>
+                <div class="registration-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div {% if message.tags %} class="alert alert-warning" {% endif %}>
+                            <strong style="color: red;">{{ message }}</strong>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <span class="glyphicon glyphicon-lock"></span>
-                                </div>                                
-                                <input type="password" class="form-control" placeholder="Password"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
+                        {% endfor %}
+                    {% endif %}
+                    <div class="row">                        
                         <div class="col-md-6">
-                            <a href="#">Forgot your password?</a>
-                        </div>          
-                        <div class="col-md-6 text-right">
-                            <a href="#">Create an account</a>
-                        </div>              
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <button class="btn btn-primary btn-lg btn-block">Login</button>
+                            
+                           <div class="registration-title"><strong>Welcome</strong>, Please login</div>
+                            <form action="" class="form-horizontal" method="post">{% csrf_token %}
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <input type="text" id="id_username" name="username" class="form-control" placeholder="Username" required/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <input type="password" id="id_password" name="password" class="form-control" placeholder="Password" required/>
+                                </div>
+                            </div>
+                            <div class="form-group push-down-30">
+                                <div class="col-md-6">
+                                    <a href="{% url 'userauth:user_reset_password' %}" class="btn btn-link btn-block">Forgot your password?</a>
+                                </div>
+                                <div class="col-md-6">
+                                    <button class="btn btn-info btn-block">Log In</button>
+                                </div>
+                            </div>
+                            </form> 
+                            
                         </div>
+                                
+                            </form>                            
+                            
                     </div>
-                    </form>
+                    
                 </div>
-                <div class="login-footer">
+                
+                <div class="registration-footer">
                     <div class="pull-left">
                         &copy; 2015 AppName
                     </div>
                     <div class="pull-right">
-                        <a href="#">About</a> |
-                        <a href="#">Privacy</a> |
+                        <a href="#">About</a> 
+                        <a href="#">Privacy</a> 
                         <a href="#">Contact Us</a>
                     </div>
                 </div>
             </div>
-    </div>
-    </div>
+            
         </div>
 
 

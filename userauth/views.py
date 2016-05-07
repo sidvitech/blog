@@ -13,14 +13,22 @@ def user_registration(request):
 	# view_count = UserRegistration.objects.filter(view=True).count()
 	
 	if request.method == "POST":
-		user_form = UserRegistrationForm(request.POST)
-		if user_form.is_valid():
-			user = user_form.save(commit=False)
-			password = user_form.cleaned_data["password1"]
-			user.set_password(password)
-			user.save()
-			return HttpResponseRedirect('/userauth/user_registration/')
-
+		username = request.POST['reg_username']
+		password = request.POST['reg_password']
+		cpassword = request.POST['reg_confirm_password']
+		email = request.POST['reg_email']
+		if password == cpassword:
+			try:
+				user = User(username=username)
+				user.set_password(password)
+				user.email = email
+				user.save()
+				return HttpResponseRedirect('')
+			except:
+				return HttpResponse("User does not save.....")
+		else:
+			messages.success(request, 'Password does not match........')
+			return HttpResponseRedirect('') 
 	else:
 		user_form = UserRegistrationForm()
 
@@ -30,24 +38,38 @@ def user_login(request):
 	if not request.user.is_authenticated():
 
 		if request.method == "POST":
-			user_form = UserLoginForm(request.POST)
-			if user_form.is_valid():
-				username = user_form.cleaned_data["username"]
-				password = user_form.cleaned_data["password"]
-				user =  authenticate(username=username, password=password)
-				if user is not None:
-					if user.is_active:
-						login(request, user)
-						return HttpResponseRedirect("/")
-					else:
-							messages.error(request, "Your account is not active.")
+			username = request.POST.get('username', None)
+			password = request.POST.get('password', None)
+
+			auth = authenticate(username=username, password=password)
+			if auth is not None:
+				if auth.is_active:
+					login(request, auth)
+					return HttpResponseRedirect('/')
 				else:
-						messages.error(request, "username or password were incorrect.")
+					messages.error(request, "your account is not active")
+			else:
+				messages.error(request, "username or password not match")
+
+			# try:
+			# 	username = user_form.cleaned_data["username"]
+			# 	password = user_form.cleaned_data["password"]
+			# 	user =  authenticate(username=username, password=password)
+			# 	if user is not None:
+			# 		if user.is_active:
+			# 			login(request, user)
+			# 			return HttpResponseRedirect("/")
+			# 		else:
+			# 				messages.error(request, "Your account is not active.")
+			# 	else:
+			# 			messages.error(request, "username or password were incorrect.")
+			# except:
+			# 	pass
 		else:
 				user_form = UserLoginForm()
 	else:
 			return HttpResponseRedirect("/")
-	return render(request, "userauth/user_login.html", {'form': user_form})
+	return render(request, "userauth/user_login.html")
 
 def user_logout(request):
 	logout(request)

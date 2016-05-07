@@ -9,8 +9,7 @@
 {% block body %}
         <!-- START PAGE CONTAINER -->
         <div class="page-container">
-            <div class="row">
-            <div class="col-md-3">
+            
             <!-- START PAGE SIDEBAR -->
             <div class="page-sidebar">
                 <!-- START X-NAVIGATION -->
@@ -21,11 +20,11 @@
                     </li>
                     <li class="xn-profile">
                         <a href="#" class="profile-mini">
-                            <img src="assets/images/users/avatar.jpg" alt="John Doe"/>
+                            <img src="{% static 'assets/images/users/avatar.jpg' %}" alt="John Doe"/>
                         </a>
                         <div class="profile">
                             <div class="profile-image">
-                                <img src="assets/images/users/avatar.jpg" alt="John Doe"/>
+                                <img src="{% static 'assets/images/users/avatar.jpg' %}" alt="John Doe"/>
                             </div>
                             <div class="profile-data">
                                 <div class="profile-data-name">John Doe</div>
@@ -38,7 +37,6 @@
                         </div>                                                                        
                     </li>
                     <li class="xn-title">Navigation</li>
-                    <div class="btn-group-vertical" role="group" aria-label="...">
                     <li class="xn-openable">
                         <a href="#"><span class="fa fa-dashboard"></span> <span class="xn-text">Dashboards</span></a>
                         <ul>
@@ -47,7 +45,6 @@
                             <li><a href="dashboard-dark.html"><span class="xn-text">Dashboard 3</span></a><div class="informer informer-danger">New!</div></li>
                         </ul>
                     </li>  
-                    </div>
                     <li class="xn-openable active">
                         <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text">Pages</span></a>
                         <ul>
@@ -99,11 +96,11 @@
                             <li class="xn-openable">
                                 <a href="#"><span class="fa fa-plus"></span> Registration</a>
                                 <ul>                                                                        
-                                    <li><a href="pages-registration.html">Default</a></li>
-                                    <li><a href="pages-registration-login.html">With Login</a></li>                                    
+                                    <li><a href="{% url 'userauth:user_login' %}">Default</a></li>
+                                    <li><a href="{% url 'userauth:user_registration' %}">With Login</a></li>                                    
                                 </ul>
                             </li>
-                            <li><a href="pages-forgot-password.html"><span class="fa fa-question"></span> Forgot Password</a></li>                            
+                            <li><a href="{% url 'userauth:user_reset_password' %}"><span class="fa fa-question"></span> Forgot Password</a></li>                            
                             <li class="xn-openable">
                                 <a href="#"><span class="fa fa-warning"></span> Error Pages</a>
                                 <ul>                                    
@@ -222,214 +219,202 @@
                 </ul>
                 <!-- END X-NAVIGATION -->
             </div>
-            </div>
+            <!-- END PAGE SIDEBAR -->
+            
+            <!-- PAGE CONTENT -->
+            <div class="page-content">
+                
+                <!-- START X-NAVIGATION VERTICAL -->
+                <ul class="x-navigation x-navigation-horizontal x-navigation-panel">
+                    <!-- TOGGLE NAVIGATION -->
+                    <li class="xn-icon-button">
+                        <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
+                    </li>
+                    <!-- END TOGGLE NAVIGATION -->
+                    <!-- SEARCH -->
+                    <li class="xn-search">
+                        <form role="form">
+                            <input type="text" name="search" placeholder="Search..."/>
+                        </form>
+                    </li>   
+                    <!-- END SEARCH -->
+                    <!-- POWER OFF -->
+                    <li class="xn-icon-button pull-right last">
+                        <a href="#"><span class="fa fa-power-off"></span></a>
+                        <ul class="xn-drop-left animated zoomIn">
+                            <li><a href="pages-lock-screen.html"><span class="fa fa-lock"></span> Lock Screen</a></li>
+                            <li><a href="/userauth/logout/" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span> Sign Out</a></li>
+                        </ul>                        
+                    </li> 
+                    <!-- END POWER OFF -->
+                    <!-- MESSAGES -->
+                    <li class="xn-icon-button pull-right">
+                        <a href="#"><span class="fa fa-comments"></span></a>
+                        <div class="informer informer-danger">4</div>
+                        <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><span class="fa fa-comments"></span> Messages</h3>                                
+                                <div class="pull-right">
+                                    <span class="label label-danger">4 new</span>
+                                </div>
+                            </div>
+                            <div class="panel-body list-group list-group-contacts scroll" style="height: 200px;">
+                                <a href="#" class="list-group-item">
+                                    <div class="list-group-status status-online"></div>
+                                    <img src="assets/images/users/user2.jpg" class="pull-left" alt="John Doe"/>
+                                    <span class="contacts-title">John Doe</span>
+                                    <p>Praesent placerat tellus id augue condimentum</p>
+                                </a>
+                                <a href="#" class="list-group-item">
+                                    <div class="list-group-status status-away"></div>
+                                    <img src="assets/images/users/user.jpg" class="pull-left" alt="Dmitry Ivaniuk"/>
+                                    <span class="contacts-title">Dmitry Ivaniuk</span>
+                                    <p>Donec risus sapien, sagittis et magna quis</p>
+                                </a>
+                                <a href="#" class="list-group-item">
+                                    <div class="list-group-status status-away"></div>
+                                    <img src="assets/images/users/user3.jpg" class="pull-left" alt="Nadia Ali"/>
+                                    <span class="contacts-title">Nadia Ali</span>
+                                    <p>Mauris vel eros ut nunc rhoncus cursus sed</p>
+                                </a>
+                                <a href="#" class="list-group-item">
+                                    <div class="list-group-status status-offline"></div>
+                                    <img src="assets/images/users/user6.jpg" class="pull-left" alt="Darth Vader"/>
+                                    <span class="contacts-title">Darth Vader</span>
+                                    <p>I want my money back!</p>
+                                </a>
+                            </div>     
+                            <div class="panel-footer text-center">
+                                <a href="pages-messages.html">Show all messages</a>
+                            </div>                            
+                        </div>                        
+                    </li>
+                    <!-- END MESSAGES -->
+                    <!-- TASKS -->
+                    <li class="xn-icon-button pull-right">
+                        <a href="#"><span class="fa fa-tasks"></span></a>
+                        <div class="informer informer-warning">3</div>
+                        <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><span class="fa fa-tasks"></span> Tasks</h3>                                
+                                <div class="pull-right">
+                                    <span class="label label-warning">3 active</span>
+                                </div>
+                            </div>
+                            <div class="panel-body list-group scroll" style="height: 200px;">                                
+                                <a class="list-group-item" href="#">
+                                    <strong>Phasellus augue arcu, elementum</strong>
+                                    <div class="progress progress-small progress-striped active">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">50%</div>
+                                    </div>
+                                    <small class="text-muted">John Doe, 25 Sep 2015 / 50%</small>
+                                </a>
+                                <a class="list-group-item" href="#">
+                                    <strong>Aenean ac cursus</strong>
+                                    <div class="progress progress-small progress-striped active">
+                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;">80%</div>
+                                    </div>
+                                    <small class="text-muted">Dmitry Ivaniuk, 24 Sep 2015 / 80%</small>
+                                </a>
+                                <a class="list-group-item" href="#">
+                                    <strong>Lorem ipsum dolor</strong>
+                                    <div class="progress progress-small progress-striped active">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 95%;">95%</div>
+                                    </div>
+                                    <small class="text-muted">John Doe, 23 Sep 2015 / 95%</small>
+                                </a>
+                                <a class="list-group-item" href="#">
+                                    <strong>Cras suscipit ac quam at tincidunt.</strong>
+                                    <div class="progress progress-small">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">100%</div>
+                                    </div>
+                                    <small class="text-muted">John Doe, 21 Sep 2015 /</small><small class="text-success"> Done</small>
+                                </a>                                
+                            </div>     
+                            <div class="panel-footer text-center">
+                                <a href="pages-tasks.html">Show all tasks</a>
+                            </div>                            
+                        </div>                        
+                    </li>
+                    <!-- END TASKS -->
+                    <!-- LANG BAR -->
+                    <li class="xn-icon-button pull-right">
+                        <a href="#"><span class="flag flag-gb"></span></a>
+                        <ul class="xn-drop-left xn-drop-white animated zoomIn">
+                            <li><a href="#"><span class="flag flag-gb"></span> English</a></li>
+                            <li><a href="#"><span class="flag flag-de"></span> Deutsch</a></li>
+                            <li><a href="#"><span class="flag flag-cn"></span> Chinese</a></li>
+                        </ul>                        
+                    </li> 
+                    <!-- END LANG BAR -->
+                </ul>
+                <!-- END X-NAVIGATION VERTICAL -->                    
+                
+                <!-- START BREADCRUMB -->
+                <ul class="breadcrumb">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Pages</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li class="active">Posts</li>
+                </ul>
+                <!-- END BREADCRUMB -->
+                
+                <!-- PAGE TITLE -->
+                <div class="page-title">                    
+                    <h2><span class="fa fa-arrow-circle-o-left"></span> Posts</h2>
+                </div>
+                <!-- END PAGE TITLE -->                
+                
+                <!-- PAGE CONTENT W12APPER -->
+                <div class="page-content-wrap">
+                    
+                    <div class="row">
+                        <div class="col-md-9">
+                            
 
-
-
- <div class="page-content">
-          <div class="col-md-9">
-          <!-- START X-NAVIGATION VERTICAL -->
-          <ul class="x-navigation x-navigation-horizontal x-navigation-panel">
-              <!-- TOGGLE NAVIGATION -->
-              <li class="xn-icon-button">
-                  <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
-              </li>
-              <!-- END TOGGLE NAVIGATION -->
-              <!-- SEARCH -->
-              <li class="xn-search">
-                  <form role="form">
-                      <input type="text" name="search" placeholder="Search..."/>
-                  </form>
-              </li>   
-              <!-- END SEARCH -->
-              <!-- POWER OFF -->
-              <li class="xn-icon-button pull-right last">
-                  <a href="#"><span class="fa fa-power-off"></span></a>
-                  <ul class="xn-drop-left animated zoomIn">
-                      <li><a href="pages-lock-screen.html"><span class="fa fa-lock"></span> Lock Screen</a></li>
-                      <li><a href="#" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span> Sign Out</a></li>
-                  </ul>                        
-              </li> 
-              <!-- END POWER OFF -->
-              <!-- MESSAGES -->
-              <li class="xn-icon-button pull-right">
-                  <a href="#"><span class="fa fa-comments"></span></a>
-                  <div class="informer informer-danger">4</div>
-                  <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging">
-                      <div class="panel-heading">
-                          <h3 class="panel-title"><span class="fa fa-comments"></span> Messages</h3>                                
-                          <div class="pull-right">
-                              <span class="label label-danger">4 new</span>
-                          </div>
-                      </div>
-                      <div class="panel-body list-group list-group-contacts scroll" style="height: 200px;">
-                          <a href="#" class="list-group-item">
-                              <div class="list-group-status status-online"></div>
-                              <img src="assets/images/users/user2.jpg" class="pull-left" alt="John Doe"/>
-                              <span class="contacts-title">John Doe</span>
-                              <p>Praesent placerat tellus id augue condimentum</p>
-                          </a>
-                          <a href="#" class="list-group-item">
-                              <div class="list-group-status status-away"></div>
-                              <img src="assets/images/users/user.jpg" class="pull-left" alt="Dmitry Ivaniuk"/>
-                              <span class="contacts-title">Dmitry Ivaniuk</span>
-                              <p>Donec risus sapien, sagittis et magna quis</p>
-                          </a>
-                          <a href="#" class="list-group-item">
-                              <div class="list-group-status status-away"></div>
-                              <img src="assets/images/users/user3.jpg" class="pull-left" alt="Nadia Ali"/>
-                              <span class="contacts-title">Nadia Ali</span>
-                              <p>Mauris vel eros ut nunc rhoncus cursus sed</p>
-                          </a>
-                          <a href="#" class="list-group-item">
-                              <div class="list-group-status status-offline"></div>
-                              <img src="assets/images/users/user6.jpg" class="pull-left" alt="Darth Vader"/>
-                              <span class="contacts-title">Darth Vader</span>
-                              <p>I want my money back!</p>
-                          </a>
-                      </div>     
-                      <div class="panel-footer text-center">
-                          <a href="pages-messages.html">Show all messages</a>
-                      </div>                            
-                  </div>                        
-              </li>
-              <!-- END MESSAGES -->
-              <!-- TASKS -->
-              <li class="xn-icon-button pull-right">
-                  <a href="#"><span class="fa fa-tasks"></span></a>
-                  <div class="informer informer-warning">3</div>
-                  <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging">
-                      <div class="panel-heading">
-                          <h3 class="panel-title"><span class="fa fa-tasks"></span> Tasks</h3>                                
-                          <div class="pull-right">
-                              <span class="label label-warning">3 active</span>
-                          </div>
-                      </div>
-                      <div class="panel-body list-group scroll" style="height: 200px;">                                
-                          <a class="list-group-item" href="#">
-                              <strong>Phasellus augue arcu, elementum</strong>
-                              <div class="progress progress-small progress-striped active">
-                                  <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">50%</div>
-                              </div>
-                              <small class="text-muted">John Doe, 25 Sep 2015 / 50%</small>
-                          </a>
-                          <a class="list-group-item" href="#">
-                              <strong>Aenean ac cursus</strong>
-                              <div class="progress progress-small progress-striped active">
-                                  <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;">80%</div>
-                              </div>
-                              <small class="text-muted">Dmitry Ivaniuk, 24 Sep 2015 / 80%</small>
-                          </a>
-                          <a class="list-group-item" href="#">
-                              <strong>Lorem ipsum dolor</strong>
-                              <div class="progress progress-small progress-striped active">
-                                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 95%;">95%</div>
-                              </div>
-                              <small class="text-muted">John Doe, 23 Sep 2015 / 95%</small>
-                          </a>
-                          <a class="list-group-item" href="#">
-                              <strong>Cras suscipit ac quam at tincidunt.</strong>
-                              <div class="progress progress-small">
-                                  <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">100%</div>
-                              </div>
-                              <small class="text-muted">John Doe, 21 Sep 2015 /</small><small class="text-success"> Done</small>
-                          </a>                                
-                      </div>     
-                      <div class="panel-footer text-center">
-                          <a href="pages-tasks.html">Show all tasks</a>
-                      </div>                            
-                  </div>                        
-              </li>
-              <!-- END TASKS -->
-              <!-- LANG BAR -->
-              <li class="xn-icon-button pull-right">
-                  <a href="#"><span class="flag flag-gb"></span></a>
-                  <ul class="xn-drop-left xn-drop-white animated zoomIn">
-                      <li><a href="#"><span class="flag flag-gb"></span> English</a></li>
-                      <li><a href="#"><span class="flag flag-de"></span> Deutsch</a></li>
-                      <li><a href="#"><span class="flag flag-cn"></span> Chinese</a></li>
-                  </ul>                        
-              </li> 
-              <!-- END LANG BAR -->
-          </ul>
-          <!-- END X-NAVIGATION VERTICAL -->                    
-          
-          <!-- START BREADCRUMB -->
-          <ul class="breadcrumb">
-              <li><a href="#">Home</a></li>
-              <li><a href="#">Pages</a></li>
-              <li><a href="#">Blog</a></li>
-              <li class="active">Posts</li>
-          </ul>
-          <!-- END BREADCRUMB -->
-          
-          <!-- PAGE TITLE -->
-          <div class="page-title">                    
-              <h2><span class="fa fa-arrow-circle-o-left"></span> Posts</h2>
-          </div>
-          <!-- END PAGE TITLE -->                
-          
-          <!-- PAGE CONTENT WRAPPER -->
-          <div class="page-content-wrap">
-          <div class="row">
-          <div class="col-md-8">
-                      <div class="panel panel-default">
-                          <div class="panel-body posts">
-                                  <div class="col-md-6">
-                                      <div class="post-item">
+                        <div class="panel panel-default">
+                            <div class="panel-body posts">
+<!--                                   <div class="col-md-12">
+ -->                                      <div class="post-item">
                                           <div class="container" style="margin-top: 50px;">
-
+                                            <div class="row">
                                             {% if post_list %}
-                                            {% for post in post_list %}
-                                                <div class="container">
-                                                  <img src="{{ post.image.url }}" alt="{{ post.title }}" width="320" height="315" >
+<!--                                             <div class="row">
+ -->                                            {% for post in post_list %}
+                                                                           
+                                                <div class="col-md-6 col-md-2" >
+                                                  <img src="{{ post.image.url }}" alt="{{ post.title }}" height="250" width="250" >
                                                   <div class="caption">
                                                     <h3>{{ post.title|safe }}</h3>
                                                     {{ post.body|safe }}
                                                     <form method="post" action="" name="{{ post.title }}" id="{{ post.title }}">{% csrf_token %}
                                                     <input type="hidden" name="post_name" value="{{ post.title }}"></input>
-                                                    {% if post.title|check_like:request.user %}
-                                                      <input type="hidden" name="unlike" value="True"></input>
-                                                      <button type="submit" class="btn btn-primary">Unlike</button><small> {{ post.title|like_count }}</small>
-                                                      
-                                                    {% else %}
-                                                      <input type="hidden" name="like" value="True"></input>
-                                                      <button type="submit" class="btn btn-primary">Like</button><small> {{ post.title|like_count }}</small>
-                                                    {% endif %}
-                                                    </form>
-                                                                    <ul>
-                                                                        {% for post in post.title|get_post %}
-                                                                            <li>{{ post }}<a href="{% url 'post:delete_comment' post.pk %}"> Delete</a></li></p>
-                                                                    </ul>
-                                                                        {% endfor %}
-                                                    <form method="post" action="">{% csrf_token %}
-                                                      <textarea name="comment" rows="4" cols="15" ></textarea>
-                                                      <input type="hidden" name="post_name" value="{{ post.title }}"></input>
-                                                      <input type="submit" value="Comment"></input>
-                                                        <!--           <li><a href="{% url 'post:commentview' %}">Comment List</a></li>
-                                                                  <li><a href="{% url 'post:comment_delete' %}">Delete Comment</a></li> -->
-                                                    </form>
-                                                   <a href="{% url 'post:post_list' post.pk %}"> view</a></li></p>      </div>
+                                                   <a href="{% url 'post:post_list' post.pk %}"> view</a></li></p>
+                                                   </form>
                                                 </div>
                                               </div>
+                                                                                          
                                             {% endfor %}
-                                            {% endif %}
+<!--                                             </div>
+ -->                                            {% endif %}
                                             </div>
-                                      </div>                                            
-                                  
-                                    
-                               
-                      <ul class="pagination pagination-sm pull-right push-down-20">
-                          <li class="disabled"><a href="#">«</a></li>
-                          <li class="active"><a href="#">1</a></li>
-                          <li><a href="#">2</a></li>
-                          <li><a href="#">3</a></li>
-                          <li><a href="#">4</a></li>                                    
-                          <li><a href="#">»</a></li>
-                      </ul>  
-                      </div>
-                      </div> 
-                      <div class="col-md-3">
+                                            </div>
+                                      </div>                                              
+                                    </div>
+<!--                                 </div>
+ -->                            </div>
+                            
+                            <ul class="pagination pagination-sm pull-right push-down-20">
+                                <li class="disabled"><a href="#">«</a></li>
+                                <li class="active"><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>                                    
+                                <li><a href="#">»</a></li>
+                            </ul>                            
+                            
+                        </div>   
+                        <div class="col-md-3">
                             
                             <div class="panel panel-default">
                                 <div class="panel-body">
@@ -479,7 +464,7 @@
                             
                         </div>
                     </div>
-                        </div>                                    
+                                                            
                 </div>
                 <!-- END PAGE CONTENT WRAPPER -->                       
                                 
@@ -506,13 +491,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
-</div>
-</div>
-
 {% endblock  %}
 
 

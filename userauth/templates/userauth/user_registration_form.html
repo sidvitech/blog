@@ -2,18 +2,22 @@
 {% load staticfiles %}
 
 {% block body %}
-
-        <div class="registration-container registration-extended" style="background-color: Gray; padding: 50px;">            
+       <div class="registration-container registration-extended">            
             <div class="registration-box animated fadeInDown">
                 <div class="registration-logo"></div>
                 <div class="registration-body">
-                    
-                    <div class="row">      
-                    <div class="col-sm-8 col-sm-offset-2" style="background-color: DarkGray; padding: 60px;">                  
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div {% if message.tags %} class="alert alert-warning" {% endif %}>
+                            <strong style="color: red;">{{ message }}</strong>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="row">                        
                         <div class="col-md-6">
                             
                            <div class="registration-title"><strong>Welcome</strong>, Please login</div>
-                            <form action="" class="form-horizontal" method="post">{% csrf_token %}
+                            <form action="" class="form-horizontal" method="post">
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <input type="text" class="form-control" placeholder="Username"/>
@@ -26,7 +30,7 @@
                             </div>
                             <div class="form-group push-down-30">
                                 <div class="col-md-6">
-                                    <a href="/userauth/user_reset_password/" class="btn btn-link btn-block">Forgot your password?</a>
+                                    <a href="{% url 'userauth:user_reset_password' %}" class="btn btn-link btn-block">Forgot your password?</a>
                                 </div>
                                 <div class="col-md-6">
                                     <button class="btn btn-info btn-block">Log In</button>
@@ -39,26 +43,27 @@
                             
                             <div class="registration-title"><strong>Registration</strong>, use form below</div>
                             <div class="registration-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In odio mauris, maximus ac sapien sit amet.</div>
-                            <form action="" method="post">{% csrf_token %}
+                            <form action="{% url 'userauth:user_registration' %}" class="form-horizontal" method="post">{% csrf_token %}
+
                                 <h4>Personal info</h4>
                                 <div class="form-group">
                                     <div class="col-md-12">
-                                        <input type="text" class="form-control" placeholder="User Name"/><br />
+                                        <input type="text" id="id_reg_username" name="reg_username" class="form-control" placeholder="User Name" required />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-12">
-                                        <input type="text" class="form-control" placeholder="E-mail"/><br />
+                                        <input type="text" class="form-control" id="id_reg_email" name="reg_email" placeholder="E-mail" required/>
                                     </div>
-                                </div>            
+                                </div>           
                                 <div class="form-group">
                                     <div class="col-md-12">
-                                        <input type="password" class="form-control" placeholder="Password"/><br />
+                                        <input type="password" id="id_reg_password" name="reg_password" class="form-control" placeholder="Password" required/>
                                     </div>
                                 </div>                    
                                 <div class="form-group">
                                     <div class="col-md-12">
-                                        <input type="password" class="form-control" placeholder="Re-Password"/><br />
+                                        <input id="id_reg_confirm_password" name="reg_confirm_password" type="password" class="form-control" placeholder="Confirm Password" required/>
                                     </div>
                                 </div>             
 
@@ -78,20 +83,19 @@
                     
                 </div>
                 
-                <div class="registration-footer" style="background-color: Gray; padding: 20px;">
+                <div class="registration-footer">
                     <div class="pull-left">
-                        &copy; 2016 BlogApp
+                        &copy; 2015 AppName
                     </div>
                     <div class="pull-right">
-                        <a href="#">About</a> |
-                        <a href="#">Privacy</a> |
+                        <a href="#">About</a> 
+                        <a href="#">Privacy</a> 
                         <a href="#">Contact Us</a>
                     </div>
                 </div>
             </div>
-            </div>
+            
         </div>
-
 
 
 <!-- <div class="row">
