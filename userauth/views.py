@@ -25,14 +25,14 @@ def user_registration(request):
 				user.save()
 				return HttpResponseRedirect('')
 			except:
-				return HttpResponse("User does not save.....")
+				messages.error(request, "your account all ready have create account")
 		else:
-			messages.success(request, 'Password does not match........')
+			messages.error(request, "Password does not match........")
 			return HttpResponseRedirect('') 
 	else:
 		user_form = UserRegistrationForm()
 
-	return render(request, "userauth/user_registration_form.html", { 'form': user_form})
+	return render(request, "userauth/user_registration_form.html")
 
 def user_login(request):			
 	if not request.user.is_authenticated():
