@@ -16,11 +16,11 @@ class UserProfileForm(forms.ModelForm):
 
 class PostsForm(forms.ModelForm):
 	title=forms.CharField(max_length=100)
-	detail = forms.CharField(widget=forms.Textarea)
+	details = forms.CharField(widget=forms.Textarea)
 	comments=forms.CharField(max_length=150)
 	likes=forms.IntegerField(initial=0)
 	views=forms.IntegerField(initial=0)
-	star=forms.IntegerField(initial=0)
+	stars=forms.IntegerField(initial=0)
 
 	class Meta:
 		model=Posts	

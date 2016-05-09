@@ -27,7 +27,7 @@
                             {%if registered %}
                                 <strong>Thank You For Registering!</strong>
                             {% endif %}
-                            <form id="user_form" action="/blog/register/" class="form-horizontal" method="post" enctype="multipart/form-date">
+                            <form id="user_form" action="{% url 'blog:register' %}" class="form-horizontal" method="post" enctype="multipart/form-date">
                                 <h4>Personal info</h4>
                                         {% csrf_token %}
                                         {{user_form.as_p}}
@@ -50,7 +50,7 @@
                 
                 <div class="registration-footer">
                     <div class="pull-left">
-                        &copy; 2015 AppName
+                        &copy; 2015 BlogApp
                     </div>
                     <div class="pull-right">
                         <a href="#">About</a> |

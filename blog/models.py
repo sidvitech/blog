@@ -14,12 +14,11 @@ class UserProfile(models.Model):
 
 class Posts(models.Model):
 	title=models.CharField(max_length=100)
-	detail=models.TextField()
+	details=models.TextField()
 	comments=models.CharField(max_length=150)
 	likes=models.IntegerField(default=0)
 	views=models.IntegerField(default=0)
-	star=models.IntegerField(default=0)
-
+	stars=models.IntegerField(default=0)
 	def __unicode__(self):
 		return self.title
 

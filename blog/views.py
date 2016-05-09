@@ -10,8 +10,8 @@ from django.contrib.auth.models import User
 
 
 def home(request):
-	context_dict={}
-	return render(request,'home.html', context_dict)
+	posts_list=Posts.objects.all()
+	return render(request,'home.html', {'posts_list':posts_list})
 
 def register(request):
 	registered=False
@@ -61,10 +61,8 @@ def user_logout(request):
 def add_post( request):
 	if request.method=='POST':
 		form=PostsForm(request.POST)
-		user=User.id
 		if form.is_valid():
 			post=form.save(commit=False)
-			post.user_id=user
 			post.save()
 		else:
 			print form.errors
@@ -72,3 +70,10 @@ def add_post( request):
 		form=PostsForm()
 	context_dict={'form':form}
 	return render(request, 'blog/add_post.html', context_dict)
+
+
+def view_post(request, post_id):
+	post=Posts.objects.get(id=post_id)
+	return render(request,'blog/view_post.html', {'post':post})
+
+
