@@ -15,7 +15,8 @@ class UserProfile(models.Model):
 class Posts(models.Model):
 	title=models.CharField(max_length=100)
 	details=models.TextField()
-	comments=models.CharField(max_length=150)
+	thumb=models.ImageField(upload_to="blog/images/", blank=True)
+	category=models.CharField(max_length=100)
 	likes=models.IntegerField(default=0)
 	views=models.IntegerField(default=0)
 	stars=models.IntegerField(default=0)

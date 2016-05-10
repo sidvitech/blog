@@ -12,7 +12,7 @@ admin.site.register(UserProfile, UserProfileAdmin)
 
 class PostsAdmin(admin.ModelAdmin):
 
-	list_display=('title', 'likes', 'views', 'stars')
+	list_display=('title', 'category', 'likes', 'views', 'stars')
 	search_fields=['title']
 	
 

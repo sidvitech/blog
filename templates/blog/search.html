@@ -1,0 +1,56 @@
+
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block address %}
+<li><a href="{% url 'blog:search' %}">Search</a></li>
+{% endblock %}
+{% block body %}
+    <div class="page-title">                    
+        <h2><a href="/blog/"><span class="fa fa-arrow-circle-o-left"></span></a> {{post.title}}</h2>
+    </div>
+    <div class="page-content-wrap">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row stacked">
+                            <div class="col-md-12">
+                                        <form class="form-inline" id="user_form" method="post" action="{% url 'blog:search' %}">
+                                            {% csrf_token %}
+                                            <input class="form-control" type="text" size="50" name="query" value="" id="query" />
+                                            <input class="btn btn-primary" type="submit" name="submit" value="Search" />
+                                            <br />
+                                        </form>
+                                        <div class="panel">
+                                            {% if result_list %}
+                                                <div class="panel-heading">
+                                                <h3 class="panel-title">Results</h3>
+                                                <div class="panel-body">
+                                                    <div class="list-group">
+                                                        {% for result in result_list %}
+                                                            <div class="sr-item">
+                                                                <a href="{{ result.link }}" class="sr-item-title">{{ result.title }}</a>
+                                                                <div class="sr-item-link">h{{ result.link }}</div>
+                                                                <p>{{ result.summary }}</p>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                            </div>
+                                              
+                                    </div>
+                                </div>                                            
+                            </div>  
+                        </div>
+                    </div>
+                                       
+                            
+                </div>   
+                            
+            </div>
+        </div>
+                                                            
+    </div>
+                
+{% endblock %}

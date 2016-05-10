@@ -33,17 +33,23 @@
                         <a href="#" class="profile-mini">
                             <img src="{% static 'assets/images/users/avatar.jpg' %}" alt="John Doe"/>
                         </a>
-                        <div class="profile">
-                            <div class="profile-image">
-                                <img src="{% static 'assets/images/users/avatar.jpg' %}" alt="John Doe"/>
-                            </div>
-                            <div class="profile-data">
-                                {% if user.is_authenticated %}
 
+                        <div class="profile">
+                            {% if user.is_authenticated %}
+                                <div class="profile-image">
+                                    <img src="{% static 'assets/images/users/avatar.jpg' %}" alt="John Doe"/>
+                                </div>
+                            {% else %}
+                                 <div class="profile-image">
+                                    <img src="{% static 'assets/images/users/no-image.jpg' %}" alt="User"/>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="profile-data">
+                                {% if user.is_authenticated %}    
                                     <div class="profile-data-name">{{user.username}}</div>
-                                {%else %}
+                                {% else %}
                                     <div class="profile-data-name">User</div>
-                                    
                                 {% endif %}
                             </div>
                             <div class="profile-controls">
@@ -56,67 +62,20 @@
                     <li class="xn-openable active">
                         <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text">Pages</span></a>
                         <ul>
-                            <li><a href="pages-gallery.html"><span class="fa fa-image"></span> Gallery</a></li>
-                            <li><a href="pages-invoice.html"><span class="fa fa-dollar"></span> Invoice</a></li>
-                            <li><a href="pages-edit-profile.html"><span class="fa fa-wrench"></span> Edit Profile</a></li>
-                            <li><a href="pages-profile.html"><span class="fa fa-user"></span> Profile</a></li>
-                            <li><a href="pages-address-book.html"><span class="fa fa-users"></span> Address Book</a></li>
-                            <li class="xn-openable">
-                                <a href="#"><span class="fa fa-clock-o"></span> Timeline</a>
-                                <ul>
-                                    <li><a href="pages-timeline.html"><span class="fa fa-align-center"></span> Default</a></li>
-                                    <li><a href="pages-timeline-simple.html"><span class="fa fa-align-justify"></span> Full Width</a></li>
-                                </ul>
-                            </li>
-                            <li class="xn-openable">
-                                <a href="#"><span class="fa fa-envelope"></span> Mailbox</a>
-                                <ul>                                    
-                                    <li><a href="pages-mailbox-inbox.html"><span class="fa fa-inbox"></span> Inbox</a></li>
-                                    <li><a href="pages-mailbox-message.html"><span class="fa fa-file-text"></span> Message</a></li>
-                                    <li><a href="pages-mailbox-compose.html"><span class="fa fa-pencil"></span> Compose</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="pages-messages.html"><span class="fa fa-comments"></span> Messages</a></li>
-                            <li><a href="pages-calendar.html"><span class="fa fa-calendar"></span> Calendar</a></li>
-                            <li><a href="pages-tasks.html"><span class="fa fa-edit"></span> Tasks</a></li>
-                            <li><a href="pages-content-table.html"><span class="fa fa-columns"></span> Content Table</a></li>
-                            <li><a href="pages-faq.html"><span class="fa fa-question-circle"></span> FAQ</a></li>                            
-                            <li><a href="pages-search.html"><span class="fa fa-search"></span> Search</a></li>
                             <li class="xn-openable active">
                                 <a href="#"><span class="fa fa-file"></span> Blog</a>
                                 
                                 <ul>                                    
-                                    <li class="active"><a href="pages-blog-list.html"><span class="fa fa-copy"></span> List of Posts</a></li>
-                                    <li><a href="pages-blog-post.html"><span class="fa fa-file-o"></span>Single Post</a></li>
+                                    <li class="active"><a href="/blog/"><span class="fa fa-copy"></span> List of Posts</a></li>
+                                    <li><a href="{%url 'blog:add_post' %}"><span class="fa fa-file-o"></span>Add Post</a></li>
                                 </ul>
                             </li>                   
-                            <li><a href="pages-lock-screen.html"><span class="fa fa-lock"></span> Lock Screen</a></li>
-                            <li class="xn-openable">
-                                <a href="#"><span class="fa fa-sign-in"></span> Login</a>
-                                <ul>                                                                        
-                                    <li><a href="pages-login.html">Login v1</a></li>
-                                    <li><a href="pages-login-v2.html">Login v2</a></li>
-                                    <li><a href="pages-login-inside.html">Login v2 Inside</a></li>
-                                    <li><a href="pages-login-website.html">Website Login</a></li>
-                                    <li><a href="pages-login-website-light.html"> Website Login Light</a></li>
-                                </ul>
-                            </li>                   
-                            <li class="xn-openable">
-                                <a href="#"><span class="fa fa-plus"></span> Registration</a>
-                                <ul>                                                                        
-                                    <li><a href="pages-registration.html">Default</a></li>
-                                    <li><a href="pages-registration-login.html">With Login</a></li>                                    
-                                </ul>
-                            </li>
+                            <li><a href="{% url 'blog:edit_profile' %}"><span class="fa fa-wrench"></span> Edit Profile</a></li>
+                            <li><a href="{% url 'blog:view_profile' %}"><span class="fa fa-user"></span> Profile</a></li>
+                            <li><a href="{% url 'blog:search' %}"><span class="fa fa-search"></span> Search</a></li>
+                            <li><a href="{% url 'blog:login' %}"><span class="fa fa-sign-in"></span> Login</a></li>
+                             <li><a href="{% url 'blog:register' %}"><span class="fa fa-plus"></span> Registration</a></li>
                             <li><a href="pages-forgot-password.html"><span class="fa fa-question"></span> Forgot Password</a></li>                            
-                            <li class="xn-openable">
-                                <a href="#"><span class="fa fa-warning"></span> Error Pages</a>
-                                <ul>                                    
-                                    <li><a href="pages-error-404.html">Error 404 Sample 1</a></li>
-                                    <li><a href="pages-error-404-2.html">Error 404 Sample 2</a></li>
-                                    <li><a href="pages-error-500.html"> Error 500</a></li>
-                                </ul>
-                            </li>                            
                         </ul>
                     </li>
                     <li class="xn-openable">
@@ -233,15 +192,16 @@
                         <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
                     </li>
                     <li class="xn-search">
-                        <form role="form">
-                            <input type="text" name="search" placeholder="Search..."/>
+                        <form class="form-inline" id="user_form" method="post" action="{% url 'blog:search' %}">
+                            {% csrf_token %}
+                            <input class="form-control" placeholder="Search" type="text" size="50" name="query" value="" id="query" />
                         </form>
                     </li>   
                     <li class="xn-icon-button pull-right last">
                         <a href="#"><span class="fa fa-power-off"></span></a>
                         <ul class="xn-drop-left animated zoomIn">
                             <li><a href="pages-lock-screen.html"><span class="fa fa-lock"></span> Lock Screen</a></li>
-                            <li><a href="#" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span> Sign Out</a></li>
+                            <li><a href="{% url 'blog:logout' %}"><span class="fa fa-sign-out"></span> Sign Out</a></li>
                         </ul>                        
                     </li> 
                     <li class="xn-icon-button pull-right">
@@ -363,7 +323,7 @@
                     </div>
                     <div class="mb-footer">
                         <div class="pull-right">
-                            <a href="{% url 'blog:login' %}">Logout</a>
+                            <button class="btn btn-default btn-lg mb-control-close"><a href="{% url 'blog:logout' %}">Signout</a></button>
                             <button class="btn btn-default btn-lg mb-control-close">No</button>
                         </div>
                     </div>

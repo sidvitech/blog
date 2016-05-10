@@ -1,12 +1,8 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block address %}
-<li><a href="/blog/">Posts</a></li>
-<li><a href="/blog/view_posts/{{post.id}}">{{post.title}}</a></li>
-{% endblock %}
 {% block body %}
     <div class="page-title">                    
-        <h2><a href="/blog/"><span class="fa fa-arrow-circle-o-left"></span></a> {{post.title}}</h2>
+        <h2>Posts</h2>
     </div>
     <div class="page-content-wrap">
         <div class="row">
@@ -16,28 +12,19 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="post-item">
-                                            
+                                    <div class="post-title">
                                         <ul>
-
-                                                {%if post.thumb %}
-                                                        <img src="/media/{{post.thumb}}" class="img-responsive img-text"/>
-                                                    
-                                                {% endif %}
-                                                <div class="post-text">
-                                                    <p>{{post.details}}</p>                                            
-                                                </div>
-                                                <div class="post-row">
-                                                    <div class="post-info">
-                                                        <span class="fa fa-thumbs-up"></span> {{post.likes}} - <span class="fa fa-eye"></span> {{post.views}} - <span class="fa fa-star"></span> {{post.stars}}
-                                                    </div>                                            
-                                                </div>       
+                                                <div class="post-title"><a href="/blog/view_post/{{posts.id}}">{{user.firstname}}</a></div>
+                                                <div class="post-title"><a href="/blog/view_post/{{posts.id}}">{{user.lastname}}</a></div>
+                                                <div class="post-title"><a href="/blog/view_post/{{posts.id}}">{{user.email}}</a></div>
+                                                <div class="post-title"><a href="/blog/view_post/{{posts.id}}">{{user.username}}</a></div>
+                                                
                                         </ul> 
                                     </div>
                                 </div>                                            
                             </div>  
                         </div>
                     </div>
-                                       
                             
                 </div>   
             <div class="col-md-3">

@@ -7,11 +7,13 @@ from datetime import datetime
 from blog.models import UserProfile, Posts
 from blog.forms import UserForm, PostsForm, UserProfileForm
 from django.contrib.auth.models import User
+from blog.bing_search import run_query
 
 
 def home(request):
 	posts_list=Posts.objects.all()
-	return render(request,'home.html', {'posts_list':posts_list})
+	return render(request,'blog/posts.html', {'posts_list':posts_list})
+
 
 def register(request):
 	registered=False
@@ -53,9 +55,17 @@ def user_login(request):
 	else:
 		return render(request, 'blog/login.html', {})
 
+def view_profile(request):
+	user=UserProfile.objects.get(username=username)
+	return render(request,'blog/edit_profile.html', {'user':user})
+
+def edit_profile(request):
+	user=UserProfile.objects.get(username=username)
+	return render(request,'blog/edit_profile.html', {'user':user})
+
 def user_logout(request):
 	logout(request)
-	return HttpResponseRedirect('home')
+	return HttpResponseRedirect('/blog/login/')
 
 
 def add_post( request):
@@ -71,9 +81,16 @@ def add_post( request):
 	context_dict={'form':form}
 	return render(request, 'blog/add_post.html', context_dict)
 
-
 def view_post(request, post_id):
 	post=Posts.objects.get(id=post_id)
 	return render(request,'blog/view_post.html', {'post':post})
 
+
+def search(request):
+	result_list=[]
+	if request.method=='POST' :
+		query=request.POST['query'].strip()
+		if query:
+			result_list=run_query(query)
+	return render(request,'blog/search.html',{'result_list': result_list})
 

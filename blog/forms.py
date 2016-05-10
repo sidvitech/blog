@@ -17,7 +17,8 @@ class UserProfileForm(forms.ModelForm):
 class PostsForm(forms.ModelForm):
 	title=forms.CharField(max_length=100)
 	details = forms.CharField(widget=forms.Textarea)
-	comments=forms.CharField(max_length=150)
+	thumb=forms.ImageField(widget=forms.ImageField)
+	category=forms.CharField(max_length=100)
 	likes=forms.IntegerField(initial=0)
 	views=forms.IntegerField(initial=0)
 	stars=forms.IntegerField(initial=0)

@@ -2504,7 +2504,7 @@ body {
   min-height: 100%;
 }
 body.page-container-boxed {
-  background: url("../img/backgrounds/wall_1.jpg") left top no-repeat fixed;
+  background: url("{%static 'img/backgrounds/wall_1.jpg' %}") left top no-repeat fixed;
   padding: 20px 0px;
 }
 body.page-container-boxed .page-container {
@@ -2524,34 +2524,34 @@ body.page-container-boxed .page-container.page-navigation-top .page-content {
   border-radius: 5px;
 }
 body.page-container-boxed.wall_1 {
-  background-image: url("../img/backgrounds/wall_1.jpg");
+  background-image: url("{%static 'img/backgrounds/wall_1.jpg' %}");
 }
 body.page-container-boxed.wall_2 {
-  background-image: url("../img/backgrounds/wall_2.jpg");
+  background-image: url("{%static 'img/backgrounds/wall_2.jpg' %}");
 }
 body.page-container-boxed.wall_3 {
-  background-image: url("../img/backgrounds/wall_3.jpg");
+  background-image: url("{%static 'img/backgrounds/wall_3.jpg' %}");
 }
 body.page-container-boxed.wall_4 {
-  background-image: url("../img/backgrounds/wall_4.jpg");
+  background-image: url("{%static 'img/backgrounds/wall_4.jpg' %}");
 }
 body.page-container-boxed.wall_5 {
-  background-image: url("../img/backgrounds/wall_5.jpg");
+  background-image: url("{%static 'img/backgrounds/wall_5.jpg' %}");
 }
 body.page-container-boxed.wall_6 {
-  background-image: url("../img/backgrounds/wall_6.jpg");
+  background-image: url("{%static 'img/backgrounds/wall_6.jpg' %}");
 }
 body.page-container-boxed.wall_7 {
-  background-image: url("../img/backgrounds/wall_7.jpg");
+  background-image: url("{%static 'img/backgrounds/wall_7.jpg' %}");
 }
 body.page-container-boxed.wall_8 {
-  background-image: url("../img/backgrounds/wall_8.jpg");
+  background-image: url("{%static 'img/backgrounds/wall_8.jpg' %}");
 }
 body.page-container-boxed.wall_9 {
-  background-image: url("../img/backgrounds/wall_9.jpg");
+  background-image: url("{%static 'img/backgrounds/wall_9.jpg' %}");
 }
 body.page-container-boxed.wall_10 {
-  background-image: url("../img/backgrounds/wall_10.jpg");
+  background-image: url("{%static 'img/backgrounds/wall_10.jpg' %}");
 }
 /* END PAGE CONTAINER */
 /* X-Dashboard */
