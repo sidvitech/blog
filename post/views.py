@@ -14,7 +14,29 @@ def post_list(request, pk):
 	post_list = get_object_or_404(Post, pk=pk)
 
 	# comment Like
-    
+	if request.method == "POST":
+		user_form = MyCommentForm(request.POST)
+		post_name = request.POST.get('post_name')
+		comment = request.POST.get('comment')
+
+		post = Post.objects.get(title=post_name)
+		try:
+			com_obj = MyComment(user=request.user, post_name=post)
+			com_obj.title = comment
+			com_obj.save()
+			return HttpResponseRedirect('/post/post_list/')
+		except:
+			HttpResponse("hi")
+	else:
+		user_form = MyCommentForm()
+
+	post = MyComment.objects.all()
+	comment_display =  [post for post in post]
+
+	context["comment_display"] = comment_display
+	context["user_form"] = user_form
+
+	
 	context["post_list"] = post_list  
 	return render(request, "post/post_list.html", context)
 
@@ -46,44 +68,30 @@ def mycomment(request):
   # comment Like
 
   if request.method == "POST":
-    like = request.POST.get('like')
-    unlike = request.POST.get('unlike')
-    post_name = request.POST.get('post_name')
-    comment = request.POST.get('comment')
-    if like:
-      post_name = request.POST.get('post_name')
-      post = Post.objects.get(title=post_name)
-      try:
-        like_obj, cond = Like.objects.get_or_create(user=request.user, post=post)
-        like_obj.like = True
-        like_obj.save()
-      except:
-        pass
-    elif unlike:
-      post_name = request.POST.get('post_name')
-      post = Post.objects.get(title=post_name)
-      try:
-        like_obj = Like.objects.get(user=request.user, post=post)
-        like_obj.like=False
-        like_obj.save()
-      except:
-        pass
-    else:
-      pass
-
-    if comment:
-        post = Post.objects.get(title=post_name)
-        try:
-            com_obj = MyComment(user=request.user, post_name=post)
-            com_obj.title = comment
-            com_obj.save()
-            return HttpResponseRedirect('/post/mycomment/')
-        except:
-            HttpResponse("hi")
-    post = MyComment.objects.all()
-    comment_display =  [post for post in post]
-
-    context["comment_display"] = comment_display
+	like = request.POST.get('like')
+	unlike = request.POST.get('unlike')
+	post_name = request.POST.get('post_name')
+	comment = request.POST.get('comment')
+	if like:
+	  post_name = request.POST.get('post_name')
+	  post = Post.objects.get(title=post_name)
+	  try:
+		like_obj, cond = Like.objects.get_or_create(user=request.user, post=post)
+		like_obj.like = True
+		like_obj.save()
+	  except:
+		pass
+	elif unlike:
+	  post_name = request.POST.get('post_name')
+	  post = Post.objects.get(title=post_name)
+	  try:
+		like_obj = Like.objects.get(user=request.user, post=post)
+		like_obj.like=False
+		like_obj.save()
+	  except:
+		pass
+	else:
+	  pass
  
   context["is_like"] = is_like
   context["post_list"] = post_list  
@@ -169,7 +177,7 @@ def contact(request):
 				template = get_template('contact_template.txt')
 				context = Context({'contact_name': contact_name,
 					'contact_email': contact_email,
-				    'form_content': form_content,
+					'form_content': form_content,
 				})
 				print "Hi...."
 				print contact_name
@@ -177,11 +185,11 @@ def contact(request):
 				print form_content
 				content = template.render(context)
 				send_mail(contact_name, form_content, user_email,
-    			[contact_email], fail_silently=False)
+				[contact_email], fail_silently=False)
 				return redirect('/post/contact/')
 		else:
 			form_class=ContactForm()
-	 		# pass
+			# pass
 	else:
 		return HttpResponseRedirect('/userauth/user_login/')
- 	return render(request, 'post/contact.html', {'form_class': form_class})
+	return render(request, 'post/contact.html', {'form_class': form_class})
