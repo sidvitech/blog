@@ -69,16 +69,16 @@
                                     <li class="active"><a href="/blog/"><span class="fa fa-copy"></span> List of Posts</a></li>
                                     <li><a href="{%url 'blog:add_post' %}"><span class="fa fa-file-o"></span>Add Post</a></li>
                                 </ul>
-                            </li>
+                            </li>                   
                             <li class="xn-openable active">
                                 <a href="#"><span class="fa fa-file"></span> Category</a>
                                 
                                 <ul>                                    
-                                    <li class="active"><a href="/blog/"><span class="fa fa-copy"></span> List of Categories</a></li>
+                                    <li class="active"><a href="{% url 'blog:category_list' %}"><span class="fa fa-copy"></span> List of Categories</a></li>
                                     <li><a href="{%url 'blog:add_post' %}"><span class="fa fa-file-o"></span>Add Category</a></li>
                                 </ul>
                             </li>                   
-                                               
+                            
                             <li><a href="{% url 'blog:edit_profile' %}"><span class="fa fa-wrench"></span> Edit Profile</a></li>
                             <li><a href="{% url 'blog:view_profile' %}"><span class="fa fa-user"></span> Profile</a></li>
                             <li><a href="{% url 'blog:search' %}"><span class="fa fa-search"></span> Search</a></li>
@@ -318,10 +318,58 @@
                     {% block address %}
                     {% endblock %}
                 </ul>
-                
-                {% block body %}
-                {% endblock %}                       
-                                
+                <div class="page-content-wrap">
+                    <div class="row">
+                            {% block body %}
+                            {% endblock %}                       
+                        <div class="col-md-3">           
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <a href="/blog/category_list/"><h3>Categories</h3></a>
+                                    <div class="links">
+                                        {% for category in categories %}  
+                                          <a href="/blog/category/{{category.name}}">{{ category.name }} <span class="label label-default">{{ category.total_posts }}</span></a>
+                                        {% endfor %}
+                                      </div>
+                  
+                                </div>
+                            </div>
+                                        
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <h3>Recent</h3>
+                                    <div class="links small">
+                                        <a href="#">Vestibulum porttitor neque vitae odio vulputate molestie</a>
+                                        <a href="#">Etiam tellus mi, interdum id nulla in</a>
+                                        <a href="#">Cras eu tincidunt quam</a>
+                                        <a href="#">Donec rhoncus quam tortor, id pulvinar erat elementum eu</a>
+                                        <a href="#">Nunc lorem est, suscipit bibendum</a>
+                                        <a href="#">Fusce sollicitudin quis turpis eget mollis</a>
+                                        <a href="#">Cras eget sagittis dui, et mollis tortor</a>
+                                    </div>
+                                </div>
+                            </div>
+                                        
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <h3>Tags</h3>
+                                    <ul class="list-tags push-up-10">
+                                        <li><a href="#"><span class="fa fa-tag"></span> Donec</a></li>
+                                        <li><a href="#"><span class="fa fa-tag"></span> Bibendum</a></li>
+                                        <li><a href="#"><span class="fa fa-tag"></span> Praesent</a></li>
+                                        <li><a href="#"><span class="fa fa-tag"></span> Fusce</a></li>
+                                        <li><a href="#"><span class="fa fa-tag"></span> Nam quis</a></li>
+                                        <li><a href="#"><span class="fa fa-tag"></span> Maecenas</a></li>
+                                        <li><a href="#"><span class="fa fa-tag"></span> Nulla facilisi</a></li>
+                                        <li><a href="#"><span class="fa fa-tag"></span> Donec</a></li>
+                                        <li><a href="#"><span class="fa fa-tag"></span> Nam vitae</a></li>
+                                        <li><a href="#"><span class="fa fa-tag"></span> Malesuada</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
             </div>            
         </div>
         

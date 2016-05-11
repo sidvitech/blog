@@ -4,15 +4,16 @@ from django.shortcuts import render_to_response, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
-from blog.models import UserProfile, Posts
-from blog.forms import UserForm, PostsForm, UserProfileForm
+from blog.models import UserProfile, Posts, Category
+from blog.forms import UserForm, PostsForm, UserProfileForm, CategoryForm
 from django.contrib.auth.models import User
 from blog.bing_search import run_query
 
 
 def home(request):
+	categories=Category.objects.all()
 	posts_list=Posts.objects.all()
-	return render(request,'blog/posts.html', {'posts_list':posts_list})
+	return render(request,'blog/posts.html', {'categories':categories, 'posts_list':posts_list})
 
 
 def register(request):
@@ -65,7 +66,7 @@ def edit_profile(request):
 
 def user_logout(request):
 	logout(request)
-	return HttpResponseRedirect('/blog/login/')
+	return HttpResponseRedirect('/')
 
 
 def add_post( request):
@@ -82,8 +83,14 @@ def add_post( request):
 	return render(request, 'blog/add_post.html', context_dict)
 
 def view_post(request, post_id):
+	context_dict={}
+	categories=Category.objects.all()
 	post=Posts.objects.get(id=post_id)
-	return render(request,'blog/view_post.html', {'post':post})
+	post.views=post.views+1
+	post.save()
+	context_dict['post']=post
+	context_dict['categories']=categories
+	return render(request,'blog/view_post.html', context_dict)
 
 
 def search(request):
@@ -93,4 +100,24 @@ def search(request):
 		if query:
 			result_list=run_query(query)
 	return render(request,'blog/search.html',{'result_list': result_list})
+
+
+def category_list(request):
+	context_dict={}
+	categories=Category.objects.all()
+	context_dict['categories']=categories
+	return render(request, 'blog/category_list.html', context_dict)
+
+
+def category(request,category_name):
+	context_dict={}
+	category=Category.objects.get(name=category_name)
+	context_dict['category_name']=category.name
+	posts=Posts.objects.filter(category=category)
+	context_dict['posts']=posts
+	context_dict['category']=category
+	categories=Category.objects.all()
+	context_dict['categories']=categories
+	return render(request, 'blog/category.html', context_dict)
+
 

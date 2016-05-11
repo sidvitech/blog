@@ -1,5 +1,7 @@
 {% load staticfiles %}
 <!DOCTYPE html>
+{% if user.is_authenticated %}
+{% else %}    
 <html lang="en" class="body-full-height">
 
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
@@ -18,6 +20,7 @@
         
         <div class="login-container login-v2">
             {% csrf_token %}
+            <strong></strong><i><h2><a href="/">Home</a></h2><i></strong>
                 
             <div class="login-box animated fadeInDown">
                 
@@ -114,7 +117,7 @@
     </body>
 
 </html>
-
+{% endif %}
 
 
 
