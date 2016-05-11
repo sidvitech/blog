@@ -26,7 +26,7 @@
                                 <img src="{% static 'assets/images/users/avatar.jpg' %}" alt="John Doe"/>
                             </div>
                             <div class="profile-data">
-                                <div class="profile-data-name">John Doe</div>
+                                <div class="profile-data-name">{{ user.username }}</div>
                                 <div class="profile-data-title">Web Developer/Designer</div>
                             </div>
                             <div class="profile-controls">
@@ -380,28 +380,32 @@
 											{% if post_list.image.url %}
 												<img src="{{ post_list.image.url }}" class="img-responsive" height="400" width="800">
 											{% endif %}
-												<h1>{{ title }}<small>{% if post_list.user %}<span style='color:red;'>Draft</span>{% endif %}{{ post_list.created }}</small></h1>
+												<h1>{{ title }}<small>{% if post_list.User %}<span style='color:red;'>Draft</span>{% endif %}{{ post_list.created }}</small></h1>
 												<p><span style='color:blue;'>Title: {{ post_list.title|safe }}</span></p>
 												<p>Author: {{ post_list.author|safe }}</p>
-												<p>{{ post_list.body|safe }}</p>
+												<p>Body:<br />{{ post_list.body|safe }}</p>
 
-                                                                                                                                                  {% for post in post.title|get_post  %}
-                                                      {{ post }}<a href="{% url 'post:delete_comment' post.pk %}"> Delete</a></li></p>
-                                                        <hr />
-                                                        
-                                                      {% endfor %}<!--  <p><a href="{% url 'post:mycomment'%}?postname={{ post.title }}">comment</a></p> -->
-                                                      <form method="post" action="">{% csrf_token %}
-                                                      {{ user_form.as_p }}
-                                                      <input type="hidden" name="post_name" value="{{ post.title }}"></input>
-                                                      <input type="submit" value="Comment"></input>
-                                                        <!--           <li><a href="{% url 'post:commentview' %}">Comment List</a></li>
-                                                                  <li><a href="{% url 'post:comment_delete' %}">Delete Comment</a></li> -->
-
-                                                      </form> 
+                                                <p>Comment:</p>
+                                                {% if post_comment %}
+                                                {% for post in post_comment %}
+                                                <ul>
+                                                    {% for post in post.title|get_post %}
+                                                        <li>{{ post }}<a href="{% url 'post:delete_comment' post.pk %}"> Delete</a></li></p>
+                                                    {% endfor %}
+                                                </ul>
+                                                {% endfor %}
+                                                {% endif %}
+                                                    <form method="post" action="">{% csrf_token %}
+                                                              <textarea name="comment" rows="4" cols="15" ></textarea>
+                                                              <input type="hidden" id="id_post_name" name="post_name" value="{{ post.title }}"></input>
+                                                              <input type="submit" value="Comment"></input>
+                                                    </form> 
 
 												<p>
 												<div class="fb-like" data-href="{{ request.build_absolute_uri }}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
 												</p>
+                                                
+
 
 											<p>
 												<a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">

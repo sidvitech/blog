@@ -12,16 +12,19 @@ from django.template import RequestContext, Context
 def post_list(request, pk):
 	context = {}
 	post_list = get_object_or_404(Post, pk=pk)
+	post_comment = Post.objects.all()
 
 	# comment Like
 	if request.method == "POST":
 		user_form = MyCommentForm(request.POST)
 		post_name = request.POST.get('post_name')
 		comment = request.POST.get('comment')
+		print comment
 
-		post = Post.objects.get(title=post_name)
+		# post = Post.objects.get(title=post_name)
 		try:
-			com_obj = MyComment(user=request.user, post_name=post)
+			com_obj = MyComment(post_name=post_name)
+			print com_obj
 			com_obj.title = comment
 			com_obj.save()
 			return HttpResponseRedirect('/post/post_list/')
@@ -33,10 +36,10 @@ def post_list(request, pk):
 	post = MyComment.objects.all()
 	comment_display =  [post for post in post]
 
-	context["comment_display"] = comment_display
+
 	context["user_form"] = user_form
 
-	
+	context["post_comment"] = post_comment
 	context["post_list"] = post_list  
 	return render(request, "post/post_list.html", context)
 
@@ -155,7 +158,7 @@ def delete_comment(request, pk):
 	try:
 		comment = MyComment.objects.get(user=request.user, pk=pk)
 		comment.delete()
-		return HttpResponseRedirect('/post/mycomment/')
+		return HttpResponseRedirect('/post/post_list/')
 	except:
 		return HttpResponse("user does not match. or comment does not exist.")
 

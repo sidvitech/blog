@@ -27,7 +27,7 @@
                                 <img src="{% static 'assets/images/users/avatar.jpg' %}" alt="John Doe"/>
                             </div>
                             <div class="profile-data">
-                                <div class="profile-data-name">John Doe</div>
+                                <div class="profile-data-name">{{ user.username }}</div>
                                 <div class="profile-data-title">Web Developer/Designer</div>
                             </div>
                             <div class="profile-controls">
@@ -352,11 +352,12 @@
                 
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Pages</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li class="active">Posts</li>
-                </ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="{% url 'category:category' %}">Category</a></li>
+                    <li><a href="{% url 'userblog:blog' %}">Blog</a></li>
+                    <li><a href="{% url 'post:frontpage' %}">post</a></li>
+<!--                     <li class="active">Posts</li>
+ -->                </ul>
                 <!-- END BREADCRUMB -->
                 
                 <!-- PAGE TITLE -->
@@ -382,8 +383,9 @@
                                                 <div class="col-xs-6 col-md-6" >
                                                   <img src="{{ post.image.url }}" alt="{{ post.title }}" height="250" width="250" ><br />
                                                   <div class="caption">
-                                                    <h3>{{ post.title|safe }}</h3>
-                                                    {{ post.body|safe }}
+                                                    <h3>{{ post.title|safe }} <h5>{{ post.created }}</h5></h3>
+<!--                                                     {{ post.body|safe }}
+ -->                                                 <p>Athor:- {{ post.author|safe }}</p>
                                                     <form method="post" action="" name="{{ post.title }}" id="{{ post.title }}">{% csrf_token %}
                                                     <input type="hidden" name="post_name" value="{{ post.title }}"></input>
                                                    <a href="{% url 'post:post_list' post.pk %}"> view</a></li></p>
