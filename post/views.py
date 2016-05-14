@@ -6,6 +6,9 @@ from .forms import PostForm, MyCommentForm, UserDeleteComment, ContactForm
 from django.template.loader import get_template
 from django.core.mail import EmailMessage, send_mail
 from django.template import RequestContext, Context
+from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
+from django.utils.text import slugify
 # Create your views here.
 
 
@@ -14,44 +17,38 @@ def post_list(request, pk):
 	post_list = get_object_or_404(Post, pk=pk)
 	post_comment = Post.objects.all()
 
-	# comment Like
-	if request.method == "POST":
-		user_form = MyCommentForm(request.POST)
-		post_name = request.POST.get('post_name')
-		comment = request.POST.get('comment')
-		print comment
-
-		# post = Post.objects.get(title=post_name)
-		try:
-			com_obj = MyComment(post_name=post_name)
-			print com_obj
-			com_obj.title = comment
-			com_obj.save()
-			return HttpResponseRedirect('/post/post_list/')
-		except:
-			HttpResponse("hi")
-	else:
-		user_form = MyCommentForm()
+		# # comment Like
+		# if request.method == "POST":
+		# 	user_form = MyCommentForm(request.POST)
+		# 	if user_form.is_valid():
+		# 		try:
+		# 			post = Post.objects.get(title)
+		# 			data = user_form.save(commit=False)
+		# 			data.user = request.user
+		# 			data.post_name = 
+		# 			data.save()
+		# 			return HttpResponseRedirect('')
+		# else:
+		# 	user_form = MyCommentForm()
 
 	post = MyComment.objects.all()
 	comment_display =  [post for post in post]
 
-
-	context["user_form"] = user_form
+	# context["user_form"] = user_form
 
 	context["post_comment"] = post_comment
 	context["post_list"] = post_list  
 	return render(request, "post/post_list.html", context)
 
 
-
+@login_required(login_url='/userauth/user_login/')
 def frontpage(request):
 	if request.method == "POST":
 		form = PostForm(request.POST, request.FILES)
 		if form.is_valid():
 			print request.FILES
-			form.save()
-			return HttpResponseRedirect('post/frontpage/')
+			obj = form.save()
+			return HttpResponseRedirect(reverse('post:post_list', kwargs={'pk':obj.pk}))
 	else:
 		form = PostForm()
 
@@ -63,42 +60,19 @@ def frontview(request):
 	post_body_list =  [post.body for post in post]
 	return render(request, "post/frontview.html", {'post_list': post_body_list})
 
+
 def mycomment(request):
-  context = {}
-  post_list = Post.objects.all()
-  is_like = False
+	if request.user.is_authenticated():
+		username = request.user.username
+		print username
 
-  # comment Like
-
-  if request.method == "POST":
-	like = request.POST.get('like')
-	unlike = request.POST.get('unlike')
-	post_name = request.POST.get('post_name')
-	comment = request.POST.get('comment')
-	if like:
-	  post_name = request.POST.get('post_name')
-	  post = Post.objects.get(title=post_name)
-	  try:
-		like_obj, cond = Like.objects.get_or_create(user=request.user, post=post)
-		like_obj.like = True
-		like_obj.save()
-	  except:
-		pass
-	elif unlike:
-	  post_name = request.POST.get('post_name')
-	  post = Post.objects.get(title=post_name)
-	  try:
-		like_obj = Like.objects.get(user=request.user, post=post)
-		like_obj.like=False
-		like_obj.save()
-	  except:
-		pass
+		user_post = Post.objects.all().filter(user__username=username)
+		# print user_post
 	else:
-	  pass
- 
-  context["is_like"] = is_like
-  context["post_list"] = post_list  
-  return render(request, "post/comment.html", context)
+		user_post = Post.objects.all()
+		print user_post
+
+	return render(request, "post/comment.html", { 'user_post': user_post})
 
 def commentview(request):
 	data = False

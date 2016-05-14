@@ -5,6 +5,7 @@ from userblog.models import Blog
 # Create your models here.
 
 class Post(models.Model):
+	user = models.ForeignKey(User)
 	blog_name = models.ForeignKey(Blog)
 	title = models.CharField(max_length=100)
 	image = models.ImageField(upload_to="images/",blank=True, null=True)

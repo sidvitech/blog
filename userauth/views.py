@@ -23,7 +23,7 @@ def user_registration(request):
 				user.set_password(password)
 				user.email = email
 				user.save()
-				return HttpResponseRedirect('')
+				return HttpResponseRedirect('/post/mycomment/')
 			except:
 				messages.error(request, "your account all ready have create account")
 		else:
@@ -45,7 +45,7 @@ def user_login(request):
 			if auth is not None:
 				if auth.is_active:
 					login(request, auth)
-					return HttpResponseRedirect('/')
+					return HttpResponseRedirect('/post/mycomment/')
 				else:
 					messages.error(request, "your account is not active")
 			else:
@@ -68,12 +68,17 @@ def user_login(request):
 		else:
 				user_form = UserLoginForm()
 	else:
-			return HttpResponseRedirect("/")
+		messages.error(request, "User All Ready Login...")
+		return HttpResponseRedirect("/")
 	return render(request, "userauth/user_login.html")
 
 def user_logout(request):
-	logout(request)
-	return HttpResponseRedirect('/userauth/user_login')
+	if request.user.is_authenticated():
+		logout(request)
+		return HttpResponseRedirect('/userauth/user_login')
+	else:
+		messages.error(request, "User All Ready Logout...")
+		return HttpResponseRedirect("/post/mycomment")
 
 def main_page(request):
 	return render_to_response('userauth/main_page.html', {'user': request.user})

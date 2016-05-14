@@ -16,14 +16,14 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
-from post import views
+from userauth import views
 from django.conf.urls.static import static
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^userauth/', include('userauth.urls', namespace="userauth")),
-    url(r'^$', views.mycomment, name='mycomment'),
+    url(r'^$', views.user_registration, name='user_registration'),
     # url(r'^$', views.home, name='home'),
     url(r'^category/', include('category.urls', namespace="category")),
     url(r'^userblog/', include('userblog.urls', namespace="userblog")),

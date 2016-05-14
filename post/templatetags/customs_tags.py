@@ -9,6 +9,7 @@ def get_post(value):
 		data = MyComment.objects.filter(post_name=post)
 	except:
 		data = []
+		print data
 	return data
 
 register.filter('get_post', get_post)

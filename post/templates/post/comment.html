@@ -243,7 +243,7 @@
                         <a href="#"><span class="fa fa-power-off"></span></a>
                         <ul class="xn-drop-left animated zoomIn">
                             <li><a href="pages-lock-screen.html"><span class="fa fa-lock"></span> Lock Screen</a></li>
-                            <li><a href="{% url 'userauth:user_logout' %}" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span> Sign Out</a></li>
+                            <li><a href="{% url 'userauth:user_logout' %}"><span class="fa fa-sign-out"></span> Sign Out</a></li>
                         </ul>                        
                     </li> 
                     <!-- END POWER OFF -->
@@ -347,12 +347,20 @@
                         </ul>                        
                     </li> 
                     <!-- END LANG BAR -->
+                    <li class="xn-icon-button pull-right">
+                        <a href="#"><span class="glyphicon glyphicon-plus">Add</span></a>
+                        <ul class="xn-drop-left xn-drop-white animated zoomIn">
+                            <li><a href="{% url 'post:frontpage' %}">Add New POst</a></li>
+<!--                             <li><a href="#"><span class="flag flag-de"></span> Deutsch</a></li>
+                            <li><a href="#"><span class="flag flag-cn"></span> Chinese</a></li> -->
+                        </ul>                        
+                    </li>
                 </ul>
                 <!-- END X-NAVIGATION VERTICAL -->                    
                 
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
-                    <li><a href="/">Home</a></li>
+                    <li><a href="{% url 'post:mycomment' %}">Home</a></li>
                     <li><a href="{% url 'category:category' %}">Category</a></li>
                     <li><a href="{% url 'userblog:blog' %}">Blog</a></li>
                     <li><a href="{% url 'post:frontpage' %}">post</a></li>
@@ -377,15 +385,14 @@
                             <div class="panel-body posts">
                                       <div class="post-item">
                                             <div class="row">
-                                            {% if post_list %}
-                                            {% for post in post_list %}
+                                            {% if user_post %}
+                                            {% for post in user_post %}
                                                                            
                                                 <div class="col-xs-6 col-md-6" >
                                                   <img src="{{ post.image.url }}" alt="{{ post.title }}" height="250" width="250" ><br />
                                                   <div class="caption">
                                                     <h3>{{ post.title|safe }} <h5>{{ post.created }}</h5></h3>
-<!--                                                     {{ post.body|safe }}
- -->                                                 <p>Athor:- {{ post.author|safe }}</p>
+                                                 <p>Athor:- {{ post.author|safe }}</p>
                                                     <form method="post" action="" name="{{ post.title }}" id="{{ post.title }}">{% csrf_token %}
                                                     <input type="hidden" name="post_name" value="{{ post.title }}"></input>
                                                    <a href="{% url 'post:post_list' post.pk %}"> view</a></li></p>
