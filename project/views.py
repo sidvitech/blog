@@ -5,7 +5,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from blog.models import Posts
 
-
 def home(request):
 	posts_list=Posts.objects.all()
 	return render(request,'home.html', {'posts_list':posts_list})
+
+
+

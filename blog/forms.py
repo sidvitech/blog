@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from blog.models import UserProfile, Posts
+from blog.models import UserProfile, Posts, Category
 from datetime import datetime, date
 
 class UserForm(forms.ModelForm):
@@ -12,7 +12,16 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
 	class Meta:
 		model=UserProfile
-		fields=('first_name','last_name','email')
+		fields=('first_name','last_name','email', 'profile_picture')
+
+
+class CategoryForm(forms.ModelForm):
+	name=forms.CharField(max_length=128, help_text="Please enter the category name")
+	total_posts=forms.IntegerField(initial=0)
+	class Meta:
+		model=Category
+		fields=('name',)
+
 
 class PostsForm(forms.ModelForm):
 	title=forms.CharField(max_length=100)

@@ -36,9 +36,9 @@
 
                         <div class="profile">
                             {% if user.is_authenticated %}
-                                <div class="profile-image">
-                                    <img src="{% static 'assets/images/users/avatar.jpg' %}" alt="John Doe"/>
-                                </div>
+                                    <div class="profile-image">
+                                        <img src='/media/user/profile_pictures/user4.jpg' alt="User"/>
+                                    </div>
                             {% else %}
                                  <div class="profile-image">
                                     <img src="{% static 'assets/images/users/no-image.jpg' %}" alt="User"/>
@@ -47,7 +47,7 @@
                             
                             <div class="profile-data">
                                 {% if user.is_authenticated %}    
-                                    <div class="profile-data-name">{{user.username}}</div>
+                                    <div class="profile-data-name">Ravi</div>
                                 {% else %}
                                     <div class="profile-data-name">User</div>
                                 {% endif %}
@@ -67,15 +67,19 @@
                                 
                                 <ul>                                    
                                     <li class="active"><a href="/blog/"><span class="fa fa-copy"></span> List of Posts</a></li>
-                                    <li><a href="{%url 'blog:add_post' %}"><span class="fa fa-file-o"></span>Add Post</a></li>
+                                </ul>
+                            </li>
+                            <li class="xn-openable active">
+                                <a href="#"><span class="fa fa-file"></span> Category</a>
+                                
+                                <ul>                                    
+                                    <li class="active"><a href="{% url 'blog:category_list' %}"><span class="fa fa-copy"></span> List of Categories</a></li>
                                 </ul>
                             </li>                   
+                                               
                             <li><a href="{% url 'blog:edit_profile' %}"><span class="fa fa-wrench"></span> Edit Profile</a></li>
                             <li><a href="{% url 'blog:view_profile' %}"><span class="fa fa-user"></span> Profile</a></li>
                             <li><a href="{% url 'blog:search' %}"><span class="fa fa-search"></span> Search</a></li>
-                            <li><a href="{% url 'blog:login' %}"><span class="fa fa-sign-in"></span> Login</a></li>
-                             <li><a href="{% url 'blog:register' %}"><span class="fa fa-plus"></span> Registration</a></li>
-                            <li><a href="pages-forgot-password.html"><span class="fa fa-question"></span> Forgot Password</a></li>                            
                         </ul>
                     </li>
                     <li class="xn-openable">
@@ -196,14 +200,20 @@
                             {% csrf_token %}
                             <input class="form-control" placeholder="Search" type="text" size="50" name="query" value="" id="query" />
                         </form>
-                    </li>   
-                    <li class="xn-icon-button pull-right last">
-                        <a href="#"><span class="fa fa-power-off"></span></a>
-                        <ul class="xn-drop-left animated zoomIn">
-                            <li><a href="pages-lock-screen.html"><span class="fa fa-lock"></span> Lock Screen</a></li>
-                            <li><a href="{% url 'blog:logout' %}"><span class="fa fa-sign-out"></span> Sign Out</a></li>
-                        </ul>                        
                     </li> 
+                    {% if user.is_authenticated %}  
+                        <li class="xn-icon-button pull-right last">
+                            <a href="#"><span class="fa fa-power-off"></span></a>
+                            <ul class="xn-drop-left animated zoomIn">
+                                <li><a href="pages-lock-screen.html"><span class="fa fa-lock"></span> Lock Screen</a></li>
+                                <li><a href="{% url 'blog:logout' %}"><span class="fa fa-sign-out"></span> Sign Out</a></li>
+                            </ul>                        
+                        </li> 
+                    {%else %}
+                                <li><a href="/login"><span class="fa fa-sign-in"></span> Login</a></li>
+                                <li><a href="{% url 'blog:register' %}"><span class="fa fa-plus"></span> Registration</a></li>
+                            
+                    {% endif %}
                     <li class="xn-icon-button pull-right">
                         <a href="#"><span class="fa fa-comments"></span></a>
                         <div class="informer informer-danger">4</div>
@@ -346,42 +356,6 @@
         <script type="text/javascript" src="{% static 'js/plugins.js' %}"></script>        
         <script type="text/javascript" src="{% static 'js/actions.js' %}"></script>
 
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script',"{% static 'analytics.js' %}",'ga');
-
-        ga('create', 'UA-36783416-1', 'auto');
-        ga('send', 'pageview');
-    </script>
-    <script type="text/javascript">
-        (function (d, w, c) {
-            (w[c] = w[c] || []).push(function() {
-                try {
-                    w.yaCounter25836617 = new Ya.Metrika({
-                        id:25836617,
-                        clickmap:true,
-                        trackLinks:true,
-                        accurateTrackBounce:true,
-                        webvisor:true
-                    });
-                } catch(e) { }
-            });
-
-            var n = d.getElementsByTagName("script")[0],
-                s = d.createElement("script"),
-                f = function () { n.parentNode.insertBefore(s, n); };
-            s.type = "text/javascript";
-            s.async = true;
-            s.src = "{% static 'watch.js' %}";
-
-            if (w.opera == "[object Opera]") {
-                d.addEventListener("DOMContentLoaded", f, false);
-            } else { f(); }
-        })(document, window, "yandex_metrika_callbacks");
-    </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/25836617" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     </body>
 
 </html>
