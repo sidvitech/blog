@@ -86,18 +86,18 @@
                             <li class="xn-openable">
                                 <a href="#"><span class="fa fa-sign-in"></span> Login</a>
                                 <ul>                                                                        
-                                    <li><a href="pages-login.html">Login v1</a></li>
-                                    <li><a href="pages-login-v2.html">Login v2</a></li>
+                                    <li><a href="{% url 'userauth:user_login' %}">Login</a></li>
+<!--                                     <li><a href="pages-login-v2.html">Login v2</a></li>
                                     <li><a href="pages-login-inside.html">Login v2 Inside</a></li>
                                     <li><a href="pages-login-website.html">Website Login</a></li>
-                                    <li><a href="pages-login-website-light.html"> Website Login Light</a></li>
+                                    <li><a href="pages-login-website-light.html"> Website Login Light</a></li> -->
                                 </ul>
                             </li>                   
                             <li class="xn-openable">
                                 <a href="#"><span class="fa fa-plus"></span> Registration</a>
                                 <ul>                                                                        
-                                    <li><a href="{% url 'userauth:user_login' %}">Default</a></li>
-                                    <li><a href="{% url 'userauth:user_registration' %}">With Login</a></li>                                    
+<!--                                     <li><a href="{% url 'userauth:user_login' %}">Default</a></li>
+ -->                                    <li><a href="{% url 'userauth:user_registration' %}">With Login</a></li>                                    
                                 </ul>
                             </li>
                             <li><a href="{% url 'userauth:user_reset_password' %}"><span class="fa fa-question"></span> Forgot Password</a></li>                            
@@ -243,7 +243,9 @@
                         <a href="#"><span class="fa fa-power-off"></span></a>
                         <ul class="xn-drop-left animated zoomIn">
                             <li><a href="pages-lock-screen.html"><span class="fa fa-lock"></span> Lock Screen</a></li>
+                            {% if user.is_authenticated %}
                             <li><a href="{% url 'userauth:user_logout' %}"><span class="fa fa-sign-out"></span> Sign Out</a></li>
+                            {% endif %}
                         </ul>                        
                     </li> 
                     <!-- END POWER OFF -->
@@ -393,6 +395,8 @@
                                                   <div class="caption">
                                                     <h3>{{ post.title|safe }} <h5>{{ post.created }}</h5></h3>
                                                  <p>Athor:- {{ post.author|safe }}</p>
+                                                 <p>Comments:- {{ comment_count }}</p>
+                                                 <p>Likes:- {{ like_count }}</p>
                                                     <form method="post" action="" name="{{ post.title }}" id="{{ post.title }}">{% csrf_token %}
                                                     <input type="hidden" name="post_name" value="{{ post.title }}"></input>
                                                    <a href="{% url 'post:post_list' post.pk %}"> view</a></li></p>
@@ -477,7 +481,7 @@
         <!-- END PAGE CONTAINER -->
         
         <!-- MESSAGE BOX-->
-        <div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
+<!--         <div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
             <div class="mb-container">
                 <div class="mb-middle">
                     <div class="mb-title"><span class="fa fa-sign-out"></span> Log <strong>Out</strong> ?</div>
@@ -493,7 +497,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 {% endblock  %}
 
 

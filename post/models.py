@@ -24,6 +24,7 @@ class MyComment(models.Model):
 	user = models.ForeignKey(User)
 	post_name = models.ForeignKey(Post, on_delete=models.CASCADE)
 	title = models.CharField(max_length=250)
+	comment = models.BooleanField(default=False)
 
 	def __unicode__(self):
 		return self.title

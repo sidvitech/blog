@@ -39,4 +39,12 @@ def like_count(value):
 
 register.filter('like_count', like_count)
 
+def comment_count(value):
+	count = 0
+	if value:
+		# post_obj = Post.objects.get(title=value)
+		count = MyComment.objects.get(comment=True).count()
+		
+	return count
 
+register.filter('comment_count', comment_count)

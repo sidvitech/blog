@@ -9,6 +9,8 @@ from django.template import RequestContext, Context
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
+from django.contrib import messages
+
 # Create your views here.
 
 
@@ -17,25 +19,62 @@ def post_list(request, pk):
 	post_list = get_object_or_404(Post, pk=pk)
 	post_comment = Post.objects.all()
 
+
+	data = False
+	like_count = Like.objects.filter(like=True).count()
+	if request.user.is_authenticated():
+		try:
+		  obj = Like.objects.get(user=request.user)
+		  data = obj.like
+		except:
+		  pass
+
 		# # comment Like
-		# if request.method == "POST":
-		# 	user_form = MyCommentForm(request.POST)
-		# 	if user_form.is_valid():
-		# 		try:
-		# 			post = Post.objects.get(title)
-		# 			data = user_form.save(commit=False)
-		# 			data.user = request.user
-		# 			data.post_name = 
-		# 			data.save()
-		# 			return HttpResponseRedirect('')
-		# else:
-		# 	user_form = MyCommentForm()
+	if request.method == "POST":
+		unlike = request.POST.get('unlike')
+		like = request.POST.get('like')
+		if request.user.is_authenticated():
+			if like:
+				user, condition = Like.objects.get_or_create(user=request.user)
+				user.like = True
+				user.save()
+				return HttpResponseRedirect(reverse('post:post_list', kwargs={'pk':obj.pk}))
+			if unlike:
+				like_obj = Like.objects.get(user=request.user)
+				like_obj.like = False
+				like_obj.save()
+				return HttpResponseRedirect(reverse('post:post_list', kwargs={'pk':obj.pk}))
+		else:
+			messages.error(request, "User not login........")
+			return HttpResponseRedirect('/userauth/user_login/')
+
+
+			# print "Hello"
+		 #    user_form = MyCommentForm(request.POST)
+		 #    comment = request.POST.get('comment')
+		 #    print "hi"
+		 #    if user_form.is_valid():
+		 #        try:
+		 #        	print 778899
+		 #            post = Post.objects.get(title)
+		 #            data = user_form.save(commit=False)
+		 #            data.user = request.user
+		 #            data.post_name = comment
+		 #            data.save()
+		 #            return HttpResponseRedirect('')
+		 #        except:
+		 #        	pass
+		 #    else:
+		 #    	httpp
+	else:
+		user_form = MyCommentForm()
 
 	post = MyComment.objects.all()
 	comment_display =  [post for post in post]
 
 	# context["user_form"] = user_form
-
+	context["data"] = data
+	context["like_count"] = like_count
 	context["post_comment"] = post_comment
 	context["post_list"] = post_list  
 	return render(request, "post/post_list.html", context)
@@ -48,7 +87,7 @@ def frontpage(request):
 		if form.is_valid():
 			print request.FILES
 			obj = form.save()
-			return HttpResponseRedirect(reverse('post:post_list', kwargs={'pk':obj.pk}))
+			return HttpResponseRedirect('/post/mycomment/')
 	else:
 		form = PostForm()
 
@@ -62,6 +101,26 @@ def frontview(request):
 
 
 def mycomment(request):
+	data = False
+	like_count = Like.objects.filter(like=True).count()
+	if request.user.is_authenticated():
+		try:
+		  obj = Like.objects.get(user=request.user)
+		  data = obj.like
+		except:
+		  pass
+
+	data=False
+	comment_count = MyComment.objects.filter(comment=True).count()
+	print comment_count
+	print "Hello comment"
+	if request.user.is_authenticated():
+		try:
+		  obj = MyComment.objects.get(user=request.user)
+		  data = obj.comment
+		except:
+		  pass
+
 	if request.user.is_authenticated():
 		username = request.user.username
 		print username
@@ -72,34 +131,34 @@ def mycomment(request):
 		user_post = Post.objects.all()
 		print user_post
 
-	return render(request, "post/comment.html", { 'user_post': user_post})
+	return render(request, "post/comment.html", { 'user_post': user_post, 'data': data, 'like_count': like_count, 'comment_count': comment_count})
 
 def commentview(request):
-	data = False
+	# data = False
 	# like_count = Like.objects.filter(like=True).count()
 	# if request.user.is_authenticated():
-	# 	try:
-	# 		obj = Like.objects.get(user=request.user)
-	# 		data = obj.like
-	# 	except:
-	# 		pass
+	#   try:
+	#       obj = Like.objects.get(user=request.user)
+	#       data = obj.like
+	#   except:
+	#       pass
 
 	# if request.method == "POST":
-	# 	unlike = request.POST.get('unlike')
-	# 	like = request.POST.get('like')
-	# 	if request.user.is_authenticated():
-	# 		if like:
-	# 			user, condition = Like.objects.get_or_create(user=request.user)
-	# 			user.like = True
-	# 			user.save()
-	# 			return HttpResponseRedirect('/post/commentview/')
-	# 		if unlike:
-	# 			like_obj = Like.objects.get(user=request.user)
-	# 			like_obj.like = False
-	# 			like_obj.save()
-	# 			return HttpResponseRedirect('/post/commentview/')
-	# 	else:
-	# 		return HttpResponseRedirect('/userauth/user_login/')
+	#   unlike = request.POST.get('unlike')
+	#   like = request.POST.get('like')
+	#   if request.user.is_authenticated():
+	#       if like:
+	#           user, condition = Like.objects.get_or_create(user=request.user)
+	#           user.like = True
+	#           user.save()
+	#           return HttpResponseRedirect('/post/commentview/')
+	#       if unlike:
+	#           like_obj = Like.objects.get(user=request.user)
+	#           like_obj.like = False
+	#           like_obj.save()
+	#           return HttpResponseRedirect('/post/commentview/')
+	#   else:
+	#       return HttpResponseRedirect('/userauth/user_login/')
 
 
 
@@ -118,7 +177,7 @@ def comment_delete(request):
 				except MyComment.DoesNotExist:
 					return HttpResponse("Category name not match. or user does not match. Plz check category name ")
 				# except Category.MultipleObjectsReturned:
-				# 	return HttpResponse("Category does not exist")
+				#   return HttpResponse("Category does not exist")
 
 		else:
 			form = UserDeleteComment()
