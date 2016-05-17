@@ -23,6 +23,13 @@ INSTALLED_APPS = [
     'blog',
 ]
 
+
+EMAIL_USE_TLS=True
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_HOST_USER='raviu.deshmukh@gmail.com'
+EMAIL_HOST_PASSWORD='muktaikunj'
+
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -103,5 +110,5 @@ STATICFILES_DIRS = [
 
 
 MEDIA_URL='/media/'
-MEDIA_ROOT=os.path.join(PROJECT_PATH,'media')
+MEDIA_ROOT=os.path.join(BASE_DIR,'media')
 
