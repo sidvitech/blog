@@ -4,10 +4,10 @@ from django.shortcuts import render_to_response, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from blog.models import UserProfile, Posts, Category
-from blog.forms import UserForm, PostsForm, UserProfileForm, CategoryForm
+from blog.forms import UserForm, PostsForm, CategoryForm, UserProfileForm
 from django.contrib.auth.models import User
 from blog.bing_search import run_query
-
+from django.contrib import messages
 
 def home(request):
 	categories=Category.objects.all()
@@ -17,6 +17,7 @@ def home(request):
 
 def register(request):
 	registered=False
+	error_msg=""
 	if request.method=='POST' :
 		firstname=request.POST.get('firstname')
 		lastname=request.POST.get('lastname')
@@ -30,23 +31,24 @@ def register(request):
 			try:
 				user=User(username=username)
 				user.set_password(user.password)
-				user.set_email(user.email)
-				profile=UserProfile(user_id=user.id)
-				profile.first_name=firstname
-				profile.last_name=lastname
-				profile.email=email
-				# profile.profile_picture=profile_picture
+				user.email=email
+				user.first_name=firstname
+				user.last_name=lastname
+				# profile=UserProfile()
+				# profile.user_id=user.id
+				# profile.save()
 				user.save()
-				profile.save()
 				registered=True
 			except:
+				error_msg="Invalid data"
 				registered=False
 				pass
-			else:
-				registered=False
-	if registered==True:
-		HttpResponseRedirect('/login/?Registered')
-	return render(request,'blog/register.html',{'registered':registered})
+		else:
+			error_msg="Password does not match"
+			registered=False
+	if registered is True:
+		return HttpResponseRedirect('/login')
+	return render(request,'blog/register.html',{'error_msg': error_msg })
 			
 
 def user_login(request):

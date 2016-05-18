@@ -1,9 +1,11 @@
 from django.conf.urls import url, include, patterns
 from django.contrib import admin
-from project import views, auth_views
+from project import views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+from django.contrib.auth import views as auth_views
+
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),

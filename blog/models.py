@@ -6,10 +6,7 @@ from datetime import datetime, date
 
 class UserProfile(models.Model):
 	user=models.OneToOneField(User)
-	first_name=models.CharField(max_length=50)
-	last_name=models.CharField(max_length=50, blank=True)
-	email=models.EmailField(unique=True)
-	profile_picture=models.ImageField(upload_to='/media/user/profile_pictures/', default='/media/user/profile_pictures/no-image.jpg')
+	profile_picture=models.ImageField(upload_to="user/profile_pictures/", default="user/profile_pictures/no-image.jpg")
 	def __unicode__(self):
 		return self.user.username
 

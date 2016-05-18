@@ -7,12 +7,13 @@ class UserForm(forms.ModelForm):
 	password=forms.CharField(widget=forms.PasswordInput())
 	class Meta:
 		model=User
-		fields=('username', 'password')
+		fields=('username', 'password', 'email', 'first_name', 'last_name')
+
 
 class UserProfileForm(forms.ModelForm):
 	class Meta:
 		model=UserProfile
-		fields=('first_name','last_name','email', 'profile_picture')
+		fields=('profile_picture',)
 
 
 class CategoryForm(forms.ModelForm):

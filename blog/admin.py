@@ -4,19 +4,18 @@ from blog.models import UserProfile, Posts, Category
 
 class UserProfileAdmin(admin.ModelAdmin):
 
-	list_display=('first_name', 'last_name', 'email')
-	search_fields=['email']
-	
+	list_display=('user','profile_picture')
 
 admin.site.register(UserProfile, UserProfileAdmin)
+
 
 class CategoryAdmin(admin.ModelAdmin):
 
 	list_display=('name',)
 	search_fields=['name']
 	
-
 admin.site.register(Category, CategoryAdmin)
+
 
 class PostsAdmin(admin.ModelAdmin):
 

@@ -22,49 +22,45 @@
                 <div class="registration-body">
                     <div class="registration-title"><strong>Registration</strong></div>
                     <div class="registration-subtitle"></div>
-                    {% if registered %}
-                        <strong>Thank You For Registering!</strong>
-                    {% else %}
-                        <strong> Invalid data </strong>
-                    {% endif %}
+                    <strong>{{error_msg}}</strong>
                     <form enctype="multipart/form-data" id="user_form" action="{% url 'blog:register' %}" class="form-horizontal" method="post"  />
                         <h4>Personal info</h4>
                         {% csrf_token %}
                         
                         <div class="form-group">
                             <div class="col-md-12">
-                                <input type="text" class="form-control" placeholder="First Name" name="firstname" />
+                                <input type="text" class="form-control" placeholder="First Name" name="firstname" required='True' />
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-md-12">
-                                <input type="text" class="form-control" placeholder="Last Name" name="lastname" />
+                                <input type="text" class="form-control" placeholder="Last Name" name="lastname" required='True' />
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-md-12">
-                                <input type="email" class="form-control" placeholder="E-mail" name="email" />
+                                <input type="email" class="form-control" placeholder="E-mail" name="email" required='True' />
                             </div>
                         </div>
                         <!-- <div class="form-group">
                             <div class="col-md-12">
-                                <h4>ProfilePicture<input type="file" class="form-control" placeholder="Profile_picture" name="profile_picture" ></h4>
+                                <input type="file" class="form-control" placeholder="Profile Picture" name="profile_picture" />
                             </div>
-                        </div> -->                        
+                        </div> -->
                         <h4>Authentication</h4>                    
                         <div class="form-group">
                             <div class="col-md-12">
-                                <input type="text" class="form-control" placeholder="Login" name="username" />
+                                <input type="text" class="form-control" placeholder="Login" name="username" required='True'/>
                             </div>
                         </div>                        
                         <div class="form-group">
                             <div class="col-md-12">
-                                <input type="password" class="form-control" placeholder="Password" name="password1" />
+                                <input type="password" class="form-control" placeholder="Password" name="password1" required='True' />
                             </div>
                         </div>                    
                         <div class="form-group">
                             <div class="col-md-12">
-                                <input type="password" class="form-control" placeholder="Re-Password" name="password2" />
+                                <input type="password" class="form-control" placeholder="Re-Password" name="password2" required='True' />
                             </div>
                         </div>  
                         <div class="form-group push-up-30">
