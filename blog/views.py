@@ -16,13 +16,10 @@ def home(request):
 
 
 def register(request):
-	registered=False
-	error_msg=""
 	if request.method=='POST' :
 		firstname=request.POST.get('firstname')
 		lastname=request.POST.get('lastname')
 		email=request.POST.get('email')
-		# profile_picture=request.POST.get['profile_picture']
 		username=request.POST.get('username')
 		password1=request.POST.get('password1')
 		password2=request.POST.get('password2')
@@ -30,25 +27,20 @@ def register(request):
 			password=password1
 			try:
 				user=User(username=username)
-				user.set_password(user.password)
+				user.set_password(password)
 				user.email=email
 				user.first_name=firstname
 				user.last_name=lastname
-				# profile=UserProfile()
-				# profile.user_id=user.id
-				# profile.save()
 				user.save()
-				registered=True
+				return HttpResponseRedirect('/login')
 			except:
-				error_msg="Invalid data"
-				registered=False
+				messages.error(request, "Username already used!")
 				pass
 		else:
-			error_msg="Password does not match"
-			registered=False
-	if registered is True:
-		return HttpResponseRedirect('/login')
-	return render(request,'blog/register.html',{'error_msg': error_msg })
+			messages.error(request, "Passwords does not match!!")
+			return HttpResponseRedirect('.') 
+		
+	return render(request,'blog/register.html')
 			
 
 def user_login(request):

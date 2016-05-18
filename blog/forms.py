@@ -5,9 +5,19 @@ from datetime import datetime, date
 
 class UserForm(forms.ModelForm):
 	password=forms.CharField(widget=forms.PasswordInput())
+	email=forms.EmailField()
 	class Meta:
 		model=User
 		fields=('username', 'password', 'email', 'first_name', 'last_name')
+		
+	def clean_username(self):
+		username = self.cleaned_data['username']
+		try:
+			User.objects.get(username=username)
+		except User.DoesNotExist:
+			return username
+		raise forms.ValidationError("That username is already taken, please select another name")
+
 
 
 class UserProfileForm(forms.ModelForm):

@@ -22,7 +22,13 @@
                 <div class="registration-body">
                     <div class="registration-title"><strong>Registration</strong></div>
                     <div class="registration-subtitle"></div>
-                    <strong>{{error_msg}}</strong>
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div {% if message.tags %} class="alert alert-warning" {% endif %}>
+                            <strong style="color: red;">{{ message }}</strong>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
                     <form enctype="multipart/form-data" id="user_form" action="{% url 'blog:register' %}" class="form-horizontal" method="post"  />
                         <h4>Personal info</h4>
                         {% csrf_token %}
@@ -42,11 +48,6 @@
                                 <input type="email" class="form-control" placeholder="E-mail" name="email" required='True' />
                             </div>
                         </div>
-                        <!-- <div class="form-group">
-                            <div class="col-md-12">
-                                <input type="file" class="form-control" placeholder="Profile Picture" name="profile_picture" />
-                            </div>
-                        </div> -->
                         <h4>Authentication</h4>                    
                         <div class="form-group">
                             <div class="col-md-12">
