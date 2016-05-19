@@ -28,14 +28,19 @@ def register(request):
 			try:
 				user=User(username=username)
 				user.set_password(password)
-				user.email=email
+				try:
+					email = user.cleaned_email[email]
+					user.email=email
+				except:
+					messages.error(request, "Email already used!")
+					return HttpResponseRedirect('.')
 				user.first_name=firstname
 				user.last_name=lastname
 				user.save()
 				return HttpResponseRedirect('/login')
 			except:
 				messages.error(request, "Username already used!")
-				pass
+				return HttpResponseRedirect('.') 	
 		else:
 			messages.error(request, "Passwords does not match!!")
 			return HttpResponseRedirect('.') 
