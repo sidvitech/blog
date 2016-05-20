@@ -132,7 +132,7 @@ $(function() {
         var feBsFileInput = function(){
             
             if($("input.fileinput").length > 0){
-                $("input.fileinput").bootstrapFileInput();                               
+                $("input.fileinput").bootstrapFileInput();
             }
             
         }

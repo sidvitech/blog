@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% block body %}
-    <div class="page-title">                    
-        <h2>Posts</h2>
+
+    <div class="page-title">
+        <h2>Profile</h2>
     </div>
     <div class="page-content-wrap">
         <div class="row">
@@ -14,70 +15,18 @@
                                 <div class="post-item">
                                     <div class="post-title">
                                         <ul>
-                                                <div class="post-title"><a href="/blog/view_post/{{posts.id}}">{{user.firstname}}</a></div>
-                                                <div class="post-title"><a href="/blog/view_post/{{posts.id}}">{{user.lastname}}</a></div>
-                                                <div class="post-title"><a href="/blog/view_post/{{posts.id}}">{{user.email}}</a></div>
-                                                <div class="post-title"><a href="/blog/view_post/{{posts.id}}">{{user.username}}</a></div>
-                                                
-                                        </ul> 
+                                            Full Name       : {{user.first_name}} {{user.last_name}}<br>
+                                            User Email Id   : {{user.email}}<br>
+                                            Username        : {{user.username}}<br>
+                                        </ul>
                                     </div>
-                                </div>                                            
-                            </div>  
-                        </div>
-                    </div>
-                            
-                </div>   
-            <div class="col-md-3">
-                            
-	            <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h3>Categories</h3>
-                        <div class="links">
-                            <a href="#">Front-end <span class="label label-default">195</span></a>
-                            <a href="#">Back-end <span class="label label-default">278</span></a>
-                            <a href="#">Frameworks <span class="label label-default">48</span></a>
-                            <a href="#">Programming <span class="label label-default">311</span></a>
-                            <a href="#">Management <span class="label label-default">94</span></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                            
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h3>Recent</h3>
-                        <div class="links small">
-                            <a href="#">Vestibulum porttitor neque vitae odio vulputate molestie</a>
-                            <a href="#">Etiam tellus mi, interdum id nulla in</a>
-                            <a href="#">Cras eu tincidunt quam</a>
-                            <a href="#">Donec rhoncus quam tortor, id pulvinar erat elementum eu</a>
-                            <a href="#">Nunc lorem est, suscipit bibendum</a>
-                            <a href="#">Fusce sollicitudin quis turpis eget mollis</a>
-                            <a href="#">Cras eget sagittis dui, et mollis tortor</a>
-                        </div>
-                    </div>
-                </div>
-                            
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h3>Tags</h3>
-                        <ul class="list-tags push-up-10">
-	                        <li><a href="#"><span class="fa fa-tag"></span> Donec</a></li>
-	                        <li><a href="#"><span class="fa fa-tag"></span> Bibendum</a></li>
-	                        <li><a href="#"><span class="fa fa-tag"></span> Praesent</a></li>
-	                        <li><a href="#"><span class="fa fa-tag"></span> Fusce</a></li>
-	                        <li><a href="#"><span class="fa fa-tag"></span> Nam quis</a></li>
-	                        <li><a href="#"><span class="fa fa-tag"></span> Maecenas</a></li>
-	                        <li><a href="#"><span class="fa fa-tag"></span> Nulla facilisi</a></li>
-	                        <li><a href="#"><span class="fa fa-tag"></span> Donec</a></li>
-	                        <li><a href="#"><span class="fa fa-tag"></span> Nam vitae</a></li>
-	                        <li><a href="#"><span class="fa fa-tag"></span> Malesuada</a></li>
-                        </ul>
-                    </div>
-                </div>
-                            
             </div>
         </div>
-                                                            
     </div>
-                
+
 {% endblock %}

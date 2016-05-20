@@ -4,7 +4,8 @@ from blog.models import UserProfile, Posts, Category
 
 class UserProfileAdmin(admin.ModelAdmin):
 
-	list_display=('user','profile_picture')
+	list_display=('user','designation', 'birthdate', 'lives_in','profile_picture')
+	search_fields=['user']
 
 admin.site.register(UserProfile, UserProfileAdmin)
 

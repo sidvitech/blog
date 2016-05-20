@@ -4,15 +4,20 @@ from django.shortcuts import render_to_response, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from blog.models import UserProfile, Posts, Category
-from blog.forms import UserForm, PostsForm, CategoryForm, UserProfileForm
+from blog.forms import UserForm, PostsForm, CategoryForm
 from django.contrib.auth.models import User
 from blog.bing_search import run_query
 from django.contrib import messages
 
+@login_required(login_url='/login/')
 def home(request):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	profile=UserProfile.objects.get(user_id=user.id)
+	
 	categories=Category.objects.all()
 	posts_list=Posts.objects.all()
-	return render(request,'blog/posts.html', {'categories':categories, 'posts_list':posts_list})
+	return render(request,'blog/posts.html', {'categories':categories, 'posts_list':posts_list, 'user':user, 'profile':profile})
 
 
 def register(request):
@@ -55,6 +60,7 @@ def user_login(request):
 		user=authenticate(username=username, password=password)
 		if user:
 			if user.is_active:
+				request.session['user_id'] = user.id
 				login(request, user)
 				return HttpResponseRedirect('/?login_successful')
 			else:
@@ -66,20 +72,63 @@ def user_login(request):
 	else:
 		return render(request, 'blog/login.html', {})
 
+@login_required(login_url='/login/')
 def view_profile(request):
-	user=UserProfile.objects.get(username=username)
-	return render(request,'blog/edit_profile.html', {'user':user})
+	username=request.user.username
+	user=User.objects.get(username=username)
+	profile=UserProfile.objects.get(user_id=user.id)
+	return render(request,'blog/view_profile.html', {'user':user, 'profile':profile})
 
+@login_required(login_url='/login/')
 def edit_profile(request):
-	user=UserProfile.objects.get(username=username)
-	return render(request,'blog/edit_profile.html', {'user':user})
+	username=request.user.username
+	user=User.objects.get(username=username)
+	profile=UserProfile.objects.get(user_id=user.id)
+	if request.method=='POST' :
+		firstname=request.POST.get('firstname')
+		lastname=request.POST.get('lastname')
+		email=request.POST.get('email')
+		username=request.POST.get('username')
+		designation=request.POST.get('designation')
+		birthdate=request.POST.get('birthdate')
+		lives_in=request.POST.get('lives_in')
+		profile_picture=request.POST.get('profile_picture')
+		try:
+			user.username=username
+			if user.email is not email:
+				try:
+					email = user.cleaned_newemail[email]
+					user.email=email
+				except:
+					messages.error(request, "Email already used!")
+					return HttpResponseRedirect('.')
+			
+			user.first_name=firstname
+			user.last_name=lastname
+			profile.designation=designation
+			profile.birthdate=birthdate
+			profile.lives_in=lives_in
+			profile.profile_picture=profile_picture
+			user.save()
+			profile.save()
+			return HttpResponseRedirect('/')
+		except:
+			messages.error(request, "Username already used!")
+			return HttpResponseRedirect('.')
 
+	return render(request,'blog/edit_profile.html', {'user':user, 'profile':profile})
+
+@login_required(redirect_field_name='/login')
 def user_logout(request):
+	del request.user
 	logout(request)
 	return HttpResponseRedirect('/')
 
-
+@login_required(redirect_field_name='/login')
 def view_post(request, post_id):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	profile=UserProfile.objects.get(user_id=user.id)
 	context_dict={}
 	categories=Category.objects.all()
 	post=Posts.objects.get(id=post_id)
@@ -90,26 +139,39 @@ def view_post(request, post_id):
 	context_dict['post']=post
 	context_dict['categories']=categories
 	context_dict['see_also']=see_also
+	context_dict['user']=user
+	context_dict['profile']=profile
 	return render(request,'blog/view_post.html', context_dict)
 
-
+@login_required(redirect_field_name='/login')
 def search(request):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	profile=UserProfile.objects.get(user_id=user.id)
 	result_list=[]
 	if request.method=='POST' :
 		query=request.POST['query'].strip()
 		if query:
 			result_list=run_query(query)
-	return render(request,'blog/search.html',{'result_list': result_list})
+	return render(request,'blog/search.html',{'result_list': result_list, 'user':user, 'profile': profile})
 
-
+@login_required(login_url='/login/')
 def category_list(request):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	profile=UserProfile.objects.get(user_id=user.id)
 	context_dict={}
 	categories=Category.objects.all()
 	context_dict['categories']=categories
+	context_dict['user']=user
+	context_dict['profile']=profile
 	return render(request, 'blog/category_list.html', context_dict)
 
-
+@login_required(login_url='/login/')
 def category(request,category_name):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	profile=UserProfile.objects.get(user_id=user.id)
 	context_dict={}
 	category=Category.objects.get(name=category_name)
 	context_dict['category_name']=category.name
@@ -118,6 +180,8 @@ def category(request,category_name):
 	context_dict['category']=category
 	categories=Category.objects.all()
 	context_dict['categories']=categories
+	context_dict['user']=user
+	context_dict['profile']=profile
 	return render(request, 'blog/category.html', context_dict)
 
 

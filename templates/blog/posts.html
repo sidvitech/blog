@@ -16,7 +16,7 @@
                                 <ul>
                                     <div class="post-title"><a href="/blog/view_post/{{posts.id}}">{{posts.title}}</a></div>
                                     {%if posts.thumb %}
-                                        <img src="media/{{posts.thumb}}" class="img-responsive img-text"/>
+                                        <img src="/media/{{posts.thumb}}" class="img-responsive img-text"/>
                                     {% endif %}
                                     <div class="post-text">
                                         <p>{{posts.details | truncatechars:"250"}}</p>                                            
