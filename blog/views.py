@@ -24,11 +24,10 @@ def register(request):
 	if request.method=='POST' :
 		firstname=request.POST.get('firstname')
 		lastname=request.POST.get('lastname')
-		email=request.POST.get('email')
 		username=request.POST.get('username')
 		password1=request.POST.get('password1')
 		password2=request.POST.get('password2')
-		if password1==password2:
+		if password1:
 			password=password1
 			try:
 				user=User(username=username)
@@ -87,34 +86,32 @@ def edit_profile(request):
 	if request.method=='POST' :
 		firstname=request.POST.get('firstname')
 		lastname=request.POST.get('lastname')
-		email=request.POST.get('email')
-		username=request.POST.get('username')
 		designation=request.POST.get('designation')
-		birthdate=request.POST.get('birthdate')
 		lives_in=request.POST.get('lives_in')
-		profile_picture=request.POST.get('profile_picture')
 		try:
-			user.username=username
-			if user.email is not email:
-				try:
-					email = user.cleaned_newemail[email]
-					user.email=email
-				except:
-					messages.error(request, "Email already used!")
-					return HttpResponseRedirect('.')
-			
-			user.first_name=firstname
-			user.last_name=lastname
-			profile.designation=designation
-			profile.birthdate=birthdate
-			profile.lives_in=lives_in
-			profile.profile_picture=profile_picture
-			user.save()
-			profile.save()
-			return HttpResponseRedirect('/')
+			profile_picture=request.FILES['profile_picture']
 		except:
-			messages.error(request, "Username already used!")
+			profile_picture=False
+			pass
+		if profile_picture:
+			profile.profile_picture=profile_picture
+			profile.save()
+			messages.success(request,"Profile Picture Updated")
 			return HttpResponseRedirect('.')
+		else:	
+			try:
+				user.first_name=firstname
+				user.last_name=lastname
+				profile.designation=designation
+				profile.lives_in=lives_in
+				user.save()
+				profile.save()
+				success_message = "Profile Updated"
+				messages.success(request, 'Profile details updated.')
+				return HttpResponseRedirect('.')
+			except:
+				messages.error(request, "Username already used!")
+				return HttpResponseRedirect('.')
 
 	return render(request,'blog/edit_profile.html', {'user':user, 'profile':profile})
 

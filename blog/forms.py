@@ -4,6 +4,7 @@ from blog.models import UserProfile, Posts, Category
 from datetime import datetime, date
 from project import settings
 
+
 class UserForm(forms.ModelForm):
 	password=forms.CharField(widget=forms.PasswordInput())
 	class Meta:
@@ -11,17 +12,18 @@ class UserForm(forms.ModelForm):
 		fields=('username', 'password', 'email', 'first_name', 'last_name')
 
 	def clean_email(self):
-		email = self.cleaned_data.get('email')
-		if User.objects.filter(email=email).count() >= 0:
-			return email
-		raise forms.ValidationError('This email address is already registered.')
+		email = self.cleaned_data['email']
+		if User.objects.filter(email=email).count() > 0 :
+			raise forms.ValidationError('This email address is already registered.')
+		return email
 
 
 class UserProfileForm(forms.ModelForm):
-    birthdate = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
-    class Meta:
-       model = UserProfile
-       fields=('designation','birthdate','lives_in','profile_picture')
+	birthdate = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
+	class Meta:
+		model = UserProfile
+		fields=('designation','birthdate','lives_in','profile_picture')
+
 
 class CategoryForm(forms.ModelForm):
 	name=forms.CharField(max_length=128, help_text="Please enter the category name")
