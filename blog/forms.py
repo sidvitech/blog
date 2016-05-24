@@ -11,12 +11,6 @@ class UserForm(forms.ModelForm):
 		model=User
 		fields=('username', 'password', 'email', 'first_name', 'last_name')
 
-	def clean_email(self):
-		email = self.cleaned_data['email']
-		if User.objects.filter(email=email).count() > 0 :
-			raise forms.ValidationError('This email address is already registered.')
-		return email
-
 
 class UserProfileForm(forms.ModelForm):
 	birthdate = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
@@ -46,5 +40,5 @@ class PostsForm(forms.ModelForm):
 		model=Posts	
 		fields=('title',)
 	
-		
+
 

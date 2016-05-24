@@ -16,39 +16,40 @@
         <div class="registration-container">
             <div class="registration-box animated fadeInDown">
                 <a href="/"><div class="registration-logo"> </div></a>
-                    <div class="registration-body">
-                        <div class="registration-title"><strong>Registration</strong></div>
-                        <div class="registration-subtitle"></div>
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert alert-danger" role="alert">
-                                    <strong style="color: red;">{{ message }}</strong>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-        <form enctype="multipart/form-data" id="user_form" action="{% url 'blog:register' %}" class="form-horizontal" method="post"  />
+                <div class="registration-body">
+                    <div class="registration-title"><strong>Registration</strong></div>
+                    <div class="registration-subtitle"></div>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-danger" role="alert">
+                                <strong>{{ message }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+        
+                    <form enctype="multipart/form-data" id="user_form" action="{% url 'blog:register' %}" class="form-horizontal" method="post"  />
                             <h4>Personal info</h4>
                             {% csrf_token %}
 
                             <div class="form-group">
                                 <div class="col-md-12">
-                                    <input type="text" class="form-control" placeholder="First Name" name="firstname" required='True' />
+                                    <input type="text" class="form-control" value="{{firstname}}" placeholder="First Name" name="firstname" required='True' />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12">
-                                    <input type="text" class="form-control" placeholder="Last Name" name="lastname" required='True' />
+                                    <input type="text" class="form-control" value="{{lastname}}" placeholder="Last Name" name="lastname" required='True' />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12">
-                                    <input type="email" class="form-control" placeholder="E-mail" name="email" required='True' />
+                                    <input type="email" class="form-control" value="{{email}}" placeholder="E-Mail" name="email" required='True' />
                                 </div>
                             </div>
                             <h4>Authentication</h4>
                             <div class="form-group">
                                 <div class="col-md-12">
-                                    <input type="text" class="form-control" placeholder="Username" name="username" required='True'/>
+                                    <input type="text" class="form-control" value="{{username}}" placeholder="UserName" name="username" required='True'/>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -58,7 +59,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-md-12">
-                                    <input type="password" minlength="8" class="form-control" placeholder="Re-Password" name="password2" required='True' />
+                                    <input type="password" minlength="8" class="form-control" placeholder="Re-Enter Password" name="password2" required='True' />
                                 </div>
                             </div>  
                             <div class="form-group push-up-30">
@@ -75,10 +76,11 @@
                         <div class="pull-left">
                             &copy; 2015 BlogApp
                         </div>
-                    <div class="pull-right">
-                        <a href="#">About</a> |
-                        <a href="#">Privacy</a> |
-                        <a href="#">Contact Us</a>
+                        <div class="pull-right">
+                            <a href="#">About</a> |
+                            <a href="#">Privacy</a> |
+                            <a href="#">Contact Us</a>
+                        </div>
                     </div>
                 </div>
             </div>

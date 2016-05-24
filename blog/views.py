@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from blog.models import UserProfile, Posts, Category
-from blog.forms import UserForm, PostsForm, CategoryForm
+from blog.forms import UserForm, PostsForm, CategoryForm, UserProfileForm
 from django.contrib.auth.models import User
 from blog.bing_search import run_query
 from django.contrib import messages
@@ -17,59 +17,72 @@ def home(request):
 	
 	categories=Category.objects.all()
 	posts_list=Posts.objects.all()
-	return render(request,'blog/posts.html', {'categories':categories, 'posts_list':posts_list, 'user':user, 'profile':profile})
-
+	return render(request,'/blog/posts.html', {'categories':categories, 'posts_list':posts_list, 'user':user, 'profile':profile})
 
 def register(request):
-	if request.method=='POST' :
-		firstname=request.POST.get('firstname')
-		lastname=request.POST.get('lastname')
-		username=request.POST.get('username')
-		password1=request.POST.get('password1')
-		password2=request.POST.get('password2')
-		if password1:
-			password=password1
-			try:
-				user=User(username=username)
-				user.set_password(password)
+	username=request.user.username
+	if username:
+		return HttpResponseRedirect('/')
+	else:
+		if request.method=='POST' :
+			firstname=request.POST.get('firstname')
+			lastname=request.POST.get('lastname')
+			email=request.POST.get('email')
+			username=request.POST.get('username')
+			password1=request.POST.get('password1')
+			password2=request.POST.get('password2')
+			if password1==password2:
+				password=password1
 				try:
-					email = user.cleaned_email[email]
-					user.email=email
+					allusers=User.objects.all()
+					user=User(username=username)
+					user.set_password(password)
+					try:
+						count=User.objects.filter(email=email).count()
+						if count==0:
+							user.email=email
+						else:
+							raise forms.ValidationError(u'This email address is already registered.')
+					except:
+						messages.error(request,"Email already used!")
+						return render(request,'blog/register.html', { 'firstname':firstname, 'lastname':lastname, 'email':email, 'username':username })
+					user.first_name=firstname
+					user.last_name=lastname
+					user.save()
+					return HttpResponseRedirect('/login')
 				except:
-					messages.error(request, "Email already used!")
-					return HttpResponseRedirect('.')
-				user.first_name=firstname
-				user.last_name=lastname
-				user.save()
-				return HttpResponseRedirect('/login')
-			except:
-				messages.error(request, "Username already used!")
-				return HttpResponseRedirect('.') 	
-		else:
-			messages.error(request, "Passwords does not match!!")
-			return HttpResponseRedirect('.') 
-		
-	return render(request,'blog/register.html')
+					messages.error(request, "Username already used!")
+					return render(request,'blog/register.html', { 'firstname':firstname, 'lastname':lastname, 'email':email, 'username':username })
+			else:
+				messages.error(request, "Passwords does not match!!")
+				return render(request,'blog/register.html', { 'firstname':firstname, 'lastname':lastname, 'email':email, 'username':username })
 			
+		return render(request,'blog/register.html')
+
+
 
 def user_login(request):
-	if request.method=='POST':
-		username=request.POST.get('username')
-		password=request.POST.get('password')
-		user=authenticate(username=username, password=password)
-		if user:
-			if user.is_active:
-				request.session['user_id'] = user.id
-				login(request, user)
-				return HttpResponseRedirect('/?login_successful')
-			else:
-				error_msg="Your Account Is Disabled."
-				return render(request, 'blog/login.html', {'error_msg':error_msg})
-		else:
-			error_msg="Invalid login details supplied."
-			return render(request,'blog/login.html',{'error_msg':error_msg})
+	username=request.user.username
+	if username:
+		return HttpResponseRedirect('/')
 	else:
-		return render(request, 'blog/login.html', {})
+		if request.method=='POST':
+			username=request.POST.get('username')
+			password=request.POST.get('password')
+			user=authenticate(username=username, password=password)
+			if user:
+				if user.is_active:
+					request.session['user_id'] = user.id
+					login(request, user)
+					return HttpResponseRedirect('/?login_successful')
+				else:
+					messages.error(request, "Your Account Is Disabled.")
+					return HttpResponseRedirect('.')
+			else:
+				messages.error(request, "Invalid login details provided.")
+				return HttpResponseRedirect('.')
+		else:
+			return render(request, 'blog/login.html')
 
 @login_required(login_url='/login/')
 def view_profile(request):
@@ -88,6 +101,7 @@ def edit_profile(request):
 		lastname=request.POST.get('lastname')
 		designation=request.POST.get('designation')
 		lives_in=request.POST.get('lives_in')
+		email=request.POST.get('email')
 		try:
 			profile_picture=request.FILES['profile_picture']
 		except:
@@ -98,19 +112,25 @@ def edit_profile(request):
 			profile.save()
 			messages.success(request,"Profile Picture Updated")
 			return HttpResponseRedirect('.')
-		else:	
+		else:
 			try:
+				count=User.objects.filter(email=email).count()
+				if count==0:
+					user.email=email
+				elif user.email==email:
+					pass
+				else:
+					raise forms.ValidationError(u'This email address is already registered.')
 				user.first_name=firstname
 				user.last_name=lastname
 				profile.designation=designation
 				profile.lives_in=lives_in
 				user.save()
 				profile.save()
-				success_message = "Profile Updated"
-				messages.success(request, 'Profile details updated.')
+				messages.success(request,'Profile details updated.')
 				return HttpResponseRedirect('.')
 			except:
-				messages.error(request, "Username already used!")
+				messages.error(request,"Email Id already registered!")
 				return HttpResponseRedirect('.')
 
 	return render(request,'blog/edit_profile.html', {'user':user, 'profile':profile})
