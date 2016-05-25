@@ -13,11 +13,13 @@ from django.contrib import messages
 def home(request):
 	username=request.user.username
 	user=User.objects.get(username=username)
-	profile=UserProfile.objects.get(user_id=user.id)
-	
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
 	categories=Category.objects.all()
 	posts_list=Posts.objects.all()
-	return render(request,'/blog/posts.html', {'categories':categories, 'posts_list':posts_list, 'user':user, 'profile':profile})
+	return render(request,'blog/posts.html', {'categories':categories, 'posts_list':posts_list, 'user':user, 'profile':profile})
 
 def register(request):
 	username=request.user.username
@@ -28,13 +30,13 @@ def register(request):
 			firstname=request.POST.get('firstname')
 			lastname=request.POST.get('lastname')
 			email=request.POST.get('email')
+			birthdate=request.POST.get('birthdate')
 			username=request.POST.get('username')
 			password1=request.POST.get('password1')
 			password2=request.POST.get('password2')
 			if password1==password2:
 				password=password1
 				try:
-					allusers=User.objects.all()
 					user=User(username=username)
 					user.set_password(password)
 					try:
@@ -48,6 +50,9 @@ def register(request):
 						return render(request,'blog/register.html', { 'firstname':firstname, 'lastname':lastname, 'email':email, 'username':username })
 					user.first_name=firstname
 					user.last_name=lastname
+					profile=UserProfile()
+					profile.user_id=user.id
+					profile.birthdate=birthdate
 					user.save()
 					return HttpResponseRedirect('/login')
 				except:
@@ -64,7 +69,7 @@ def register(request):
 def user_login(request):
 	username=request.user.username
 	if username:
-		return HttpResponseRedirect('/')
+		return HttpResponseRedirect('/blog')
 	else:
 		if request.method=='POST':
 			username=request.POST.get('username')
@@ -88,50 +93,68 @@ def user_login(request):
 def view_profile(request):
 	username=request.user.username
 	user=User.objects.get(username=username)
-	profile=UserProfile.objects.get(user_id=user.id)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
 	return render(request,'blog/view_profile.html', {'user':user, 'profile':profile})
 
 @login_required(login_url='/login/')
 def edit_profile(request):
 	username=request.user.username
 	user=User.objects.get(username=username)
-	profile=UserProfile.objects.get(user_id=user.id)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
 	if request.method=='POST' :
+		profile.user_id=user.id
 		firstname=request.POST.get('firstname')
 		lastname=request.POST.get('lastname')
 		designation=request.POST.get('designation')
 		lives_in=request.POST.get('lives_in')
 		email=request.POST.get('email')
+		birthdate=request.POST.get('birthdate')
 		try:
 			profile_picture=request.FILES['profile_picture']
 		except:
 			profile_picture=False
 			pass
+
 		if profile_picture:
 			profile.profile_picture=profile_picture
 			profile.save()
-			messages.success(request,"Profile Picture Updated")
 			return HttpResponseRedirect('.')
-		else:
-			try:
+			
+		try:
+			if email:
 				count=User.objects.filter(email=email).count()
-				if count==0:
+				print user.email
+				print email
+				if user.email==email:
 					user.email=email
-				elif user.email==email:
-					pass
+				elif count==0:
+					user.email=email
 				else:
 					raise forms.ValidationError(u'This email address is already registered.')
-				user.first_name=firstname
-				user.last_name=lastname
-				profile.designation=designation
-				profile.lives_in=lives_in
-				user.save()
-				profile.save()
-				messages.success(request,'Profile details updated.')
-				return HttpResponseRedirect('.')
-			except:
-				messages.error(request,"Email Id already registered!")
-				return HttpResponseRedirect('.')
+		except:
+			messages.error(request,"Email Id already registered!")
+			return HttpResponseRedirect('.')
+		if birthdate:
+			profile.birthdate=birthdate
+		if firstname:
+			user.first_name=firstname
+		if lastname:
+			user.last_name=lastname
+		if designation:
+			profile.designation=designation
+		if lives_in:
+			profile.lives_in=lives_in
+		
+		user.save()
+		profile.save()
+	
+		return HttpResponseRedirect('.')
 
 	return render(request,'blog/edit_profile.html', {'user':user, 'profile':profile})
 
@@ -145,7 +168,10 @@ def user_logout(request):
 def view_post(request, post_id):
 	username=request.user.username
 	user=User.objects.get(username=username)
-	profile=UserProfile.objects.get(user_id=user.id)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
 	context_dict={}
 	categories=Category.objects.all()
 	post=Posts.objects.get(id=post_id)
@@ -164,7 +190,10 @@ def view_post(request, post_id):
 def search(request):
 	username=request.user.username
 	user=User.objects.get(username=username)
-	profile=UserProfile.objects.get(user_id=user.id)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
 	result_list=[]
 	if request.method=='POST' :
 		query=request.POST['query'].strip()
@@ -176,7 +205,10 @@ def search(request):
 def category_list(request):
 	username=request.user.username
 	user=User.objects.get(username=username)
-	profile=UserProfile.objects.get(user_id=user.id)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
 	context_dict={}
 	categories=Category.objects.all()
 	context_dict['categories']=categories
@@ -188,7 +220,10 @@ def category_list(request):
 def category(request,category_name):
 	username=request.user.username
 	user=User.objects.get(username=username)
-	profile=UserProfile.objects.get(user_id=user.id)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
 	context_dict={}
 	category=Category.objects.get(name=category_name)
 	context_dict['category_name']=category.name

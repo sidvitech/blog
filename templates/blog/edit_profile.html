@@ -11,12 +11,8 @@
         <div class="row">
             <div class="col-md-12">
                 {% for message in messages %}
-                    {% if message.error %}
+                    {% if message %}
                         <div class="alert alert-danger" role="alert">
-                            <strong>{{ message }}</strong>
-                        </div>
-                    {% elif message %}
-                        <div class="alert alert-success" role="alert">
                             <strong>{{ message }}</strong>
                         </div>
                     {% endif %}
@@ -25,36 +21,30 @@
         </div>
         <div class="row">
             <div class="col-md-3 col-sm-4 col-xs-5">
-                <form action="." class="form-horizontal">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <h3><span class="fa fa-user"></span> {{user.first_name}} {{user.last_name}} </h3>
-                            <p> {{profile.designation}} </p>
-                            <div class="text-center" id="user_image">
-                                <img src="/media/{{profile.profile_picture}}" class="img-thumbnail"/>
-                            </div>
-                        </div>
-                        <div class="panel-body form-group-separated">
-                            <div class="form-group">
-                                <div class="col-md-12 col-xs-12">
-                                    <a href="#" class="btn btn-primary btn-block btn-rounded" data-toggle="modal" data-target="#modal_change_photo">Change Photo</a>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">#ID</label>
-                                <div class="col-md-9 col-xs-7">
-                                    <input type="text" value="{{user.id}}" class="form-control" disabled/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Username</label>
-                                <div class="col-md-9 col-xs-7">
-                                    <input type="text" name="username" value="{{user.username}}" class="form-control" disabled/>
-                                </div>
-                            </div>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3><span class="fa fa-user"></span> {{user.first_name}} {{user.last_name}} </h3>
+                        <div class="text-center" id="user_image">
+                            <img src="/media/{{profile.profile_picture}}" class="img-thumbnail"/>
                         </div>
                     </div>
-                </form>
+                    <div class="panel-body form-group-separated">
+                        <div class="form-group">
+                            <div class="col-md-12 col-xs-12">
+                                <a href="#" class="btn btn-primary btn-block btn-rounded" data-toggle="modal" data-target="#modal_change_photo">Change Photo</a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-5 col-xs-6 control-label">#ID</label>
+                            <label class="col-md-7 col-xs-6 control-label">{{user.id}}</label>
+                            
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-5 col-xs-6 control-label">Username</label>
+                            <label class="col-md-7 col-xs-6 control-label">{{user.username}}</label>
+                        </div>
+                    </div>
+                </div>
             </div>
         
             <div class="col-md-6 col-sm-8 col-xs-7">
@@ -69,47 +59,40 @@
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">First Name</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <input type="text" name="firstname" value="{{user.first_name}}" class="form-control"/>
+                                    <input type="text" name="firstname" value="{{user.first_name}}" maxlength="30" class="form-control"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Last Name</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <input type="text" name='lastname' value="{{user.last_name}}" class="form-control"/>
+                                    <input type="text" name='lastname' value="{{user.last_name}}" maxlength="30" class="form-control"/>
                                 </div>
                             </div>
-                             <div class="form-group">
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-5 control-label">Birthdate</label>
+                                <div class="col-md-9 col-xs-7">
+                                    <div class="input-group">
+                                        <span class="input-group-addon add-on"><span class="fa fa-calendar"></span></span>
+                                        <input type="text" name="birthdate" class="form-control datepicker" placeholder="{{profile.birthdate}}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">E-mail</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <input type="text" value="{{user.email}}" class="form-control" />
+                                    <input type="text" value="{{user.email}}" name="email" class="form-control" maxlength="30" />
                                 </div>
                             </div>
-                            {% if profile.birthdate %}
-                                <a href="javascript:DateTimeShortcuts.openCalendar(0);" id="calendarlink0"><span class="date-icon" title="Choose a Date"></span></a>
-                                <div class="form-group">
-                                    <label class="col-md-3 col-xs-5 control-label">BirthDate</label>
-                                    <div class="col-md-4 col-xs-7">
-                                        {{profile.birthdate}}
-                                    </div>
-                                </div>
-                            {% else %}
-                                <div class="form-group">
-                                    <label class="col-md-3 col-xs-5 control-label">BirthDate</label>
-                                    <div class="col-md-4 col-xs-7">
-                                        <input type="date" value="{{profile.birthdate}}" class="form-control"/>
-                                    </div>
-                                    </div>
-                            {%endif %}
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Lives In</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <input type="text" value="{{profile.lives_in}}" name='lives_in' class="form-control"/>
+                                    <input type="text" value="{{profile.lives_in}}" name='lives_in' class="form-control" maxlength="100"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Designation</label>
                                 <div class="col-md-9 col-xs-7">
-                                    <input type="text" value="{{profile.designation}}" name='designation' class="form-control"/>
+                                    <input type="text" value="{{profile.designation}}" name='designation' class="form-control" maxlength="50"/>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -117,12 +100,12 @@
                                     <button class="btn btn-primary btn-rounded pull-right">Save</button>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                 </form>
             </div>
-
-            <div class="col-md-3">
+            <div class="col-md-3 col-sm-12 col-xs-12">
                 <div class="panel panel-default form-horizontal">
                     <div class="panel-body">
                         <h3><span class="fa fa-info-circle"></span> Quick Info</h3>
@@ -131,41 +114,41 @@
                     <div class="panel-body form-group-separated">
                         <div class="form-group">
                             <label class="col-md-4 col-xs-5 control-label">Last visit</label>
-                            <div class="col-md-8 col-xs-7 line-height-30">{{user.last_login}}</div>
+                            <div class="col-md-8 col-xs-7">{{user.last_login}}</div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 col-xs-5 control-label">Registration</label>
-                            <div class="col-md-8 col-xs-7 line-height-30">{{user.date_joined}}</div>
+                            <div class="col-md-8 col-xs-7">{{user.date_joined}}</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="modal animated fadeIn" id="modal_change_photo" tabindex="-1" role="dialog" aria-labelledby="smallModalHead" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" id="smallModalHead">Change photo</h4>
-                </div>
-                <form id="form" method="POST" enctype="multipart/form-data" role="form" action=".">
+                </div>                    
+                <form method="post" enctype="multipart/form-data" action=".">
                     {% csrf_token %}
                     <div class="modal-body form-horizontal form-group-separated">
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Select New Photo</label>
-                            
-                            <div class="col-md-4">
-                                <input type="file" accept="image/JPEG" name="profile_picture" id="profile_picture" />
+                            <label class="col-md-4 col-sm-4 col-xs-6 control-label">New Photo</label>
+                            <div class="col-md-8 col-sm-4 col-xs-6">
+                                <input type="file" class="fileinput btn-info" name="profile_picture" data-filename-placement="inside" title="Select file"/>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success" id="cp_accept">Accept</button>
+                        <button type="submit" class="btn btn-success">Accept</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </form>
+                
             </div>
         </div>
     </div>
@@ -179,21 +162,7 @@
         <a class="play-pause"></a>
         <ol class="indicator"></ol>
     </div>
-    <audio id="audio-alert" src="{% static 'audio/alert.mp3' %}" preload="auto"></audio>
-    <audio id="audio-fail" src="{% static 'audio/fail.mp3'%}" preload="auto"></audio>
-    <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery.min.js'%}"></script>
-    <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery-ui.min.js'%}"></script>
-    <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap.min.js'%}"></script>
-    <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery-migrate.min.js'%}"></script>
-    <script type='text/javascript' src="{% static 'js/plugins/icheck/icheck.min.js'%}"></script>
-    <script type="text/javascript" src="{% static 'js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js'%}"></script>  
-    <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap-file-input.js'%}"></script>
-    <script type="text/javascript" src="{% static 'js/plugins/form/jquery.form.js'%}"></script>
-    <script type="text/javascript" src="{% static 'js/plugins/cropper/cropper.min.js'%}"></script>
-    <script type="text/javascript" src="{% static 'js/settings.js'%}"></script>
-    <script type="text/javascript" src="{% static 'js/plugins.js'%}"></script>
-    <script type="text/javascript" src="{% static 'js/actions.js'%}"></script>
-    <script type="text/javascript" src="{% static 'js/demo_edit_profile.js'%}"></script>
+    
 {% endblock %}
 
 

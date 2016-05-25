@@ -11,8 +11,11 @@ from blog.models import UserProfile
 def home(request):
 	username=request.user.username
 	user=User.objects.get(username=username)
-	profile=UserProfile.objects.get(user_id=user.id)
-	
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
+
 	posts_list=Posts.objects.all()
 	return render(request,'home.html', {'posts_list':posts_list, 'user':user, 'profile':profile})
 

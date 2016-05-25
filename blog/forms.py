@@ -13,7 +13,6 @@ class UserForm(forms.ModelForm):
 
 
 class UserProfileForm(forms.ModelForm):
-	birthdate = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
 	class Meta:
 		model = UserProfile
 		fields=('designation','birthdate','lives_in','profile_picture')

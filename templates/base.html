@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    
 <head>
         <link href="{% static 'css/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
         <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
@@ -11,6 +11,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="content-type" content="text/html;charset=utf-8" />
         
         <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
         
@@ -28,9 +29,16 @@
                     <li class="xn-profile">
                         <div class="profile">
                             {% if user.is_authenticated %}
+                                {% if profile.profile_picture %}
                                 <div class="profile-image">
-                                    <img src='/media/{{profile.profile_picture}}' alt="User"/>
+                                    <a href="/blog/view_profile/"><img src='/media/{{profile.profile_picture}}' alt="User"/></a>
                                 </div>
+                                {% else %}
+                                    <div class="profile-image">
+                                        <img src='/media/user/profile_pictures/no-image.jpg' alt="User"/>
+                                    </div>
+                                {% endif %}
+                            
                             {% else %}
                                 <div class="profile-image">
                                     <img src='/media/user/profile_pictures/no-image.jpg' alt="User"/>
@@ -40,12 +48,13 @@
                             <div class="profile-data">
                                 {% if user.is_authenticated %}    
                                     <a href="/blog/view_profile/"><div class="profile-data-name">{{user.first_name}} {{user.last_name}}</div></a>
+                                    <div class="profile-data-title">{{profile.designation}} </div>
                                 {% else %}
                                     <div class="profile-data-name">User</div>
                                 {% endif %}
                             </div>
                             <div class="profile-controls">
-                                <a href="pages-profile.html" class="profile-control-left"><span class="fa fa-info"></span></a>
+                                <a href="{% url 'blog:edit_profile' %}" class="profile-control-left"><span class="fa fa-info"></span></a>
                                 <a href="pages-messages.html" class="profile-control-right"><span class="fa fa-envelope"></span></a>
                             </div>
                         </div>                                                                        
@@ -66,36 +75,41 @@
                                 <li class="active"><a href="{% url 'blog:category_list' %}"><span class="fa fa-copy"></span> List of Categories</a></li>
                                 <li class="active"><a href="{% url 'blog:category_list' %}"><span class="fa fa-file-o"></span> Add Category</a></li>
                             </ul>
+                        </li>
+                        <li class="xn-openable">
+                            <a href="#"><span class="fa fa-user"></span> Profile</a>
+                            
+                            <ul>                                    
+                                <li><a href="{% url 'blog:edit_profile' %}"><span class="fa fa-wrench"></span> Edit Profile</a></li>
+                                <li><a href="{% url 'blog:view_profile' %}"><span class="fa fa-user"></span> Profile</a></li>
+                            </ul>
                         </li>                       
-                            <li><a href="{% url 'blog:edit_profile' %}"><span class="fa fa-wrench"></span> Edit Profile</a></li>
-                            <li><a href="{% url 'blog:view_profile' %}"><span class="fa fa-user"></span> Profile</a></li>
-                            <li><a href="{% url 'blog:search' %}"><span class="fa fa-search"></span> Search</a></li>
+                        <li><a href="{% url 'blog:search' %}"><span class="fa fa-search"></span> Search</a></li>
                         
-                    </li>
-                    <li class="xn-openable">
-                        <a href="#"><span class="fa fa-file-text-o"></span> <span class="xn-text">Layouts</span></a>
-                        <ul>
-                            <li><a href="layout-boxed.html">Boxed</a></li>
-                            <li><a href="layout-nav-toggled.html">Navigation Toggled</a></li>
-                            <li><a href="layout-nav-toggled-hover.html">Nav Toggled (Hover)</a></li>
-                            <li><a href="layout-nav-toggled-item-hover.html">Nav Toggled (Item Hover)</a></li>
-                            <li><a href="layout-nav-top.html">Navigation Top</a></li>
-                            <li><a href="layout-nav-right.html">Navigation Right</a></li>
-                            <li><a href="layout-nav-top-fixed.html">Top Navigation Fixed</a></li>
-                            <li><a href="layout-nav-custom.html">Custom Navigation</a></li>
-                            <li><a href="layout-nav-top-custom.html">Custom Top Navigation</a></li>
-                            <li><a href="layout-frame-left.html">Frame Left Column</a></li>
-                            <li><a href="layout-frame-right.html">Frame Right Column</a></li>
-                            <li><a href="layout-search-left.html">Search Left Side</a></li>
-                            <li><a href="layout-page-sidebar.html">Page Sidebar</a></li>
-                            <li><a href="layout-page-loading.html">Page Loading</a></li>
-                            <li><a href="layout-rtl.html">Layout RTL</a></li>
-                            <li><a href="layout-tabbed.html">Page Tabbed</a></li>
-                            <li><a href="layout-custom-header.html">Custom Header</a></li>
-                            <li><a href="layout-adaptive-panels.html">Adaptive Panels</a></li>                            
-                            <li><a href="blank.html">Blank Page</a></li>
-                        </ul>
-                    </li>                                              
+                        <li class="xn-openable">
+                            <a href="#"><span class="fa fa-file-text-o"></span> <span class="xn-text">Layouts</span></a>
+                            <ul>
+                                <li><a href="layout-boxed.html">Boxed</a></li>
+                                <li><a href="layout-nav-toggled.html">Navigation Toggled</a></li>
+                                <li><a href="layout-nav-toggled-hover.html">Nav Toggled (Hover)</a></li>
+                                <li><a href="layout-nav-toggled-item-hover.html">Nav Toggled (Item Hover)</a></li>
+                                <li><a href="layout-nav-top.html">Navigation Top</a></li>
+                                <li><a href="layout-nav-right.html">Navigation Right</a></li>
+                                <li><a href="layout-nav-top-fixed.html">Top Navigation Fixed</a></li>
+                                <li><a href="layout-nav-custom.html">Custom Navigation</a></li>
+                                <li><a href="layout-nav-top-custom.html">Custom Top Navigation</a></li>
+                                <li><a href="layout-frame-left.html">Frame Left Column</a></li>
+                                <li><a href="layout-frame-right.html">Frame Right Column</a></li>
+                                <li><a href="layout-search-left.html">Search Left Side</a></li>
+                                <li><a href="layout-page-sidebar.html">Page Sidebar</a></li>
+                                <li><a href="layout-page-loading.html">Page Loading</a></li>
+                                <li><a href="layout-rtl.html">Layout RTL</a></li>
+                                <li><a href="layout-tabbed.html">Page Tabbed</a></li>
+                                <li><a href="layout-custom-header.html">Custom Header</a></li>
+                                <li><a href="layout-adaptive-panels.html">Adaptive Panels</a></li>                            
+                                <li><a href="blank.html">Blank Page</a></li>
+                            </ul>
+                        </li>                                              
                     <li class="xn-title">Components</li>
                     <li class="xn-openable">
                         <a href="#"><span class="fa fa-cogs"></span> <span class="xn-text">UI Kits</span></a>                        
@@ -333,19 +347,22 @@
         </div>
 
         <audio id="audio-alert" src="{% static 'audio/alert.mp3' %}" preload="auto"></audio>
-        <audio id="audio-fail" src="{% static 'audio/fail.mp3' %}" preload="auto"></audio>
+        <audio id="audio-fail" src="{% static 'audio/fail.mp3'%}" preload="auto"></audio>
 
-        <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery-ui.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap.min.js' %}"></script>        
-
-        <script type='text/javascript' src="{% static 'js/plugins/icheck/icheck.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js' %}"></script>                
-
-        <script type="text/javascript" src="{% static 'js/settings.js' %}"></script>
-        
-        <script type="text/javascript" src="{% static 'js/plugins.js' %}"></script>        
-        <script type="text/javascript" src="{% static 'js/actions.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery.min.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery-ui.min.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap.min.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery-migrate.min.js'%}"></script>
+        <script type='text/javascript' src="{% static 'js/plugins/icheck/icheck.min.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js'%}"></script>  
+        <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap-file-input.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/form/jquery.form.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/cropper/cropper.min.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap-datepicker.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/settings.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/actions.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/demo_edit_profile.js'%}"></script>
 
     </body>
 
