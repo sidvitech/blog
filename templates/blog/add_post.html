@@ -6,85 +6,64 @@
     <li><a href="{% url 'blog:add_post' %}">Add Post</a></li>
 {% endblock %}
 
-{% block body_block %}
+{% block body %}
 
-    <div class="page-title">                    
-        <h2><a href="/blog/"><span class="fa fa-arrow-circle-o-left"></span></a> Add New Post</h2>
-    </div>
-    <div class="page-content-wrap">
-        <div class="row">
-            <div class="col-md-8">
+            <div class="editor col-md-8">
                 <div class="panel panel-default">
                     <div class="panel-body posts">
-                        <div class="post-item">
-                            <form role="form"  id="post_form" method="post" action="{% url 'blog:add_post' %}">
-                                <h2 class="form-signin-heading">Add a Post</h2>
-                                    {% csrf_token %}
-                                    {% for hidden in form.hidden_fields %}
-                                        {{ hidden }}
-                                    {% endfor %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="post-item">
+                                    <div class="post-title">
+                                        Add New Post:
+                                    </div>
+                                    <form enctype="multipart/form-data" id="user_form" action="." class="form-horizontal" method="post"  />
+                                        {% csrf_token %}
 
-                                    {% for field in form.visible_fields %}
-                                        {{ field.errors }}
-                                        {{ field.help_text }}<br/>
-                                        {{ field }}<br/>
-                                    {% endfor %}
-                                    <br/>
-                                    <button class="btn btn-primary" type="submit" name="submit">Add Post</button>
-                            </form>
-                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" class="form-control" maxlength="100" placeholder="Title" name="title" required='True' />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <select name="category_name" required='True'>
+                                                    <option >--Select Category--</option>
+                                                    {% for category in categories %}
+                                                        <option >{{category.name}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" class="form-control"  placeholder="Details" name="details" required='True' />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="file" accept="image/*" class="fileinput btn-info" name="thumb" data-filename-placement="inside" title="Select Thumb Image"/>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group push-up-30">
+                                            <div class="col-md-6">    
+                                                <button class="btn btn-success btn-block">Add Post</button>
+                                            </div>
+                                        </div>
+                                        
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>  
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h3>Categories</h3>
-                <div class="links">
-                    <a href="#">Front-end <span class="label label-default">195</span></a>
-                    <a href="#">Back-end <span class="label label-default">278</span></a>
-                    <a href="#">Frameworks <span class="label label-default">48</span></a>
-                    <a href="#">Programming <span class="label label-default">311</span></a>
-                    <a href="#">Management <span class="label label-default">94</span></a>
-                </div>
-            </div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h3>Recent</h3>
-                <div class="links small">
-                    <a href="#">Vestibulum porttitor neque vitae odio vulputate molestie</a>
-                    <a href="#">Etiam tellus mi, interdum id nulla in</a>
-                    <a href="#">Cras eu tincidunt quam</a>
-                    <a href="#">Donec rhoncus quam tortor, id pulvinar erat elementum eu</a>
-                    <a href="#">Nunc lorem est, suscipit bibendum</a>
-                    <a href="#">Fusce sollicitudin quis turpis eget mollis</a>
-                    <a href="#">Cras eget sagittis dui, et mollis tortor</a>
-                </div>
-            </div>
-        </div>
-                                
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h3>Tags</h3>
-                <ul class="list-tags push-up-10">
-                    <li><a href="#"><span class="fa fa-tag"></span> Donec</a></li>
-                    <li><a href="#"><span class="fa fa-tag"></span> Bibendum</a></li>
-                    <li><a href="#"><span class="fa fa-tag"></span> Praesent</a></li>
-                    <li><a href="#"><span class="fa fa-tag"></span> Fusce</a></li>
-                    <li><a href="#"><span class="fa fa-tag"></span> Nam quis</a></li>
-                    <li><a href="#"><span class="fa fa-tag"></span> Maecenas</a></li>
-                    <li><a href="#"><span class="fa fa-tag"></span> Nulla facilisi</a></li>
-                    <li><a href="#"><span class="fa fa-tag"></span> Donec</a></li>
-                    <li><a href="#"><span class="fa fa-tag"></span> Nam vitae</a></li>
-                    <li><a href="#"><span class="fa fa-tag"></span> Malesuada</a></li>
-                </ul>
-            </div>
-        </div>
-                            
-    </div>
-               
+                </div>        
+            </div>   
+            
+
+
+
+
 {% endblock %}
 

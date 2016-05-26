@@ -24,9 +24,15 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h3><span class="fa fa-user"></span> {{user.first_name}} {{user.last_name}} </h3>
-                        <div class="text-center" id="user_image">
-                            <img src="/media/{{profile.profile_picture}}" class="img-thumbnail"/>
-                        </div>
+                        {% if profile.profile_picture %}
+                            <div class="text-center" id="user_image">
+                                <img src="/media/{{profile.profile_picture}}" class="img-thumbnail"/>
+                            </div>
+                        {% else %}
+                            <div class="text-center" id="user_image">
+                                <img src="/media/user/profile_pictures/no-image.jpg" class="img-thumbnail"/>
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="panel-body form-group-separated">
                         <div class="form-group">
@@ -73,7 +79,7 @@
                                 <div class="col-md-9 col-xs-7">
                                     <div class="input-group">
                                         <span class="input-group-addon add-on"><span class="fa fa-calendar"></span></span>
-                                        <input type="text" name="birthdate" class="form-control datepicker" placeholder="{{profile.birthdate}}"/>
+                                        <input type="text" name="birthdate" class="form-control datepicker" value="{{profile.birthdate}}" required/>
                                     </div>
                                 </div>
                             </div>
@@ -139,7 +145,7 @@
                         <div class="form-group">
                             <label class="col-md-4 col-sm-4 col-xs-6 control-label">New Photo</label>
                             <div class="col-md-8 col-sm-4 col-xs-6">
-                                <input type="file" class="fileinput btn-info" name="profile_picture" data-filename-placement="inside" title="Select file"/>
+                                <input type="file" class="fileinput btn-info" name="profile_picture" accept="image/jpg, image/jpeg" data-filename-placement="inside" title="Select file"/>
                             </div>
                         </div>
                     </div>

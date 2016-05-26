@@ -35,7 +35,7 @@
                                 </div>
                                 {% else %}
                                     <div class="profile-image">
-                                        <img src='/media/user/profile_pictures/no-image.jpg' alt="User"/>
+                                        <a href="/blog/view_profile/"><img src='/media/user/profile_pictures/no-image.jpg' alt="User"/></a>
                                     </div>
                                 {% endif %}
                             
@@ -64,7 +64,7 @@
                             <a href="/blog/"><span class="fa fa-files-o"></span> <span class="xn-text">Posts</span></a>
                             <ul>
                                 <li class="active"><a href="/blog/"><span class="fa fa-copy"></span> List of Posts</a></li>
-                                <li class="active"><a href="/blog/"><span class="fa fa-file-o"></span> Add Post</a></li>
+                                <li class="active"><a href="/blog/add_post"><span class="fa fa-file-o"></span> Add Post</a></li>
                                 <li class="active"><a href="/blog/"><span class="fa fa-copy"></span> Recent Posts</a></li>
                             </ul>
                         </li>                   
@@ -76,14 +76,21 @@
                                 <li class="active"><a href="{% url 'blog:category_list' %}"><span class="fa fa-file-o"></span> Add Category</a></li>
                             </ul>
                         </li>
-                        <li class="xn-openable">
-                            <a href="#"><span class="fa fa-user"></span> Profile</a>
+                        {% if user.is_authenticated %}
+                            <li class="xn-openable">
+                                <a href="#"><span class="fa fa-user"></span> Profile</a>
+                                
+                                <ul>                                    
+                                    <li><a href="{% url 'blog:edit_profile' %}"><span class="fa fa-wrench"></span> Edit Profile</a></li>
+                                    <li><a href="{% url 'blog:view_profile' %}"><span class="fa fa-user"></span> Profile</a></li>
+                                </ul>
+                            </li>                       
+                        {%else %}
+                                    <li><a href="/login"><span class="fa fa-sign-in"></span> Login</a></li>
+                                    <li><a href="{% url 'blog:register' %}"><span class="fa fa-plus"></span> Registration</a></li>
                             
-                            <ul>                                    
-                                <li><a href="{% url 'blog:edit_profile' %}"><span class="fa fa-wrench"></span> Edit Profile</a></li>
-                                <li><a href="{% url 'blog:view_profile' %}"><span class="fa fa-user"></span> Profile</a></li>
-                            </ul>
-                        </li>                       
+                        {% endif %}
+                    
                         <li><a href="{% url 'blog:search' %}"><span class="fa fa-search"></span> Search</a></li>
                         
                         <li class="xn-openable">
@@ -212,19 +219,23 @@
                             <ul class="xn-drop-left animated zoomIn">
                                 <li><a href="#"><span class="fa fa-lock"></span> Lock Screen</a></li>
                                 <li><a href="{% url 'blog:logout' %}" class="mb-control" data-box="#mb-logout"><span class="fa fa-sign-out"></span> Log Out</a></li>
-                            </ul>                        
+                            </ul>
                         </li> 
                     {%else %}
+                        <li class="xn-icon-button pull-right last">
+                            <a href="#"><span class="fa fa-sign-in"></span></a>
+                            <ul class="xn-drop-left animated zoomIn">
                                 <li><a href="/login"><span class="fa fa-sign-in"></span> Login</a></li>
                                 <li><a href="{% url 'blog:register' %}"><span class="fa fa-plus"></span> Registration</a></li>
-                            
+                            </ul>
+                        </li>
                     {% endif %}
                     <li class="xn-icon-button pull-right">
                         <a href="#"><span class="fa fa-comments"></span></a>
                         <div class="informer informer-danger">4</div>
                         <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging">
                             <div class="panel-heading">
-                                <h3 class="panel-title"><span class="fa fa-comments"></span> Messages</h3>                                
+                                <h3 class="panel-title"><span class="fa fa-comments"></span> Messages</h3> 
                                 <div class="pull-right">
                                     <span class="label label-danger">4 new</span>
                                 </div>

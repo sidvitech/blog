@@ -30,7 +30,9 @@ def register(request):
 			firstname=request.POST.get('firstname')
 			lastname=request.POST.get('lastname')
 			email=request.POST.get('email')
+			print 1
 			birthdate=request.POST.get('birthdate')
+			print 2
 			username=request.POST.get('username')
 			password1=request.POST.get('password1')
 			password2=request.POST.get('password2')
@@ -47,21 +49,26 @@ def register(request):
 							raise forms.ValidationError(u'This email address is already registered.')
 					except:
 						messages.error(request,"Email already used!")
-						return render(request,'blog/register.html', { 'firstname':firstname, 'lastname':lastname, 'email':email, 'username':username })
+						return render(request,'blog/register.html', { 'firstname':firstname, 'lastname':lastname, 'email':email, 'username':username, 'birthdate':birthdate })
 					user.first_name=firstname
 					user.last_name=lastname
-					profile=UserProfile()
-					profile.user_id=user.id
-					profile.birthdate=birthdate
-					user.save()
-					return HttpResponseRedirect('/login')
+					try:
+						user.save()
+						profile=UserProfile()
+						profile.user_id=user.id
+						profile.birthdate=birthdate
+						profile.save()
+						return HttpResponseRedirect('/login')
+					except:
+						messages.error(request, "Birthdate problem!")
+						return render(request,'blog/register.html', { 'firstname':firstname, 'lastname':lastname, 'email':email, 'username':username, 'birthdate':birthdate })	
 				except:
 					messages.error(request, "Username already used!")
-					return render(request,'blog/register.html', { 'firstname':firstname, 'lastname':lastname, 'email':email, 'username':username })
+					return render(request,'blog/register.html', { 'firstname':firstname, 'lastname':lastname, 'email':email, 'username':username, 'birthdate':birthdate })
 			else:
 				messages.error(request, "Passwords does not match!!")
-				return render(request,'blog/register.html', { 'firstname':firstname, 'lastname':lastname, 'email':email, 'username':username })
-			
+				return render(request,'blog/register.html', { 'firstname':firstname, 'lastname':lastname, 'email':email, 'username':username, 'birthdate':birthdate })
+
 		return render(request,'blog/register.html')
 
 
@@ -122,7 +129,10 @@ def edit_profile(request):
 			pass
 
 		if profile_picture:
+			if profile.profile_picture is not "/user/no-image.jpg":
+				profile.profile_picture.delete(True)
 			profile.profile_picture=profile_picture
+			
 			profile.save()
 			return HttpResponseRedirect('.')
 			
@@ -150,10 +160,10 @@ def edit_profile(request):
 			profile.designation=designation
 		if lives_in:
 			profile.lives_in=lives_in
-		
+
 		user.save()
 		profile.save()
-	
+
 		return HttpResponseRedirect('.')
 
 	return render(request,'blog/edit_profile.html', {'user':user, 'profile':profile})
@@ -235,5 +245,46 @@ def category(request,category_name):
 	context_dict['user']=user
 	context_dict['profile']=profile
 	return render(request, 'blog/category.html', context_dict)
+
+
+@login_required(redirect_field_name='/login')
+def add_post(request):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	post=Posts(user_id=user.id)
+	category=Category.objects.all()
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
+	context_dict={}
+	if request.method=="POST":
+		title=request.POST.get('title')
+		details=request.POST.get('details')
+		category_name=request.POST.get('category_name')
+		try:
+			thumb=request.FILES['thumb']
+		except:
+			thumb=False
+			pass
+
+		for cat in category:
+			if cat.name==category_name:
+				category=Category.objects.filter(name=category_name)
+				category.total_posts +=1
+				category.save()
+				post.category_id=cat.id
+				pass
+		post.title=title
+		post.details=details
+		post.thumb=thumb
+		post.save()
+		return HttpResponseRedirect('/blog/')
+
+	context_dict['post']=post
+	context_dict['categories']=category
+	context_dict['user']=user
+	context_dict['profile']=profile
+	return render(request,'blog/add_post.html', context_dict)
 
 

@@ -46,6 +46,14 @@
                                     <input type="email" class="form-control" value="{{email}}" placeholder="E-Mail" maxlength="30" name="email" required='True' />
                                 </div>
                             </div>
+                             <div class="form-group">
+                                <div class="col-md-12 ">
+                                    <div class="input-group">
+                                        <span class="input-group-addon add-on"><span class="fa fa-calendar"></span></span>
+                                        <input type="text" name="birthdate" class="form-control datepicker" placeholder="Birthdate" value="{{birthdate}}" required/>
+                                    </div>
+                                </div>
+                            </div>
                             <h4>Authentication</h4>
                             <div class="form-group">
                                 <div class="col-md-12">
@@ -85,6 +93,20 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery.min.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery-ui.min.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap.min.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery-migrate.min.js'%}"></script>
+        <script type='text/javascript' src="{% static 'js/plugins/icheck/icheck.min.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js'%}"></script>  
+        <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap-file-input.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/form/jquery.form.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/cropper/cropper.min.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap-datepicker.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/settings.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/actions.js'%}"></script>
+        <script type="text/javascript" src="{% static 'js/demo_edit_profile.js'%}"></script>
     </body>
 
 </html>

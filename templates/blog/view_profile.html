@@ -1,27 +1,94 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block address %}
+<li><a href="/blog/view_profile/">View Profile</a></li>
+{% endblock %}
 {% block body %}
-
     <div class="page-title">
-        <h2>Profile</h2>
+        <h2><span class="fa fa-cogs"></span> User Profile</h2>
     </div>
     <div class="page-content-wrap">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
+                {% for message in messages %}
+                    {% if message %}
+                        <div class="alert alert-danger" role="alert">
+                            <strong>{{ message }}</strong>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-sm-4 col-xs-5">
                 <div class="panel panel-default">
-                    <div class="panel-body posts">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="post-item">
-                                    <div class="post-title">
-                                        <ul>
-                                            Full Name       : {{user.first_name}} {{user.last_name}}<br>
-                                            User Email Id   : {{user.email}}<br>
-                                            Username        : {{user.username}}<br>
-                                        </ul>
-                                    </div>
-                                </div>
+                    <div class="panel-body">
+                        <h3><span class="fa fa-user"></span> {{user.first_name}} {{user.last_name}} </h3>
+                        {% if profile.profile_picture %}
+                            <div class="text-center" id="user_image">
+                                <img src="/media/{{profile.profile_picture}}" class="img-thumbnail"/>
                             </div>
+                        {% else %}
+                            <div class="text-center" id="user_image">
+                                <img src="/media/user/profile_pictures/no-image.jpg" class="img-thumbnail"/>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="panel-body form-group-separated">
+                        <div class="form-group">
+                            <label class="col-md-5 col-xs-6 control-label">Username</label>
+                            <label class="col-md-7 col-xs-6 control-label">{{user.username}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+
+            <div class="col-md-6 col-sm-8 col-xs-7">
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h3><span class="fa fa-pencil"></span> Profile</h3><a href="/blog/edit_profile/">edit</a>
+                        </div>
+                        <div class="panel-body form-group-separated">
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-5 control-label">Full Name</label>
+                                <label class="col-md-9 col-xs-7 control-label">{{user.first_name}} {{user.last_name}}</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-5 control-label">Birthdate</label>
+                                <label class="col-md-9 col-xs-7 control-label">{{profile.birthdate}}</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-5 control-label">E-mail</label>
+                                <label class="col-md-9 col-xs-7 control-label">{{user.email}}</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-5 control-label">Lives In</label>
+                                <label class="col-md-9 col-xs-7 control-label"> {{profile.lives_in}}</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 col-xs-5 control-label">Designation</label>
+                                <label class="col-md-9 col-xs-7 control-label"> {{profile.designation}}</label>
+                            </div>
+                            
+                        </div>
+                    </div>
+            </div>
+            <div class="col-md-3 col-sm-12 col-xs-12">
+                <div class="panel panel-default form-horizontal">
+                    <div class="panel-body">
+                        <h3><span class="fa fa-info-circle"></span> Quick Info</h3>
+                        <p>Some quick info about {{user.first_name}} {{user.last_name}}</p>
+                    </div>
+                    <div class="panel-body form-group-separated">
+                        <div class="form-group">
+                            <label class="col-md-4 col-xs-5 control-label">Last visit</label>
+                            <div class="col-md-8 col-xs-7">{{user.last_login}}</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 col-xs-5 control-label">Registration</label>
+                            <div class="col-md-8 col-xs-7">{{user.date_joined}}</div>
                         </div>
                     </div>
                 </div>
@@ -29,4 +96,19 @@
         </div>
     </div>
 
+    
+    <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
+        <div class="slides"></div>
+        <h3 class="title"></h3>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause"></a>
+        <ol class="indicator"></ol>
+    </div>
+    
 {% endblock %}
+
+
+
+
