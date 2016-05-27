@@ -14,6 +14,6 @@ urlpatterns=[
 	url(r'^search/', views.search, name='search'),
 	url(r'^category_list/$', views.category_list, name='category_list'),
 	url(r'^category/(?P<category_name>[\w\-]+)/$', views.category, name='category'),
-
+	
 ] 
 

@@ -118,7 +118,7 @@ def edit_profile(request):
 		profile.user_id=user.id
 		firstname=request.POST.get('firstname')
 		lastname=request.POST.get('lastname')
-		designation=request.POST.get('designation')
+		profession=request.POST.get('profession')
 		lives_in=request.POST.get('lives_in')
 		email=request.POST.get('email')
 		birthdate=request.POST.get('birthdate')
@@ -156,8 +156,8 @@ def edit_profile(request):
 			user.first_name=firstname
 		if lastname:
 			user.last_name=lastname
-		if designation:
-			profile.designation=designation
+		if profession:
+			profile.profession=profession
 		if lives_in:
 			profile.lives_in=lives_in
 
@@ -252,12 +252,13 @@ def add_post(request):
 	username=request.user.username
 	user=User.objects.get(username=username)
 	post=Posts(user_id=user.id)
-	category=Category.objects.all()
 	try:
 		profile=UserProfile.objects.get(user_id=user.id)
 	except:
 		profile=UserProfile()
 	context_dict={}
+	context_dict['user']=user
+	context_dict['profile']=profile
 	if request.method=="POST":
 		title=request.POST.get('title')
 		details=request.POST.get('details')
@@ -268,23 +269,30 @@ def add_post(request):
 			thumb=False
 			pass
 
-		for cat in category:
-			if cat.name==category_name:
-				category=Category.objects.filter(name=category_name)
-				category.total_posts +=1
-				category.save()
-				post.category_id=cat.id
-				pass
+		try:
+			category=Category.objects.get(name=category_name)
+			category.total_posts
+			total_posts=category.total_posts
+			category.total_posts=total_posts+1
+			post.category_id=category.id
+		except:
+			messages.error(request, "Oops! Something went wrong")
+			context_dict['title']=title
+			context_dict['details']=details
+			context_dict['category_name']=category_name
+			context_dict['thumb']=thumb
+			return render(request,'blog/add_post.html', context_dict)
 		post.title=title
 		post.details=details
 		post.thumb=thumb
 		post.save()
+		print 5
+		category.save()
 		return HttpResponseRedirect('/blog/')
-
+	else:
+		category_list=Category.objects.all()
 	context_dict['post']=post
-	context_dict['categories']=category
-	context_dict['user']=user
-	context_dict['profile']=profile
+	context_dict['categories']=category_list
 	return render(request,'blog/add_post.html', context_dict)
 
 

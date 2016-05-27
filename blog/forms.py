@@ -15,7 +15,7 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
 	class Meta:
 		model = UserProfile
-		fields=('designation','birthdate','lives_in','profile_picture')
+		fields=('profession','birthdate','lives_in','profile_picture')
 
 
 class CategoryForm(forms.ModelForm):

@@ -5,43 +5,50 @@
 <li><a href="/blog/category/{{category_name}}">{{ category_name }}</a></li>
 {% endblock %}
 {%block body %}
-  <div class="col-md-8">
+  <div class="col-md-9">
     <div class="panel panel-default">
-      <div class="panel-body">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="post-item">
-              <div class="panel panel-default">
-                <div class="panel-body">
-                    <h3>{{ category_name }}</h3>
-                    {% if posts %}
-                      <div class="links">
-                        <ul>
-                          {% for post in posts %}
-                            <li><a href="/blog/view_post/{{post.id}}">{{ post.title }}</a>
-                            <span class="fa fa-thumbs-up"></span> {{ post.likes}} - 
-                            <span class="fa fa-eye"></span> {{ post.views}} - 
-                            <span class="fa fa-star"></span> {{post.stars}}</li><br>
-                          {% endfor %}<br/>
-                        </ul>
-                      </div>
-                    {% else %}
-                      <strong>No pages currently in category.</strong>
-                    {% endif %}<br/>
-                      
-                    {%if user.is_authenticated%}
-                      <div class="links">
-                        <a href="/blog/"> Add Post </a>
-                      </div>
-                    {%endif%}
-                </div>
-              </div>                                            
-            </div>  
-          </div>
-        </div>                  
-      </div>        
-    </div>
-  </div>	
+      <div class="panel-body posts">
+        <div class="row row-eq-height">
+          <h3>{{ category_name }}</h3>
+          {% if posts %}
+            <div class="links">
+              <ul>
+                {% for post in posts %}
+                  <div class="col-md-5">
+                    <div class="post-item">
+                      <ul>
+                          <div class="post-title"><a href="/blog/view_post/{{posts.id}}">{{post.title}}</a></div>
+                            <div class="post-date"><span class="fa fa-calendar"></span> {{post.created_on}} / <a href="pages-profile.html">by {{post.user}}</a></div>
+                          {%if post.thumb %}
+                            <img src="/media/{{post.thumb}}" class="img-responsive img-text" height="200" width="200" />
+                          {% endif %}
+                          <div class="post-text">
+                            <p>{{post.details | truncatechars:"250"}}</p>                                            
+                          </div>
+                          <div class="post-row">
+                            <div class="post-info">
+                              <span class="fa fa-thumbs-up"></span> {{post.likes}} - <span class="fa fa-eye"></span> {{post.views}} - <span class="fa fa-star"></span> {{post.stars}}
+                            </div>                                            
+                          </div>                                         
+                      </ul> 
+                    </div>
+                  </div>
+                {% endfor %}<br/>
+              </ul>
+            </div>
+          {% else %}
+            <strong>No pages currently in category.</strong>
+          {% endif %}<br/>
+            
+          {%if user.is_authenticated%}
+            <div class="links">
+              <a href="/blog/"> Add Post </a>
+            </div>
+          {%endif%}
+        </div>
+      </div>                                            
+    </div>  
+  </div>
 
 {% endblock %}
 

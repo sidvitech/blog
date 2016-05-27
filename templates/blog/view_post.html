@@ -1,52 +1,63 @@
 {% extends 'blog.html' %}
 {% load staticfiles %}
 {% block address %}
-<li><a href="/blog/">Posts</a></li>
-<li><a href="/blog/view_posts/{{post.id}}">{{post.title}}</a></li>
+    <li><a href="/blog/">Posts</a></li>
+    <li><a href="/blog/view_posts/{{post.id}}">{{post.title}}</a></li>
 {% endblock %}
 {% block body %}
-            <div class="col-md-8">
-                <div class="panel panel-default">
-                    <div class="panel-body posts">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="post-item">
-                                    <div class="post-title">
-                                        {{ post.title }}
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-body posts">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="post-item">
+                            <div class="post-title">
+                                {{ post.title }}
+                            </div>
+                            <div class="post-date"><span class="fa fa-calendar"></span> {{post.created_on}} / <a href="pages-profile.html">by {{post.user}}</a></div>
+                            <ul>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        {%if post.thumb %}
+                                            <img src="/media/{{post.thumb}}" class="img-responsive img-text"/>
+                                        {% endif %}
                                     </div>
-                                    <div class="post-date"><span class="fa fa-calendar"></span> {{post.created_on}} / <a href="pages-profile.html">by {{post.user}}</a></div>
-                                        <ul>
-
-                                                {%if post.thumb %}
-                                                        <img src="/media/{{post.thumb}}" class="img-responsive img-text"/>
-                                                    
-                                                {% endif %}
-                                                <div class="post-text">
-                                                    <p>{{post.details}}</p>                                            
-                                                </div>
-                                                <h3>See also:</h3>
-                                                <ul>
-                                                    <div class="post-lists">
-                                                        {% for list in see_also %}
-                                                            {% if list != post %}
-                                                                <li><h5><div><a href="/blog/view_post/{{list.id}}">{{list.title}}</a></div></h5></li>
-                                                            {% endif %}   
-                                                        {% endfor %}
-                                                    </div>
-                                                </ul>                                            
-                                                <div class="post-row">
-                                                    <div class="post-info">
-                                                        <span class="fa fa-thumbs-up"></span> {{post.likes}} - <span class="fa fa-eye"></span> {{post.views}} - <span class="fa fa-star"></span> {{post.stars}}
-                                                    </div>                                            
-                                                </div>
-                                                       
-                                        </ul> 
                                 </div>
-                            </div>                                            
-                        </div>  
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <p>{{post.details |safe }}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <h3>See also:</h3>
+                                        <ul>
+                                            <div class="post-lists">
+                                                {% for list in see_also %}
+                                                    {% if list != post %}
+                                                        <li><h5><div><a href="/blog/view_post/{{list.id}}">{{list.title}}</a></div></h5></li>
+                                                    {% endif %}   
+                                                {% endfor %}
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div class="post-row">
+                                            <div class="post-info">
+                                                <span class="fa fa-thumbs-up"></span> {{post.likes}} - <span class="fa fa-eye"></span> {{post.views}} - <span class="fa fa-star"></span> {{post.stars}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ul>
+                        </div>
                     </div>
-                </div>        
-            </div>   
-            
-                
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'blog.html' %}
 
 {% block title %}Add Page{% endblock %}
 
@@ -8,44 +8,50 @@
 
 {% block body %}
 
-            <div class="editor col-md-8">
+            <div class="col-md-9">
                 <div class="panel panel-default">
                     <div class="panel-body posts">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-12 ">
                                 <div class="post-item">
                                     <div class="post-title">
                                         Add New Post:
                                     </div>
                                     <form enctype="multipart/form-data" id="user_form" action="." class="form-horizontal" method="post"  />
                                         {% csrf_token %}
+                                        
 
                                         <div class="form-group">
                                             <div class="col-md-12">
-                                                <input type="text" class="form-control" maxlength="100" placeholder="Title" name="title" required='True' />
+                                                <input type="text" class="form-control" maxlength="100" placeholder="Title" value="{{title}}" name="title" required='True' />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-12">
-                                                <select name="category_name" required='True'>
-                                                    <option >--Select Category--</option>
-                                                    {% for category in categories %}
-                                                        <option >{{category.name}}</option>
-                                                    {% endfor %}
+                                                <label for="sel1">Select Category:</label>
+                                                <select class="form-control" name="category_name" required>
+                                                    <option value=""> --Select Category -- </option>
+                                                        {% for category in categories %}
+                                                            <option value="{{category.name}}">{{category.name}}</option>
+                                                        {% endfor %}
                                                 </select>
+                                                <br>
                                             </div>
                                         </div>
+                                        {% load wysiwyg %}
+                                        {% wysiwyg_setup %}
                                         <div class="form-group">
-                                            <div class="col-md-12">
-                                                <input type="text" class="form-control"  placeholder="Details" name="details" required='True' />
+                                            <div class="col-md-12 col-xs-12">
+                                                    <textarea name="details" rows="15" id="details">{{details}}</textarea>
                                             </div>
                                         </div>
+                                        {% wysiwyg_editor "details" %}
                                         <div class="form-group">
                                             <div class="col-md-12">
                                                 <input type="file" accept="image/*" class="fileinput btn-info" name="thumb" data-filename-placement="inside" title="Select Thumb Image"/>
                                             </div>
                                         </div>
-                                        
+      
                                         <div class="form-group push-up-30">
                                             <div class="col-md-6">    
                                                 <button class="btn btn-success btn-block">Add Post</button>
@@ -62,7 +68,10 @@
             </div>   
             
 
-
+<script type='text/javascript'>
+    $('input[type="text"]').addClass('form-control');
+    $('textarea').addClass('form-control');
+</script>
 
 
 {% endblock %}

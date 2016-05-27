@@ -21,8 +21,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
+    # 'ckeditor',
+    'django_wysiwyg',
 ]
 
+# DJANGO_WYSIWYG_FLAVOR = "ckeditor"
 
 EMAIL_USE_TLS=True
 EMAIL_HOST='smtp.gmail.com'
