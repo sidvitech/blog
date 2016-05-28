@@ -16,11 +16,16 @@
         <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
         
         <link rel="stylesheet" type="text/css" id="theme" href="{% static 'css/theme-default.css' %}"/>
-                                              
+        <style>
+            {% block  %}
+            {% endblock %} 
+        </style>
+
+                                           
     </head>
     <body>
-        <div class="page-container">
-            <div class="page-sidebar">
+        <div class="page-container  page-navigation-toggled page-navigation-toggled-hover">
+            <div class="page-sidebar page-sidebar-fixed scroll">
                 <ul class="x-navigation">
                     <li class="xn-logo">
                         <a href="/">ATLANT</a>
@@ -69,8 +74,7 @@
                             </ul>
                         </li>                   
                         <li class="xn-openable">
-                            <a href="#"><span class="fa fa-file"></span> Category</a>
-                            
+                            <a href="#"><span class="fa fa-file"></span> <span class="xn-text">Category</span></a>
                             <ul>                                    
                                 <li class="active"><a href="{% url 'blog:category_list' %}"><span class="fa fa-copy"></span> List of Categories</a></li>
                                 <li class="active"><a href="{% url 'blog:category_list' %}"><span class="fa fa-file-o"></span> Add Category</a></li>
@@ -78,8 +82,7 @@
                         </li>
                         {% if user.is_authenticated %}
                             <li class="xn-openable">
-                                <a href="#"><span class="fa fa-user"></span> Profile</a>
-                                
+                                <a href="#"><span class="fa fa-user"></span> <span class="xn-text">Profile</span></a>
                                 <ul>                                    
                                     <li><a href="{% url 'blog:edit_profile' %}"><span class="fa fa-wrench"></span> Edit Profile</a></li>
                                     <li><a href="{% url 'blog:view_profile' %}"><span class="fa fa-user"></span> Profile</a></li>
@@ -91,7 +94,7 @@
                             
                         {% endif %}
                     
-                        <li><a href="{% url 'blog:search' %}"><span class="fa fa-search"></span> Search</a></li>
+                        <li><a href="{% url 'blog:search' %}"><span class="fa fa-search"></span> <span class="xn-text">Search</span></a></li>
                         
                         <li class="xn-openable">
                             <a href="#"><span class="fa fa-file-text-o"></span> <span class="xn-text">Layouts</span></a>
@@ -204,7 +207,7 @@
             <div class="page-content">
                 
                 <ul class="x-navigation x-navigation-horizontal x-navigation-panel">
-                    <li class="xn-icon-button">
+                    <li class="xn-icon-button hidden">
                         <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
                     </li>
                     <li class="xn-search">

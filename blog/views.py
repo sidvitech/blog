@@ -3,8 +3,8 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from blog.models import UserProfile, Posts, Category
-from blog.forms import UserForm, PostsForm, CategoryForm, UserProfileForm
+from blog.models import UserProfile, Posts, Category, PostData
+from blog.forms import UserForm, PostsForm, CategoryForm, UserProfileForm, PostDataForm
 from django.contrib.auth.models import User
 from blog.bing_search import run_query
 from django.contrib import messages
@@ -187,13 +187,44 @@ def view_post(request, post_id):
 	post=Posts.objects.get(id=post_id)
 	cat=post.category_id
 	see_also=Posts.objects.all().filter(category_id=cat)
-	post.views=post.views+1
+	post_data, condition=PostData.objects.get_or_create(user=user, post_title=post)
+	if post_data.view==0:
+		post.views=post.views+1
+		post_data.view+=1
+		post_data.save()
+	if request.method=="POST":
+		if request.POST.get("like"):
+			if post_data.like==0:
+				post_data.like+=1
+				post.likes+=1
+				post_data.save()
+				post.save()
+		if request.POST.get("unlike"):
+			if post_data.like==1:
+				post_data.like-=1
+				post.likes-=1
+				post_data.save()
+				post.save()
+		if request.POST.get("star"):
+			if post_data.star==0:
+				post.stars+=1
+				post_data.star+=1
+				post_data.save()
+				post.save()
+		if request.POST.get("unstar"):
+			if post_data.star==1:
+				post_data.star-=1
+				post.stars-=1
+				post_data.save()
+				post.save()
+		return HttpResponseRedirect(".")			
 	post.save()
 	context_dict['post']=post
 	context_dict['categories']=categories
 	context_dict['see_also']=see_also
 	context_dict['user']=user
 	context_dict['profile']=profile
+	context_dict['post_data']=post_data
 	return render(request,'blog/view_post.html', context_dict)
 
 @login_required(redirect_field_name='/login')
@@ -286,7 +317,6 @@ def add_post(request):
 		post.details=details
 		post.thumb=thumb
 		post.save()
-		print 5
 		category.save()
 		return HttpResponseRedirect('/blog/')
 	else:
@@ -294,5 +324,8 @@ def add_post(request):
 	context_dict['post']=post
 	context_dict['categories']=category_list
 	return render(request,'blog/add_post.html', context_dict)
+
+
+
 
 

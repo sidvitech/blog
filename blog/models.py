@@ -31,4 +31,14 @@ class Posts(models.Model):
 	likes=models.IntegerField(default=0)
 	views=models.IntegerField(default=0)
 	stars=models.IntegerField(default=0)
+
+	def __unicode__(self):
+		return self.title
+	
+class PostData(models.Model):
+	user=models.ForeignKey(User)
+	post_title=models.ForeignKey(Posts, on_delete=models.CASCADE,)
+	like=models.IntegerField(default=0)
+	view=models.IntegerField(default=0)
+	star=models.IntegerField(default=0)
 	

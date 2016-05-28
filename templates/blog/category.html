@@ -1,55 +1,51 @@
 {% extends 'blog.html' %}
 {% load staticfiles %}
 {% block address %}
-<li><a href="/blog/category_list">Category List</a></li>
-<li><a href="/blog/category/{{category_name}}">{{ category_name }}</a></li>
+  <li><a href="/blog/category_list">Category List</a></li>
+  <li><a href="/blog/category/{{category_name}}">{{ category_name }}</a></li>
 {% endblock %}
 {%block body %}
+  <div class="page-title">
+    <h2>{{category_name}}</h2>
+  </div>
   <div class="col-md-9">
     <div class="panel panel-default">
       <div class="panel-body posts">
-        <div class="row row-eq-height">
-          <h3>{{ category_name }}</h3>
+        <div class="row">
           {% if posts %}
-            <div class="links">
-              <ul>
-                {% for post in posts %}
-                  <div class="col-md-5">
-                    <div class="post-item">
-                      <ul>
-                          <div class="post-title"><a href="/blog/view_post/{{posts.id}}">{{post.title}}</a></div>
-                            <div class="post-date"><span class="fa fa-calendar"></span> {{post.created_on}} / <a href="pages-profile.html">by {{post.user}}</a></div>
-                          {%if post.thumb %}
-                            <img src="/media/{{post.thumb}}" class="img-responsive img-text" height="200" width="200" />
-                          {% endif %}
-                          <div class="post-text">
-                            <p>{{post.details | truncatechars:"250"}}</p>                                            
-                          </div>
-                          <div class="post-row">
-                            <div class="post-info">
-                              <span class="fa fa-thumbs-up"></span> {{post.likes}} - <span class="fa fa-eye"></span> {{post.views}} - <span class="fa fa-star"></span> {{post.stars}}
-                            </div>                                            
-                          </div>                                         
-                      </ul> 
+            {% for post in posts %}
+              <div class="col-md-6">
+                <div class="post-item">
+                  <ul>
+                    <div class="post-title"><a href="/blog/view_post/{{post.id}}" title="{{post.title}}">{{post.title | truncatechars:"45"}}</a></div>
+                    <div class="post-date"><span class="fa fa-calendar"></span> {{post.created_on}} / <a href="pages-profile.html">by {{post.user}}</a></div>
+                    {%if post.thumb %}
+                      <img src="/media/{{post.thumb}}" class="img-responsive img-text" height="200" width="200" />
+                    {% endif %}
+                    <div class="post-text">
+                      <p>{{post.details | truncatechars:"250" | safe}}</p>
                     </div>
-                  </div>
-                {% endfor %}<br/>
-              </ul>
-            </div>
+                    <div class="post-row">
+                      <div class="post-info">
+                        <span class="fa fa-thumbs-up"></span> {{post.likes}} - <span class="fa fa-eye"></span> {{post.views}} - <span class="fa fa-star"></span> {{post.stars}}
+                      </div>
+                    </div>
+                  </ul>
+                </div>
+              </div>
+            {% endfor %}
           {% else %}
             <strong>No pages currently in category.</strong>
           {% endif %}<br/>
-            
           {%if user.is_authenticated%}
             <div class="links">
               <a href="/blog/"> Add Post </a>
             </div>
           {%endif%}
         </div>
-      </div>                                            
-    </div>  
+      </div>
+    </div>
   </div>
-
 {% endblock %}
 
 

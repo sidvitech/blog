@@ -38,14 +38,14 @@
                                                 <br>
                                             </div>
                                         </div>
-                                        {% load wysiwyg %}
-                                        {% wysiwyg_setup %}
                                         <div class="form-group">
                                             <div class="col-md-12 col-xs-12">
-                                                    <textarea name="details" rows="15" id="details">{{details}}</textarea>
+                                                {% load wysiwyg %}
+                                                {% wysiwyg_setup %}
+                                                <textarea name="details" rows="15" id="details">{{details}}</textarea>
+                                                {% wysiwyg_editor "details" %}
                                             </div>
                                         </div>
-                                        {% wysiwyg_editor "details" %}
                                         <div class="form-group">
                                             <div class="col-md-12">
                                                 <input type="file" accept="image/*" class="fileinput btn-info" name="thumb" data-filename-placement="inside" title="Select Thumb Image"/>

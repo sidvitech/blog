@@ -4,6 +4,14 @@
     <li><a href="/blog/">Posts</a></li>
     <li><a href="/blog/view_posts/{{post.id}}">{{post.title}}</a></li>
 {% endblock %}
+
+{% block style %}
+            img { 
+                width:100%; 
+            }
+        
+{% endblock %}
+
 {% block body %}
     <div class="col-md-8">
         <div class="panel panel-default">
@@ -46,7 +54,20 @@
                                     <div class="col-md-12">
                                         <div class="post-row">
                                             <div class="post-info">
-                                                <span class="fa fa-thumbs-up"></span> {{post.likes}} - <span class="fa fa-eye"></span> {{post.views}} - <span class="fa fa-star"></span> {{post.stars}}
+                                                <form action="." method="post" enctype="multipart/form-data">
+                                                    {% csrf_token %}
+                                                    {% if post_data.like %}
+                                                        <button type="submit" class="btn btn-danger" name="unlike" value="1"><span class="fa fa-heart-o"></span>{{post.likes}}</button>
+                                                    {%else%}
+                                                        <button type="submit" class="btn" name="like" value="1"><span class="fa fa-heart"> </span>{{post.likes}}</button>
+                                                    {%endif%}
+                                                     - <b><span class="fa fa-eye"></span> {{post.views}}</b> - 
+                                                    {%if post_data.star%}
+                                                        <button type="submit" class="btn btn-warning" name="unstar" value="1"><span class="fa fa-star-o "></span>{{post.stars}}</button>
+                                                    {%else%}
+                                                        <button type="submit" name="star" class="btn" value="1"><span class="fa fa-star"></span>{{post.stars}}</button>
+                                                    {%endif%}
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -58,6 +79,5 @@
             </div>
         </div>
     </div>
-
 
 {% endblock %}
