@@ -3,23 +3,66 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from blog.models import UserProfile, Posts, Category, PostData
-from blog.forms import UserForm, PostsForm, CategoryForm, UserProfileForm, PostDataForm
+from blog.models import UserProfile, Posts, Category, PostData, CommentData
+from blog.forms import UserForm, PostsForm, CategoryForm, UserProfileForm, PostDataForm, CommentDataForm
 from django.contrib.auth.models import User
 from blog.bing_search import run_query
 from django.contrib import messages
 
 @login_required(login_url='/login/')
-def home(request):
+def blog(request):
 	username=request.user.username
 	user=User.objects.get(username=username)
+	context_dict={}
 	try:
 		profile=UserProfile.objects.get(user_id=user.id)
 	except:
 		profile=UserProfile()
 	categories=Category.objects.all()
-	posts_list=Posts.objects.all()
-	return render(request,'blog/posts.html', {'categories':categories, 'posts_list':posts_list, 'user':user, 'profile':profile})
+	higher=6
+	lower=0
+	posts_list=Posts.objects.all()[:6]
+	context_dict['categories']=categories
+	context_dict['posts_list']=posts_list
+	context_dict['user']=user
+	context_dict['profile']=profile
+	next=2
+	previous=0
+	context_dict['next']=next 
+	context_dict['previous']=previous
+	return render(request,'blog/posts.html', context_dict)
+
+
+@login_required(login_url='/login/')
+def posts_list(request, page_no):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	context_dict={}
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
+	categories=Category.objects.all()
+	higher=int(page_no)*6
+	lower=int(higher)-6
+	posts_list=Posts.objects.all()[lower:higher]
+	count=Posts.objects.all().count()
+	context_dict['categories']=categories
+	context_dict['posts_list']=posts_list
+	context_dict['user']=user
+	context_dict['profile']=profile
+	next=int(page_no)+1
+	previous=int(page_no)-1
+	if higher<count:
+		context_dict['next']=next 
+	else:
+		context_dict['next']=0
+	if lower>0:
+		context_dict['previous']=previous
+	else:
+		context_dict['previous']=0
+	context_dict['page_no']=page_no
+	return render(request,'blog/posts.html', context_dict)
 
 def register(request):
 	username=request.user.username
@@ -97,14 +140,14 @@ def user_login(request):
 			return render(request, 'blog/login.html')
 
 @login_required(login_url='/login/')
-def view_profile(request):
+def my_profile(request):
 	username=request.user.username
 	user=User.objects.get(username=username)
 	try:
 		profile=UserProfile.objects.get(user_id=user.id)
 	except:
 		profile=UserProfile()
-	return render(request,'blog/view_profile.html', {'user':user, 'profile':profile})
+	return render(request,'blog/my_profile.html', {'user':user, 'profile':profile})
 
 @login_required(login_url='/login/')
 def edit_profile(request):
@@ -193,32 +236,44 @@ def view_post(request, post_id):
 		post_data.view+=1
 		post_data.save()
 	if request.method=="POST":
-		if request.POST.get("like"):
-			if post_data.like==0:
-				post_data.like+=1
-				post.likes+=1
-				post_data.save()
-				post.save()
-		if request.POST.get("unlike"):
-			if post_data.like==1:
-				post_data.like-=1
-				post.likes-=1
-				post_data.save()
-				post.save()
-		if request.POST.get("star"):
-			if post_data.star==0:
-				post.stars+=1
-				post_data.star+=1
-				post_data.save()
-				post.save()
-		if request.POST.get("unstar"):
-			if post_data.star==1:
-				post_data.star-=1
-				post.stars-=1
-				post_data.save()
-				post.save()
-		return HttpResponseRedirect(".")			
+		comment=request.POST.get("comment")
+		if comment:
+			comments, condition=CommentData.objects.get_or_create(user=user, post_title=post)
+			comments.comment=comment
+			comments.save()
+			return HttpResponseRedirect(".")
+		else:
+			if request.POST.get("like"):
+				if post_data.like==0:
+					post_data.like+=1
+					post.likes+=1
+					post_data.save()
+					post.save()
+			if request.POST.get("unlike"):
+				if post_data.like==1:
+					post_data.like-=1
+					post.likes-=1
+					post_data.save()
+					post.save()
+			if request.POST.get("star"):
+				if post_data.star==0:
+					post.stars+=1
+					post_data.star+=1
+					post_data.save()
+					post.save()
+			if request.POST.get("unstar"):
+				if post_data.star==1:
+					post_data.star-=1
+					post.stars-=1
+					post_data.save()
+					post.save()
+			return HttpResponseRedirect(".")
 	post.save()
+	try:
+		view_comments=CommentData.objects.filter(post_title=post)
+		context_dict['view_comments']=view_comments
+	except:
+		pass
 	context_dict['post']=post
 	context_dict['categories']=categories
 	context_dict['see_also']=see_also
@@ -235,12 +290,28 @@ def search(request):
 		profile=UserProfile.objects.get(user_id=user.id)
 	except:
 		profile=UserProfile()
-	result_list=[]
 	if request.method=='POST' :
+		result_list=[]
 		query=request.POST['query'].strip()
+		posts=Posts.objects.filter(title__contains=query)
 		if query:
 			result_list=run_query(query)
-	return render(request,'blog/search.html',{'result_list': result_list, 'user':user, 'profile': profile})
+		return render(request,'blog/search.html',{'result_list': result_list, 'user':user, 'profile': profile, 'posts':posts, 'query':query})
+	return render(request,'blog/search.html',{'user':user, 'profile': profile})
+
+@login_required(redirect_field_name='/login')
+def post_search(request):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
+	if request.method=='POST' :
+		query=request.POST['query'].strip()
+		posts=Posts.objects.filter(title__contains=query)
+		return render(request,'blog/post_search.html',{'user':user, 'profile': profile, 'posts':posts, 'query':query})
+	return render(request,'blog/post_search.html',{'user':user, 'profile': profile})
 
 @login_required(login_url='/login/')
 def category_list(request):
@@ -307,7 +378,7 @@ def add_post(request):
 			category.total_posts=total_posts+1
 			post.category_id=category.id
 		except:
-			messages.error(request, "Oops! Something went wrong")
+			messages.error(request, "Oops! Something went wrong") 
 			context_dict['title']=title
 			context_dict['details']=details
 			context_dict['category_name']=category_name
@@ -326,6 +397,55 @@ def add_post(request):
 	return render(request,'blog/add_post.html', context_dict)
 
 
+
+@login_required(redirect_field_name='/login')
+def add_category(request):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	category=Category(user_id=user.id)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
+	context_dict={}
+	context_dict['user']=user
+	context_dict['profile']=profile
+	if request.method=="POST":
+		name=request.POST.get('name')
+		try:
+			category=Category()
+			category.name=name
+			category.user=user
+			category.total_posts=0
+			category.save()
+			return HttpResponseRedirect('/blog/')
+		except:
+			messages.error(request, "Category Already Exists!!") 
+			context_dict['name']=name
+			return render(request,'blog/add_category.html', context_dict)
+	return render(request,'blog/add_category.html',context_dict)
+
+
+@login_required(login_url='/login/')
+def user_profile(request,u_id):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
+	user_user=User.objects.get(id=u_id)
+	user_profile=UserProfile.objects.get(user_id=u_id)
+	context_dict={}
+	context_dict['user']=user
+	context_dict['profile']=profile
+	context_dict['user_profile']=user_profile
+	context_dict['user_user']=user_user
+	categories=Category.objects.all()
+	posts_list=Posts.objects.filter(user_id=u_id)
+	context_dict['categories']=categories
+	context_dict['posts_list']=posts_list
+	return render(request,'blog/user_profile.html',context_dict)
 
 
 

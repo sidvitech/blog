@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from blog.models import UserProfile, Posts, Category, PostData
+from blog.models import UserProfile, Posts, Category, PostData, CommentData
 
 class UserProfileAdmin(admin.ModelAdmin):
 
@@ -12,7 +12,7 @@ admin.site.register(UserProfile, UserProfileAdmin)
 
 class CategoryAdmin(admin.ModelAdmin):
 
-	list_display=('name',)
+	list_display=('name', 'total_posts')
 	search_fields=['name']
 	
 admin.site.register(Category, CategoryAdmin)
@@ -32,3 +32,14 @@ class PostDataAdmin(admin.ModelAdmin):
 	search_fields=['user']
 
 admin.site.register(PostData, PostDataAdmin)
+
+
+class CommentDataAdmin(admin.ModelAdmin):
+
+	list_display=('user','post_title', 'comment', 'likes')
+	search_fields=['user']
+
+admin.site.register(CommentData, CommentDataAdmin)
+
+
+

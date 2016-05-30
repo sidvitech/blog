@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Category{% endblock %}
+
+{% block address %}
+    <li><a href="{% url 'blog:add_category' %}">Add Category</a></li>
+{% endblock %}
+
+{% block body %}
+
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-body posts">
+                        <div class="row">
+            <div class="col-md-12">
+                {% for message in messages %}
+                    {% if message %}
+                        <div class="alert alert-danger" role="alert">
+                            <strong>{{ message }}</strong>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+                            <div class="col-md-12 ">
+                                <div class="post-item">
+                                    <div class="post-title">
+                                        Add New Category:
+                                    </div>
+                                    <form enctype="multipart/form-data" id="user_form" action="." class="form-horizontal" method="post"  />
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" class="form-control" maxlength="128" placeholder="Category Name" value="{{name}}" name="name" required='True' />
+                                            </div>
+                                        </div>
+                                        <div class="form-group push-up-30">
+                                            <div class="col-md-6">    
+                                                <button class="btn btn-success btn-block">Add Category</button>
+                                            </div>
+                                        </div>
+                                        
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+{% endblock %}
+

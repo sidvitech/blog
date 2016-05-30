@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from blog.models import UserProfile, Posts, Category, PostData
+from blog.models import UserProfile, Posts, Category, PostData, CommentData
 from datetime import datetime, date
 from project import settings
 
@@ -34,6 +34,7 @@ class PostsForm(forms.ModelForm):
 	likes=forms.IntegerField(initial=0)
 	views=forms.IntegerField(initial=0)
 	stars=forms.IntegerField(initial=0)
+	created_on=forms.DateTimeField()
 
 	class Meta:
 		model=Posts	
@@ -44,5 +45,16 @@ class PostDataForm(forms.ModelForm):
 	like=forms.IntegerField(initial=0)
 	view=forms.IntegerField(initial=0)
 	star=forms.IntegerField(initial=0)
+
+
+class CommentDataForm(forms.ModelForm):
+	comment = forms.CharField(widget=forms.Textarea)
+	likes=forms.IntegerField(initial=0)
+	created_on=forms.DateTimeField()
+	
+	class Meta:
+		model=Posts	
+		fields=('comment',)
+
 
 

@@ -13,11 +13,11 @@
             <div class="panel-body posts">
                 <div class="row">
                     {% for posts in posts_list %}
-                        <div class="col-md-6">
+                        <div class="col-md-6 "><span class="pull-right">
                             <div class="post-item">
                                 <ul>
                                     <div class="post-title"><a href="/blog/view_post/{{posts.id}}" title="{{posts.title}}">{{posts.title | truncatechars:"45"}}</a></div>
-                                    <div class="post-date"><span class="fa fa-calendar"></span> {{posts.created_on}} / <a href="pages-profile.html">by {{posts.user}}</a></div>
+                                    <div class="post-date"><span class="fa fa-calendar"></span> {{posts.created_on}} / <a href="/blog/user_profile/{{posts.user_id}}">by {{posts.user}}</a></div>
                                     {%if posts.thumb %}
                                         <img src="/media/{{posts.thumb}}" class="img-responsive img-text" style="height:200px;" />
                                     {% endif %}
@@ -30,11 +30,20 @@
                                         </div>
                                     </div>
                                 </ul>
-                            </div>
+                            </div></span>
                         </div>
                     {% endfor %}
                 </div>
             </div>
+            <ul class="pager">
+                {% if previous %}
+                    <li><a href="/blog/posts/{{previous}}">Previous</a></li>
+                {% endif %}
+                {% if next %}    
+                    <li><a href="/blog/posts/{{next}}">Next</a></li>
+                {% endif %}
+            </ul>
         </div>
     </div>
+
 {% endblock %}

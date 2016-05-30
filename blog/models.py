@@ -26,7 +26,7 @@ class Posts(models.Model):
 	title=models.CharField(max_length=100)
 	details=models.TextField()
 	thumb=models.ImageField(upload_to="blog/images/", blank=True)
-	created_on=models.DateField(auto_now_add=True)
+	created_on=models.DateTimeField(auto_now_add=True)
 	category=models.ForeignKey(Category)
 	likes=models.IntegerField(default=0)
 	views=models.IntegerField(default=0)
@@ -42,3 +42,26 @@ class PostData(models.Model):
 	view=models.IntegerField(default=0)
 	star=models.IntegerField(default=0)
 	
+
+class CommentData(models.Model):
+	user=models.ForeignKey(User)
+	post_title=models.ForeignKey(Posts, on_delete=models.CASCADE,)
+	comment=models.TextField()
+	likes=models.IntegerField(default=0)
+	created_on=models.DateTimeField(auto_now_add=True)
+
+	def __unicode__(self):
+		return self.comment
+
+
+class ReplyData(models.Model):
+	user=models.ForeignKey(User)
+	post_title=models.ForeignKey(Posts, on_delete=models.CASCADE,)
+	comment=models.ForeignKey(CommentData, on_delete=models.CASCADE,)
+	reply=models.TextField()
+	created_on=models.DateTimeField(auto_now_add=True)
+
+	def __unicode__(self):
+		return self.reply
+		
+

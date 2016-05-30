@@ -17,8 +17,12 @@ def home(request):
 	except:
 		profile=UserProfile()
 
-	posts_list=Posts.objects.all()
-	return render(request,'home.html', {'posts_list':posts_list, 'user':user, 'profile':profile, 'total':total})
+	posts=Posts.objects.all().count()
+	all_posts=Posts.objects.all()
+	views=0
+	for post in all_posts:
+		views+=post.views
+	return render(request,'home.html', {'posts':posts, 'user':user, 'profile':profile, 'total':total, 'views':views})
 
 
 def handler404(request):
