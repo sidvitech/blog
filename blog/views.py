@@ -8,21 +8,27 @@ from blog.forms import UserForm, PostsForm, CategoryForm, UserProfileForm, PostD
 from django.contrib.auth.models import User
 from blog.bing_search import run_query
 from django.contrib import messages
+from django.db.models.functions import Value
+
+
+context_dict={}
+top_viewed=Posts.objects.order_by(Value('views').desc())[:6]
+context_dict['top_viewed']=top_viewed
+categories=Category.objects.order_by(Value('total_posts').desc())[:6]
+context_dict['categories']=categories
+
 
 @login_required(login_url='/login/')
 def blog(request):
 	username=request.user.username
 	user=User.objects.get(username=username)
-	context_dict={}
 	try:
 		profile=UserProfile.objects.get(user_id=user.id)
 	except:
 		profile=UserProfile()
-	categories=Category.objects.all()
 	higher=6
 	lower=0
 	posts_list=Posts.objects.all()[:6]
-	context_dict['categories']=categories
 	context_dict['posts_list']=posts_list
 	context_dict['user']=user
 	context_dict['profile']=profile
@@ -37,17 +43,14 @@ def blog(request):
 def posts_list(request, page_no):
 	username=request.user.username
 	user=User.objects.get(username=username)
-	context_dict={}
 	try:
 		profile=UserProfile.objects.get(user_id=user.id)
 	except:
 		profile=UserProfile()
-	categories=Category.objects.all()
 	higher=int(page_no)*6
 	lower=int(higher)-6
 	posts_list=Posts.objects.all()[lower:higher]
 	count=Posts.objects.all().count()
-	context_dict['categories']=categories
 	context_dict['posts_list']=posts_list
 	context_dict['user']=user
 	context_dict['profile']=profile
@@ -225,8 +228,6 @@ def view_post(request, post_id):
 		profile=UserProfile.objects.get(user_id=user.id)
 	except:
 		profile=UserProfile()
-	context_dict={}
-	categories=Category.objects.all()
 	post=Posts.objects.get(id=post_id)
 	cat=post.category_id
 	see_also=Posts.objects.all().filter(category_id=cat)
@@ -235,10 +236,14 @@ def view_post(request, post_id):
 		post.views=post.views+1
 		post_data.view+=1
 		post_data.save()
+		post.save()
 	if request.method=="POST":
 		comment=request.POST.get("comment")
 		if comment:
-			comments, condition=CommentData.objects.get_or_create(user=user, post_title=post)
+			comments=CommentData()
+			comments.user=user
+			comments.post_title=post
+			comments.userprofile=profile
 			comments.comment=comment
 			comments.save()
 			return HttpResponseRedirect(".")
@@ -268,14 +273,12 @@ def view_post(request, post_id):
 					post_data.save()
 					post.save()
 			return HttpResponseRedirect(".")
-	post.save()
 	try:
 		view_comments=CommentData.objects.filter(post_title=post)
 		context_dict['view_comments']=view_comments
 	except:
 		pass
 	context_dict['post']=post
-	context_dict['categories']=categories
 	context_dict['see_also']=see_also
 	context_dict['user']=user
 	context_dict['profile']=profile
@@ -310,7 +313,11 @@ def post_search(request):
 	if request.method=='POST' :
 		query=request.POST['query'].strip()
 		posts=Posts.objects.filter(title__contains=query)
-		return render(request,'blog/post_search.html',{'user':user, 'profile': profile, 'posts':posts, 'query':query})
+		if posts:
+			return render(request,'blog/post_search.html',{'user':user, 'profile': profile, 'posts':posts, 'query':query})
+		else:
+			messages.error(request, "No Post Found.")
+			return render(request,'blog/post_search.html',{'user':user, 'profile': profile, 'posts':posts, 'query':query})
 	return render(request,'blog/post_search.html',{'user':user, 'profile': profile})
 
 @login_required(login_url='/login/')
@@ -321,9 +328,6 @@ def category_list(request):
 		profile=UserProfile.objects.get(user_id=user.id)
 	except:
 		profile=UserProfile()
-	context_dict={}
-	categories=Category.objects.all()
-	context_dict['categories']=categories
 	context_dict['user']=user
 	context_dict['profile']=profile
 	return render(request, 'blog/category_list.html', context_dict)
@@ -336,14 +340,11 @@ def category(request,category_name):
 		profile=UserProfile.objects.get(user_id=user.id)
 	except:
 		profile=UserProfile()
-	context_dict={}
 	category=Category.objects.get(name=category_name)
 	context_dict['category_name']=category.name
 	posts=Posts.objects.filter(category=category)
 	context_dict['posts']=posts
 	context_dict['category']=category
-	categories=Category.objects.all()
-	context_dict['categories']=categories
 	context_dict['user']=user
 	context_dict['profile']=profile
 	return render(request, 'blog/category.html', context_dict)
@@ -358,42 +359,45 @@ def add_post(request):
 		profile=UserProfile.objects.get(user_id=user.id)
 	except:
 		profile=UserProfile()
-	context_dict={}
 	context_dict['user']=user
 	context_dict['profile']=profile
 	if request.method=="POST":
 		title=request.POST.get('title')
 		details=request.POST.get('details')
 		category_name=request.POST.get('category_name')
-		try:
-			thumb=request.FILES['thumb']
-		except:
-			thumb=False
-			pass
-
-		try:
-			category=Category.objects.get(name=category_name)
-			category.total_posts
-			total_posts=category.total_posts
-			category.total_posts=total_posts+1
-			post.category_id=category.id
-		except:
-			messages.error(request, "Oops! Something went wrong") 
+		
+		if details:
+			try:
+				category=Category.objects.get(name=category_name)
+				category.total_posts
+				total_posts=category.total_posts
+				category.total_posts=total_posts+1
+				post.category_id=category.id
+			except:
+				messages.error(request, "Oops! Something went wrong") 
+				context_dict['title']=title
+				context_dict['details']=details
+				context_dict['category_name']=category_name
+				context_dict['thumb']=thumb
+				return render(request,'blog/add_post.html', context_dict)
+			post.title=title
+			post.details=details
+			try:
+				thumb=request.FILES['thumb']
+				post.thumb=thumb
+			except:
+				pass			
+			post.save()
+			category.save()
+			return HttpResponseRedirect('/blog/')
+		else:
+			messages.error(request, "Details field is empty. ")
 			context_dict['title']=title
-			context_dict['details']=details
-			context_dict['category_name']=category_name
-			context_dict['thumb']=thumb
+			context_dict['post']=post
+			context_dict['user']=user
+			context_dict['profile']=profile
 			return render(request,'blog/add_post.html', context_dict)
-		post.title=title
-		post.details=details
-		post.thumb=thumb
-		post.save()
-		category.save()
-		return HttpResponseRedirect('/blog/')
-	else:
-		category_list=Category.objects.all()
 	context_dict['post']=post
-	context_dict['categories']=category_list
 	return render(request,'blog/add_post.html', context_dict)
 
 
@@ -407,7 +411,6 @@ def add_category(request):
 		profile=UserProfile.objects.get(user_id=user.id)
 	except:
 		profile=UserProfile()
-	context_dict={}
 	context_dict['user']=user
 	context_dict['profile']=profile
 	if request.method=="POST":
@@ -436,16 +439,23 @@ def user_profile(request,u_id):
 		profile=UserProfile()
 	user_user=User.objects.get(id=u_id)
 	user_profile=UserProfile.objects.get(user_id=u_id)
-	context_dict={}
 	context_dict['user']=user
 	context_dict['profile']=profile
 	context_dict['user_profile']=user_profile
 	context_dict['user_user']=user_user
-	categories=Category.objects.all()
 	posts_list=Posts.objects.filter(user_id=u_id)
-	context_dict['categories']=categories
 	context_dict['posts_list']=posts_list
 	return render(request,'blog/user_profile.html',context_dict)
 
+
+@login_required(login_url='/login/')
+def delete_comment(request, comment_id):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	context_dict['user']=user
+
+	comments=CommentData.objects.get(id=comment_id)
+	comments.delete()
+	return HttpResponseRedirect("/blog/view_post")
 
 

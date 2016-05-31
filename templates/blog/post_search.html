@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% block address %}
-<li><a href="{% url 'blog:search' %}">Search</a></li>
+<li><a href="{% url 'blog:post_search' %}">Post Search</a></li>
 {% endblock %}
 {% block body %}
     <div class="page-title">                    
@@ -26,6 +26,13 @@
                                         <h3 class="panel-title">Results</h3>
                                         <div class="panel-body">
                                             <div class="list-group">
+                                                {% for message in messages %}
+                                                    {% if messages %}
+                                                        <div class="alert alert-danger" role="alert">
+                                                            <strong>{{ message }}</strong>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
                                                 {% for post in posts %}
                                                     <div class="sr-item">
                                                         <a href="/blog/view_post/{{post.id}}" class="sr-item-title">{{ post.title }}</a>

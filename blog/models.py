@@ -49,6 +49,7 @@ class CommentData(models.Model):
 	comment=models.TextField()
 	likes=models.IntegerField(default=0)
 	created_on=models.DateTimeField(auto_now_add=True)
+	userprofile=models.ForeignKey(UserProfile, blank=True)
 
 	def __unicode__(self):
 		return self.comment

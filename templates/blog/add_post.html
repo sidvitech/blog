@@ -17,6 +17,14 @@
                                     <div class="post-title">
                                         Add New Post:
                                     </div>
+                                    {% for message in messages %}
+                                                    {% if messages %}
+                                                        <div class="alert alert-danger" role="alert">
+                                                            <strong>{{ message }}</strong>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                
                                     <form enctype="multipart/form-data" id="user_form" action="." class="form-horizontal" method="post"  />
                                         {% csrf_token %}
                                         
@@ -48,7 +56,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-12">
-                                                <input type="file" accept="image/*" class="fileinput btn-info" name="thumb" data-filename-placement="inside" title="Select Thumb Image"/>
+                                                <input type="file" accept="image/*" class="fileinput btn-info" name="thumb" data-filename-placement="inside" title="Select Display Image"/>
                                             </div>
                                         </div>
       

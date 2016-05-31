@@ -241,15 +241,11 @@
 
                             <div class="panel panel-default">
                                 <div class="panel-body">
-                                    <h3>Recent</h3>
+                                    <h3>Most Viewed</h3>
                                     <div class="links small">
-                                        <a href="#">Vestibulum porttitor neque vitae odio vulputate molestie</a>
-                                        <a href="#">Etiam tellus mi, interdum id nulla in</a>
-                                        <a href="#">Cras eu tincidunt quam</a>
-                                        <a href="#">Donec rhoncus quam tortor, id pulvinar erat elementum eu</a>
-                                        <a href="#">Nunc lorem est, suscipit bibendum</a>
-                                        <a href="#">Fusce sollicitudin quis turpis eget mollis</a>
-                                        <a href="#">Cras eget sagittis dui, et mollis tortor</a>
+                                        {% for top in top_viewed %}
+                                            <a href="/blog/view_post/{{top.id}}"><li>{{top.title}}</li></a>
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </div>

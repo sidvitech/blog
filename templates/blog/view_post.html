@@ -94,12 +94,15 @@
                                                 {% for comments in view_comments %}
                                                     <li class="media">
                                                         <a class="pull-left " href="/blog/user_profile/{{post.user_id}}">
-                                                            <img class="media-object img-text" src="/media/{{profile.profile_picture}}" style="width:70px; height:70px; " alt="{{user.username}}" width="64">
+                                                            <img class="media-object img-text" src="/media/{{comments.userprofile.profile_picture}}" style="width:70px; height:70px; " alt="{{comments.user.username}}" width="64">
                                                         </a>
                                                         <div class="media-body">
-                                                            <h4 class="media-heading">{{user.first_name}}{{user.last_name}}</h4>
+                                                            <h4 class="media-heading">{{comments.user.first_name}}{{comments.user.last_name}}</h4>
                                                             <p>{{comments.comment}}</p>
                                                             <p class="text-muted">{{comments.created_on}}</p>
+                                                            
+                                                            <p id="demo"></p>
+
                                                         </div><br><br> 
                                                     </li>
                                                 {% endfor %}                                           
@@ -117,4 +120,16 @@
         </div>
     </div>
 
+    <p id="demo"></p>
+
+    <script>
+    var myObject, myArray;
+    function myFunction(a, b) {
+        return a * b;
+    }
+    myArray = [comments.user, user]
+    myObject = myFunction.apply(myObject, myArray);      // Will return 20 
+    document.getElementById("demo").innerHTML = myObject; 
+    </script>
+    
 {% endblock %}
