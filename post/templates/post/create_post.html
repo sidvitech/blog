@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load customs_tags %}
+{% load staticfiles %}
+{% block jquery %}
+
+{% endblock jquery %}
+{% block body %}
+<div class="panel panel-default">
+<div class="panel-body posts">
+<div class="post-item">
+    <div class="row">
+        <div style="background-color: WhiteSmoke;" >
+            <!-- <h1 align="center">Post Form</h1>
+            <form method="post" action="" enctype="multipart/form-data">{% csrf_token %}
+                {% load wysiwyg %}
+                {% wysiwyg_setup %}
+
+                {{ form.category }}<br /><br />
+                <p style=" width: 100px; ">{{ form.title }}</p><br />
+                {{ form.image }}<br />
+                {{ form.body }}
+                {% wysiwyg_editor "id_body" %}
+                <input type="submit" value="Add Post" />
+            </form> -->
+<!--             <div class="col-md-9">
+                <div class="panel-body posts">
+                    <div class="row">
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-10 ">
+                            <div class="post-item">
+                                <div class="post-title">
+                                    Add New Post:
+                                </div><br />
+                                <form enctype="multipart/form-data" id="user_form" action="." class="form-horizontal" method="post"  />
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            {{ form.title }}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label for="sel1">Select Category:</label><br />
+                                                {{ form.category }}
+                                            <br>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12 col-xs-12">
+                                            {% load wysiwyg %}
+                                            {% wysiwyg_setup %}
+
+                                            {{ form.body }}
+                                            {% wysiwyg_editor "id_body" %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <p class="fileinput btn-info">{{ form.image }}</p>
+                                        </div>
+                                    </div>
+  
+                                    <div class="form-group push-up-30">
+                                        <div class="col-md-12">    
+                                            <input type="submit" class="btn btn-success btn-block" value="Add Post" />
+                                        </div>
+                                    </div>
+                                    
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+                                    <div class="post-title">
+                                        Add New Post:
+                                    </div>
+                                    <form enctype="multipart/form-data" id="user_form" action="." class="form-horizontal" method="post"  />
+                                        {% csrf_token %}
+                                        
+
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="text" class="form-control" maxlength="100" placeholder="Title" value="{{title}}" name="title" required='True' />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label for="sel1">Select Category:</label>
+                                                <select class="form-control" name="category_name" required>
+                                                    <option value=""> -- Select Category -- </option>
+                                                        {% for category in categories %}
+                                                            <option value="{{category.name}}">{{category.name}}</option>
+                                                        {% endfor %}
+                                                </select>
+                                                <br>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12 col-xs-12">
+                                                {% load wysiwyg %}
+                                                {% wysiwyg_setup %}
+                                                <textarea name="details" rows="15" id="details">{{details}}</textarea>
+                                                {% wysiwyg_editor "details" %}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <input type="file" accept="image/*" class="fileinput btn-info" name="thumb" data-filename-placement="inside" title="Select Thumb Image"/>
+                                            </div>
+                                        </div>
+      
+                                        <div class="form-group push-up-30">
+                                            <div class="col-md-6">    
+                                                <button class="btn btn-success btn-block">Add Post</button>
+                                            </div>
+                                        </div>
+                                        
+                                    </form>
+
+
+  </div>
+  </div>
+            
+
+<script type='text/javascript'>
+    $('input[type="text"]').addClass('form-control');
+    $('textarea').addClass('form-control');
+</script>
+{% endblock  %}

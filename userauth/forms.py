@@ -37,10 +37,3 @@ class UserPasswordResetForm(forms.Form):
 	username = forms.CharField(label=(u'User Name'))
 	password1 = forms.CharField(label="Old Password", widget=forms.PasswordInput(attrs={'requied': 'required'}))
 	password2 = forms.CharField(label="New Password", widget=forms.PasswordInput(attrs={'required': 'required'}))
-
-	
-	# def clean(self):
-	#     cleaned_data = super(UserPasswordResetForm, self).clean()
-	#     if cleaned_data['password1'] != cleaned_data['password2']:
-	#         raise forms.ValidationError("The Password did not match. Please try again")
-	#     return cleaned_data

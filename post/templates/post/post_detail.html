@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load customs_tags %}
+{% load staticfiles %}
+{% block jquery %}
+
+{% endblock jquery %}
+{% block body %}
+<div class="panel panel-default">
+<div class="panel-body posts">
+<div class=" col-xs-12  col-md-12">
+<div class="post-item">
+<!-- DETAIL OF POST -->
+    {% if messages %}
+        {% for message in messages %}
+            <div {% if message.tags %} class="alert alert-warning" {% endif %}>
+                <strong style="color: dodgerblue;">{{ message }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+<h1>
+        <span style='color: dodgerblue;'>Title: {{ post_list.title|safe }}</span>
+</h1>
+    <P>{{ title }}
+        <small>
+            {% if post_list.User %}
+                <span style='color:dodgerblue;'>Draft</span>
+            {% endif %}
+            {{ post_list.created }}
+        </small>
+    </P>
+    {% if post_list.image.url %}
+        <img src="{{ post_list.image.url }}" class="img-responsive" height="200" width="300">
+    {% else %}
+
+    {% endif %}
+    <p>
+        {{ post_list.body|safe }}
+    </p><br />
+<div class="row">
+    <div>
+        <form method="post" action="">{% csrf_token %}
+            {% if post_list.title|check_like:request.user %}
+                <input type="hidden" name="unlike" value="True"></input>
+                <button type="submit" class="glyphicon glyphicon-thumbs-down"></button>&nbsp;&nbsp;{{ like_count }}{{ post_count }}
+            {% else %}
+                <input type="hidden" name="like" value="True"></input>
+                <button type="submit" class="glyphicon glyphicon-thumbs-up"></button>&nbsp;&nbsp;{{ like_count }}
+            {% endif %}
+        </form>
+    </div>
+<br />
+    <div>
+        <h3><span>Comment :-</span></h3>
+    </div>
+    <form enctype="multipart/form-data" action="." class="form-horizontal" method="post"  />
+        {% csrf_token %}
+        <div class="form-group">
+            <div class="col-md-2 col-xs-2">
+                {% if profile.profile_picture %}
+                    <div class="text-center" id="user_image">
+                        <img src="/media/{{profile.profile_picture}}" style=" width: 50px; height: 70px;" />
+                    </div>
+                {% else %}
+                    <div class="text-center" id="user_image">
+                        <img src="/media/user/profile_pictures/no-image.jpg" style=" width: 50px; height: 70px " />
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-10 col-xs-10">
+                <textarea class="form-control" rows="3" id="comment" placeholder="Add Comment" name="comment"></textarea>
+            </div>
+        </div>
+        <div class="form-group push-up-30">
+            <div class="col-md-6 col-xs-6">
+                <button class="btn btn-info">Post Comment</button><br><br>
+            </div>
+        </div>
+    </form>
+</div>
+    
+
+{% if post_list %}
+{% for post in post_list.title|get_post %}
+<div class="row">
+<div class="col-md-10 col-xs-10"><br />
+<!--     <div class=" col-xs-2 col-sm-2">
+        <b style="color: dodgerblue;">{{ post.user }}</b>
+    </div> -->
+    <div class=" col-xs-2 col-sm-2 " style=" margin-left: -50px; " >
+        {% if profile.profile_picture.url %}
+            <div class="text-center" id="user_image">
+                <img src="/media/{{profile.profile_picture}}" style=" width: 50px; height: 50px; " />
+            </div>
+        {% else %}
+            <div class="text-center" id="user_image">
+                <img src="/media/user/profile_pictures/no-image.jpg" style=" width: 50px; height: 50px " />
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+        <div class="col-md-12">
+            <div class=" col-xs-11 col-sm-11 ">
+                <span>{{ post.user.first_name }} {{ post.user.last_name }}</span>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-12">
+            <div class=" col-xs-10 col-sm-10 ">
+                {{ post }}<br />
+                {{ comment_list.created }}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-1 col-xs-1">
+     <div class=" col-xs-1 col-sm-1" style=" margin-top: 20px; " >
+        {% if post.post.user == request.user or post.user == request.user %}
+            <a href="{% url 'post:delete_comment' post.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+        {% endif %}
+    </div>
+</div>
+</div>
+
+{% endfor %}
+{% endif %}
+    
+
+    <p>
+        <div class="fb-like" data-href="{{ request.build_absolute_uri }}" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true"></div>
+    </p>
+
+    <p>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
+        Facebook
+        </a>
+        <a href='https://plus.google.com/share?url={{ request.build_absolute_uri }}'>Google+ </a>
+    </p>
+    
+</div>
+{% endblock  %}

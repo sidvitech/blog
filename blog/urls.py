@@ -23,12 +23,10 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^userauth/', include('userauth.urls', namespace="userauth")),
-    url(r'^$', views.user_registration, name='user_registration'),
-    # url(r'^$', views.home, name='home'),
     url(r'^category/', include('category.urls', namespace="category")),
-    url(r'^userblog/', include('userblog.urls', namespace="userblog")),
     url(r'^post/', include('post.urls', namespace="post")),
-
+    url(r'^userprofile/', include('userprofile.urls', namespace="userprofile")),
+    url(r'^$', views.user_registration, name='user_registration'),
 ]
 
 

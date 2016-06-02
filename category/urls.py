@@ -1,13 +1,16 @@
 from django.conf.urls import url
 from category.views import (
-category, 
-category_delete,
-
-)
+	create_category, 
+	category_list,
+	delete_category,
+	
+	)
 
 
 urlpatterns = [
-    url(r'^category/', category, name="category"),
-    url(r'^category_delete/', category_delete, name="category_delete"),
+    url(r'^create_category/', create_category, name="create_category"),
+    url(r'^category_list/', category_list, name="category_list"),
+    url(r'^delete_category/(?P<pk>[0-9]+)', delete_category, name="delete_category"),
 
-]
+    
+    ]

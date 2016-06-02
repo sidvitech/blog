@@ -1,23 +1,30 @@
 {% extends "base.html" %}
+{% load customs_tags %}
 {% load staticfiles %}
-
+{% block jquery %}
+{% endblock jquery %}
 {% block body %}
-<form method="post" action="">{% csrf_token %}
-{% if data %}
-<input type="hidden" name="unlike" value="True"></input>
-<button type="submit">Unlike</button>{{ like_count }}
-{% else %}
-<input type="hidden" name="like" value="True"></input>
-<button type="submit">Like</button>{{ like_count }}
+<div class="panel panel-default">
+<div class="panel-body posts">    
+<div class="post-item">
+<div class="row">
+{% if user_post %}
+{% for post in user_post %}
+                               
+    <div class="col-xs-12 col-md-6" >
+      <img src="{{ post.image.url }}" alt="{{ post.title }}" height="250" width="250" ><br />
+      <div class="caption">
+        <h3><a href="{% url 'post:post_detail' post.pk %}">{{ post.title|safe }}</a> <h5>{{ post.created }}</h5></h3>
+     <p>Comments:- {{ comment_count }}</p>
+     <p>Likes:- {{ like_count }}</p>
+        <form method="post" action="" name="{{ post.title }}" id="{{ post.title }}">{% csrf_token %}
+        <input type="hidden" name="post_name" value="{{ post.title }}"></input>
+       <a href="{% url 'post:post_detail' post.pk %}"> view</a></li></p>
+       </form>
+    </div>
+  </div>
+ 
+{% endfor %}
 {% endif %}
-</form>
-<div>
-   <h1>My New Post</h1>
-
-   {% for post in post_list %}
-   {{ post }}
-   <hr />
-   {% endfor %}
-</div>
-
-{% endblock body%}
+</div>             
+{% endblock  %}

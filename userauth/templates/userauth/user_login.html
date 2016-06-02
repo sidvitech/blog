@@ -1,132 +1,64 @@
-{% extends "base.html" %}
+{% extends "navbar.html" %}
 {% load staticfiles %}
-
 {% block body %}
-        {% if user.username %}
-        <p>Welcome {{ user.username }}! Here you can store and share blog</p>
-    {% else %}
-        <p>Welcome anonymous user! You need to <a href="{% url 'userauth:user_login' %}">Login</a>before you can store and share blog</p>
-    {% endif %}
- <div class="registration-container registration-extended">            
-            <div class="registration-box animated fadeInDown">
-                <div class="registration-logo"></div>
-                <div class="registration-body">
-                    {% if messages %}
-                        {% for message in messages %}
-                        <div {% if message.tags %} class="alert alert-warning" {% endif %}>
-                            <strong style="color: red;">{{ message }}</strong>
-                        </div>
-                        {% endfor %}
-                    {% endif %}
-                    <div class="row">                        
-                        <div class="col-md-6">
-                            
-                           <div class="registration-title"><strong>Welcome</strong>, Please login</div>
-                            <form action="" class="form-horizontal" method="post">{% csrf_token %}
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <input type="text" id="id_username" name="username" class="form-control" placeholder="Username" required/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <input type="password" id="id_password" name="password" class="form-control" placeholder="Password" required/>
-                                </div>
-                            </div>
-                            <div class="form-group push-down-30">
-                                <div class="col-md-6">
-                                    <a href="{% url 'userauth:user_reset_password' %}" class="btn btn-link btn-block">Forgot your password?</a>
-                                </div>
-                                <div class="col-md-6">
-                                    <button class="btn btn-info btn-block">Log In</button>
-                                </div>
-                            </div>
-                            </form> 
-                            
-                        </div>
-                                
-                            </form>                            
-                            
+<div class="login-container login-v2">
+    <div class="login-box animated fadeInDown">
+        <div class="login-body">
+            {% if messages %}
+                {% for message in messages %}
+                    <div {% if message.tags %} class="alert alert-warning" {% endif %}>
+                        <strong style="color: red;">{{ message }}</strong>
                     </div>
-                    
-                </div>
-                
-                <div class="registration-footer">
-                    <div class="pull-left">
-                        &copy; 2015 AppName
-                    </div>
-                    <div class="pull-right">
-                        <a href="#">About</a> 
-                        <a href="#">Privacy</a> 
-                        <a href="#">Contact Us</a>
+                {% endfor %}
+            {% endif %}
+            <div class="login-title"><strong>Welcome</strong>, Please login.</div>
+            <form action="" class="form-horizontal" method="post">{% csrf_token %}
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <span class="fa fa-user"></span>
+                        </div>
+                        <input type="text" id="id_username" name="username" class="form-control" placeholder="Username" required/>
                     </div>
                 </div>
             </div>
-            
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <span class="fa fa-lock"></span>
+                        </div>                                
+                        <input type="password" id="id_password" name="password" class="form-control" placeholder="Password" required/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-6">
+                    <a href="{% url 'userauth:user_reset_password' %}" class="btn btn-link btn-block">Forgot your password?</a>
+                </div>          
+                <div class="col-md-6 text-right">
+                    <a href="{% url 'userauth:user_registration' %}">Create an account</a>
+                </div>              
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <button class="btn btn-primary btn-lg btn-block">Login</button>
+                </div>
+            </div>
+            </form>
         </div>
-
-
-<!-- <div class="row">
-    <div class="col-sm-6 col-sm-offset-3" style="background-color: #876ff5; padding: 20px;">
-        <h1 align="center">DjangoBlog</h1>
-        <div >
-                <form action="" method="post">  {% csrf_token %}
-                <div class="form-group">
-                <input type="text" id="id_username" name="username"
-                class="form-control" placeholder="Username" />
-                </div>
-                <div class="form-group">
-                <input type="password" id="id_password" name="password"
-                class="form-control" placeholder="Password" />
-                </div>
-                <input type="submit" value="Login" class="btn btn-primary btn-lg btn-block" />
-                </form>
-
-         </div>
+        <div class="login-footer">
+            <div class="pull-left">
+                &copy; 2015 AppName
+            </div>
+            <div class="pull-right">
+                <a href="#">About</a> |
+                <a href="#">Privacy</a> |
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
     </div>
-</div> -->
+</div>
 
-<!-- 
-<div class="row" style="padding-top: 30px;">
-<div class="container"> -->
-<!--     <ul class="nav nav-tabs">
-        <li><a href="{% url 'userauth:user_login' %}">Login</a></li>
-        <li><a href="{% url 'userauth:user_registration' %}">Registration</a></li>
-    </ul> -->
-<!--     <form action="" method="post">
-            {% csrf_token %}
-            {% if form.errors %}
-            <p>Please correct the following fields:</p>
-            {% endif %}
-        <div class="register_div">
-            {% if form.username.errors %}
-
-            <p class="error">
-            {{ form.username.errors }}
-            </p>{% endif %}
-
-            <p><label for="username"{% if form.username.errors %} class="error"{% endif %}>Username:
-            </label></p>
-            <p>{{ form.username }}</p>
-        </div>
-
-        <div class="register_div">
-            {% if form.password.errors %}
-
-            <p class="error">
-            {{ form.password.errors }}
-            </p>
-            {% endif %}
-            
-            <p><label for="password"{% if form.password.errors %} class="error"{% endif %}>Password:</label></p>
-            <p>{{ form.password }}</p>
-        </div>
-            <ul>
-                <li><input type="submit" value="Login" /></li>{{ view_count }}
-                <li><a href="{% url 'userauth:user_logout' %}">Logout</a></li>
-                <li>Forgot your password? <a href="/userauth/user_reset_password/">Reset it!</a></li>
-            </ul>
-    </form> -->
-<!-- </div>
-</div> -->
 {% endblock %}

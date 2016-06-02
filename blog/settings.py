@@ -39,10 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 'django.contrib.comments',
     'userauth',
-    'userprofile',
     'category',
-    'userblog',
     'post',
+    'userprofile',
     'ckeditor',
     'django_wysiwyg',
 ]

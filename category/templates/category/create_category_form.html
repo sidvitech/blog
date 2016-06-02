@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load customs_tags %}
+{% load staticfiles %}
+{% block jquery %}
+{% endblock jquery %}
+{% block body %}
+<div class="panel panel-default">
+<div class="panel-body posts">
+<div class="post-item">
+    <div class="row">
+        <div>
+            <h1 align="center">Category Form</h1>
+            <p>
+                Select the User Register Name 
+                <b>
+                    <u>{{ user.username }}</u>
+                </b>
+            </p>
+            <form method="post" action="">{% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Add Category"></input>
+                <li><a href="#">Delete Category</a></li>
+            </form>
+        </div>
+    </div>
+
+{% endblock  %}

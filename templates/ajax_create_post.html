@@ -1,0 +1,27 @@
+$("#id_category").on("change", function(){
+   $.ajax({
+        url: "/post/create_post/",
+        type: "GET",
+        data:{
+            'category_id': $("#id_category").val(),
+        },
+        success: function(result){
+            alert(result.result);
+        },
+        error: function(error){
+
+        },
+   });
+});
+
+
+
+    if request.is_ajax():
+        cat_id = request.GET.get("category_id")
+        try:
+            category = Category.objects.get(pk=cat_id)
+        except:
+            pass
+        posts = Post.objects.filter(category=category)
+        data = serializers.serialize('json', posts, fields=('pk', 'title'))
+        return JsonResponse({'result': data})

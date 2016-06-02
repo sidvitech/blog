@@ -1,125 +1,98 @@
-{% extends "base.html" %}
+{% extends "navbar.html" %}
 {% load staticfiles %}
 
 {% block body %}
-       <div class="registration-container registration-extended">            
-            <div class="registration-box animated fadeInDown">
-                <div class="registration-logo"></div>
-                <div class="registration-body">
-                    {% if messages %}
-                        {% for message in messages %}
-                        <div {% if message.tags %} class="alert alert-warning" {% endif %}>
-                            <strong style="color: red;">{{ message }}</strong>
-                        </div>
-                        {% endfor %}
-                    {% endif %}
-                    <div class="row">                        
-                        <div class="col-md-6">
-                            
-                           <div class="registration-title"><strong>Welcome</strong>, Please login</div>
-                            <form action="{% url 'userauth:user_login' %}" class="form-horizontal" method="post">{% csrf_token %}   
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <input type="text" id="id_username" name="username" class="form-control" placeholder="Username"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <input type="password" id="id_password" name="password" class="form-control" placeholder="Password"/>
-                                </div>
-                            </div>
-                            <div class="form-group push-down-30">
-                                <div class="col-md-6">
-                                    <a href="{% url 'userauth:user_reset_password' %}" class="btn btn-link btn-block">Forgot your password?</a>
-                                </div>
-                                <div class="col-md-6">
-                                    <button class="btn btn-info btn-block">Log In</button>
-                                </div>
-                            </div>
-                            </form> 
-                            
-                        </div>
-                        <div class="col-md-6">
-                            
-                            <div class="registration-title"><strong>Registration</strong>, use form below</div>
-                            <div class="registration-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In odio mauris, maximus ac sapien sit amet.</div>
-                            <form action="{% url 'userauth:user_registration' %}" class="form-horizontal" method="post">{% csrf_token %}
-
-                                <h4>Personal info</h4>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <input type="text" id="id_reg_username" name="reg_username" class="form-control" placeholder="Username" required />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <input type="text" class="form-control" id="id_reg_email" name="reg_email" placeholder="E-mail" required/>
-                                    </div>
-                                </div>           
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <input type="password" id="id_reg_password" name="reg_password" class="form-control" placeholder="Password" required/>
-                                    </div>
-                                </div>                    
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <input id="id_reg_confirm_password" name="reg_confirm_password" type="password" class="form-control" placeholder="Confirm Password" required/>
-                                    </div>
-                                </div>             
-
-                                <div class="form-group push-up-30">
-                                    <div class="col-md-6">
-                                        <a href="#" class="btn btn-link btn-block">Already have an account?</a>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <button class="btn btn-danger btn-block">Sign Up</button>
-                                    </div>
-                                </div>
-                                
-                            </form>                            
-                            
+<div class="registration-container registration-extended">            
+    <div class="registration-box animated fadeInDown">
+        <div class="registration-logo"></div>
+        <div class="registration-body">
+            {% if messages %}
+                {% for message in messages %}
+                <div {% if message.tags %} class="alert alert-warning" {% endif %}>
+                    <strong style="color: red;">{{ message }}</strong>
+                </div>
+                {% endfor %}
+            {% endif %}
+            <div class="row">                        
+                <div class="col-md-6">
+                    
+                   <div class="registration-title"><strong>Welcome</strong>, Please login</div>
+                    <form action="#" class="form-horizontal" method="post">{% csrf_token %}   
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input type="text" id="id_username" name="username" class="form-control" placeholder="Username"/>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input type="password" id="id_password" name="password" class="form-control" placeholder="Password"/>
+                        </div>
+                    </div>
+                    <div class="form-group push-down-30">
+                        <div class="col-md-6">
+                            <a href="#" class="btn btn-link btn-block">Forgot your password?</a>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-info btn-block">Log In</button>
+                        </div>
+                    </div>
+                    </form> 
                     
                 </div>
-                
-                <div class="registration-footer">
-                    <div class="pull-left">
-                        &copy; 2015 AppName
-                    </div>
-                    <div class="pull-right">
-                        <a href="#">About</a> 
-                        <a href="#">Privacy</a> 
-                        <a href="#">Contact Us</a>
-                    </div>
+                <div class="col-md-6">
+                    
+                    <div class="registration-title"><strong>Registration</strong>, use form below</div>
+                    <div class="registration-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In odio mauris, maximus ac sapien sit amet.</div>
+                    <form action="{% url 'userauth:user_registration' %}" class="form-horizontal" method="post">{% csrf_token %}
+
+                        <h4>Personal info</h4>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input type="text" id="id_reg_username" value="{{ username }}" name="reg_username" class="form-control" placeholder="Username" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input type="text" class="form-control" value="{{ email }}" id="id_reg_email" name="reg_email" placeholder="E-mail" required/>
+                            </div>
+                        </div>           
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input type="password" id="id_reg_password" value="{{ password }}" name="reg_password" class="form-control" placeholder="Password" required/>
+                            </div>
+                        </div>                    
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input id="id_reg_confirm_password" name="reg_confirm_password" type="password" class="form-control" placeholder="Confirm Password" required/>
+                            </div>
+                        </div>             
+
+                        <div class="form-group push-up-30">
+                            <div class="col-md-6">
+                                <a href="#" class="btn btn-link btn-block">Already have an account?</a>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-danger btn-block">Sign Up</button>
+                            </div>
+                        </div>
+                        
+                    </form>                            
+                    
                 </div>
             </div>
             
         </div>
-
-
-<!-- <div class="row">
-<div class="row" style="padding-top: 30px;">
-<div class="container"s> -->
-<!-- 	<ul class="nav nav-tabs">
-		<li><a href="{% url 'userauth:user_login' %}">Login</a></li>
-		<li><a href="{% url 'userauth:user_registration' %}">Registration</a></li>
-	</ul> -->
-
-<!-- 	<div class="col-sm-6 col-sm-offset-3">
-	<div class="panel panel-primary">    
-		<h1 align="center">User Registrations Form</h1>
-		<form method="post" action="">{% csrf_token %}
-		{{ form.as_p }}
-		<input type="submit" value="Sign Up"></input>
-		</form>
-		<p><a href="{% url 'userauth:user_login' %}">Login</a></p>
-    	<li><a href="{% url 'userauth:user_logout' %}">Logout</a></li>
-		<h1>View Count</h1>{{ view_count }}
-	</div>
-	</div>
+        
+        <div class="registration-footer">
+            <div class="pull-left">
+                &copy; 2015 AppName
+            </div>
+            <div class="pull-right">
+                <a href="#">About</a> 
+                <a href="#">Privacy</a> 
+                <a href="#">Contact Us</a>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
-</div>
- -->
 {% endblock %}

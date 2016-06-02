@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load customs_tags %}
+{% load staticfiles %}
+{% block jquery %}
+{% endblock jquery %}
+{% block body %}
+<div class="panel panel-default">
+<div class="panel-body posts">    
+<div class="post-item">
+<div class="row">
+{% if post_image %}
+{% for post in post_image %}
+                               
+    <div class="col-xs-12 col-md-3" >
+	 	<img src="{{ post.image.url }}" alt="{{ post.title }}" height="100" width="160" ><br />
+	    <div class="caption">
+	    <h3>{{ post.title|safe }}</h3>
+		</div>
+  </div>
+ 
+{% endfor %}
+{% endif %}
+</div>             
+{% endblock  %}

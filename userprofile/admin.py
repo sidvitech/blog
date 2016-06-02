@@ -1,6 +1,10 @@
 from django.contrib import admin
-from userprofile.models import UserDetaile
+from userprofile.models import UserProfile
 
 # Register your models here.
 
-admin.site.register(UserDetaile)
+class UserProfileAdmin(admin.ModelAdmin):
+	list_display = ('user', 'profile_picture')
+
+
+admin.site.register(UserProfile, UserProfileAdmin)
