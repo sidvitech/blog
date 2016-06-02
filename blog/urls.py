@@ -5,6 +5,8 @@ from django.conf import settings
 
 urlpatterns=[
 	url(r'^$', views.blog,name='blog'),
+	url(r'^my_posts/$', views.my_posts,name='my_posts'),
+	url(r'^my_posts/(?P<page_no>[\w\-]+)/$', views.my_posts_list,name='my_posts'),
 	url(r'^register/', views.register, name='register'),
     url(r'^logout/', views.user_logout, name='logout'),
 	url(r'^my_profile/', views.my_profile, name='my_profile'),
@@ -17,8 +19,8 @@ urlpatterns=[
 	url(r'^category/(?P<category_name>[\w\-]+)/$', views.category, name='category'),
 	url(r'^user_profile/(?P<u_id>[\w\-]+)/$', views.user_profile, name='user_profile'),
 	url(r'^post_search/', views.post_search, name='post_search'),
-	url(r'^delete_comment/(?P<comment_id>[\w\-]+)/$', views.delete_comment, name='delete_comment'),
-
+	url(r'^delete_comment/(?P<comment_id>[\w\-]+)-(?P<post_id>[\w\-]+)/$', views.delete_comment, name='delete_comment'),
+	url(r'^delete_post/(?P<post_id>[\w\-]+)/', views.delete_post, name='delete_post'),
 
 
 	url(r'^posts/(?P<page_no>[\w\-]+)/', views.posts_list, name='posts_list'),

@@ -21,6 +21,9 @@
                         <div class="post-item">
                             <div class="post-title">
                                 {{ post.title }}
+                                {% if auther %}
+                                    <div class="xn-icon-button pull-right"><a href="/blog/delete_comment/{{comments.id}}-{{post.id}}"  class="mb-control" data-box="#mb-delete" title="Delete Post"><span class="fa fa-remove"></a></span></div>
+                                {% endif %}
                             </div>
                             <div class="post-date"><span class="fa fa-calendar"></span> {{post.created_on}} / <a href="/blog/user_profile/{{post.user_id}}">by {{post.user}}</a></div>
                             <ul>
@@ -97,12 +100,18 @@
                                                             <img class="media-object img-text" src="/media/{{comments.userprofile.profile_picture}}" style="width:70px; height:70px; " alt="{{comments.user.username}}" width="64">
                                                         </a>
                                                         <div class="media-body">
-                                                            <h4 class="media-heading">{{comments.user.first_name}}{{comments.user.last_name}}</h4>
+                                                            <h4 class="media-heading">
+                                                                <a href="/blog/user_profile/{{post.user_id}}">{{comments.user.first_name}}{{comments.user.last_name}}</a>
+                                                                {% ifequal comments.user user%}
+                                                                    <li class="xn-icon-button pull-right"><a href="/blog/delete_comment/{{comments.id}}-{{post.id}}"><span class="fa fa-remove"></a></span>
+                                                                {% else %}
+                                                                    {% if auther %}
+                                                                        <li class="xn-icon-button pull-right"><a href="/blog/delete_comment/{{comments.id}}-{{post.id}}"><span class="fa fa-remove"></a></span>
+                                                                        {% endif %}
+                                                                {% endifequal %}
+                                                            </h4>
                                                             <p>{{comments.comment}}</p>
-                                                            <p class="text-muted">{{comments.created_on}}</p>
-                                                            
-                                                            <p id="demo"></p>
-
+                                                            <p>{{comments.created_on}}</p>
                                                         </div><br><br> 
                                                     </li>
                                                 {% endfor %}                                           
@@ -110,8 +119,6 @@
                                         </div>    
                                     </div>
                                 </div>
-                                
-
                             </ul>
                         </div>
                     </div>
@@ -120,16 +127,22 @@
         </div>
     </div>
 
-    <p id="demo"></p>
+    <div class="message-box animated fadeIn" data-sound="alert" id="mb-delete">
+        <div class="mb-container">
+            <div class="mb-middle">
+                <div class="mb-title"><span class="fa fa-remove"></span><strong>Delete The Post?</strong></div>
+                <div class="mb-content">
+                    <p>Are you sure you want to delete this post permanently?</p>                    
+                    <p>Press No if you don't want to delete post. Press Yes to delete this post.</p>
+                </div>
+                <div class="mb-footer">
+                    <div class="pull-right">
+                        <a href="/blog/delete_post/{{post.id}}" class="btn btn-danger btn-dl">Delete</a>
+                        <button class="btn btn-default btn-lg mb-control-close">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <script>
-    var myObject, myArray;
-    function myFunction(a, b) {
-        return a * b;
-    }
-    myArray = [comments.user, user]
-    myObject = myFunction.apply(myObject, myArray);      // Will return 20 
-    document.getElementById("demo").innerHTML = myObject; 
-    </script>
-    
 {% endblock %}

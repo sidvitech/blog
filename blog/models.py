@@ -31,6 +31,7 @@ class Posts(models.Model):
 	likes=models.IntegerField(default=0)
 	views=models.IntegerField(default=0)
 	stars=models.IntegerField(default=0)
+	total_comments=models.IntegerField(default=0)
 
 	def __unicode__(self):
 		return self.title

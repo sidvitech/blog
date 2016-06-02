@@ -35,7 +35,7 @@ class PostsForm(forms.ModelForm):
 	views=forms.IntegerField(initial=0)
 	stars=forms.IntegerField(initial=0)
 	created_on=forms.DateTimeField()
-
+	total_comments=forms.IntegerField(initial=0)
 	class Meta:
 		model=Posts	
 		fields=('title',)

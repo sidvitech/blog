@@ -70,6 +70,7 @@
                             <a href="#"><span class="fa fa-file"></span> <span class="xn-text">Posts</span></a>
                             <ul>
                                 <li class="active"><a href="/blog/"><span class="fa fa-copy"></span> List of Posts</a></li>
+                                <li class="active"><a href="/blog/my_posts"><span class="fa fa-user"></span> My Post</a></li>
                                 <li class="active"><a href="/blog/add_post"><span class="fa fa-plus"></span> Add Post</a></li>
                                 <li class="active"><a href="/blog/post_search"><span class="fa fa-search"></span> Search Post</a></li>
                             </ul>
@@ -109,7 +110,7 @@
                         <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
                     </li>
                     <li class="xn-search">
-                        <form class="form-inline" id="user_form" method="post" action="{% url 'blog:search' %}">
+                        <form class="form-inline" id="user_form" method="post" action="/blog/post_search/">
                             {% csrf_token %}
                             <input class="form-control" placeholder="Search" type="text" size="50" name="query" value="" id="query" />
                         </form>

@@ -1,0 +1,60 @@
+{% extends 'blog.html' %}
+{% load staticfiles %}
+{% block address %}
+    <li><a href="/blog/my_posts">My Posts</a></li>
+    {% if page_no %}
+        <li><a href="/blog/my_posts/{{page_no}}">Page {{page_no}}</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="page-title">                    
+        <h2>My Posts</h2>
+    </div>
+    <div class="col-md-9">
+        <div class="panel panel-default">
+            <div class="panel-body posts">
+                <div class="row">
+                    {% if posts_list %}
+                        {% for posts in posts_list %}
+                            <div class="col-md-6 ">
+                                <div class="post-item">
+                                    <ul>
+                                        <div class="post-title"><a href="/blog/view_post/{{posts.id}}" title="{{posts.title}}">{{posts.title | truncatechars:"45"}}</a></div>
+                                        <div class="post-date"><span class="fa fa-calendar"></span> {{posts.created_on}} / <a href="/blog/user_profile/{{posts.user_id}}">by {{posts.user}}</a></div>
+                                        {%if posts.thumb %}
+                                            <img src="/media/{{posts.thumb}}" class="img-responsive img-text" style="height:200px;" />
+                                        {% else %}
+                                            <img src="/media/blog/images/no-thumb.jpg" class="img-responsive img-text" style="height:200px;" />
+                                        {% endif %}
+                                        <div class="post-text">
+                                            <p>{{posts.details | truncatechars:"250" | safe }}</p>
+                                        </div>
+                                        <div class="post-row">
+                                            <div class="post-info">
+                                                <span class="fa fa-thumbs-up"></span> {{posts.likes}} - <span class="fa fa-eye"></span> {{posts.views}} - <span class="fa fa-star"></span> {{posts.stars}} - <span class="fa fa-comment"></span> {{counts}}
+                                            </div>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="alert alert-danger" role="alert">
+                            <strong>No Posts Available.</strong>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <ul class="pager">
+                {% if previous %}
+                    <li><a href="/blog/my_posts/{{previous}}">Previous</a></li>
+                {% endif %}
+                {% if next %}    
+                    <li><a href="/blog/my_posts/{{next}}">Next</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}

@@ -20,7 +20,7 @@ admin.site.register(Category, CategoryAdmin)
 
 class PostsAdmin(admin.ModelAdmin):
 
-	list_display=('title', 'category', 'likes', 'views', 'stars')
+	list_display=('title', 'category', 'likes', 'views', 'stars', 'total_comments')
 	search_fields=['title']
 	
 admin.site.register(Posts, PostsAdmin)
