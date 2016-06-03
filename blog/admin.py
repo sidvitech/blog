@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from blog.models import UserProfile, Posts, Category, PostData, CommentData
+from blog.models import UserProfile, Posts, Category, PostData, CommentData, ReplyData
 
 class UserProfileAdmin(admin.ModelAdmin):
 
@@ -40,6 +40,14 @@ class CommentDataAdmin(admin.ModelAdmin):
 	search_fields=['user']
 
 admin.site.register(CommentData, CommentDataAdmin)
+
+
+class ReplyDataAdmin(admin.ModelAdmin):
+
+	list_display=('user','post_title', 'comment', 'reply')
+	search_fields=['user']
+
+admin.site.register(ReplyData, ReplyDataAdmin)
 
 
 

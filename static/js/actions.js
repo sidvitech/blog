@@ -280,7 +280,7 @@ var page_actions = function(){
     $(".lockscreen-box .user_signin").on("click",function(){        
         $(".sign-in").show();
         $(this).remove();
-        $(".user").hide().find("img").attr("src","assets/images/users/no-image.jpg");
+        $(".user").hide().find("img").attr("src","/media/user/no-image.jpg");
         $(".user").show();
         return false;
     });

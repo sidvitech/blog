@@ -57,4 +57,10 @@ class CommentDataForm(forms.ModelForm):
 		fields=('comment',)
 
 
+class ReplyDataForm(forms.ModelForm):
+	reply=forms.CharField(widget=forms.Textarea)
+	created_on=forms.DateTimeField()
+		
+
+
 

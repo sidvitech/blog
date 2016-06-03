@@ -3,8 +3,8 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from blog.models import UserProfile, Posts, Category, PostData, CommentData
-from blog.forms import UserForm, PostsForm, CategoryForm, UserProfileForm, PostDataForm, CommentDataForm
+from blog.models import UserProfile, Posts, Category, PostData, CommentData, ReplyData
+from blog.forms import UserForm, PostsForm, CategoryForm, UserProfileForm, PostDataForm, CommentDataForm, ReplyDataForm
 from django.contrib.auth.models import User
 from blog.bing_search import run_query
 from django.contrib import messages
@@ -33,6 +33,13 @@ def blog(request):
 	context_dict['posts_list']=posts_list
 	context_dict['user']=user
 	context_dict['profile']=profile
+	categories=Category.objects.all()[:6]
+	cat=Category.objects.all()
+	for category in cat:
+		count=Posts.objects.filter(category=category).count()
+		category.total_posts=count
+		category.save()
+	context_dict['categories']=categories
 	next=2
 	previous=0
 	for post in posts_list:
@@ -292,6 +299,8 @@ def view_post(request, post_id):
 	try:
 		view_comments=CommentData.objects.filter(post_title=post)
 		context_dict['view_comments']=view_comments
+		replies=ReplyData.objects.filter(post_title=post)
+		context_dict['replies']=replies
 	except:
 		pass
 	context_dict['post']=post
@@ -300,6 +309,31 @@ def view_post(request, post_id):
 	context_dict['profile']=profile
 	context_dict['post_data']=post_data
 	return render(request,'blog/view_post.html', context_dict)
+
+@login_required(login_url="/login/")
+def add_reply(request, post_id, comment_id):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
+
+	if request.method=="POST":
+		comment=CommentData.objects.get(id=comment_id)
+		post=Posts.objects.get(id=post_id)
+		reply=request.POST.get("reply")
+		if reply:
+			add_reply=ReplyData()
+			add_reply.user=user
+			add_reply.post_title=post
+			add_reply.userprofile=profile
+			add_reply.comment=comment
+			add_reply.reply=reply
+			add_reply.save()
+			return HttpResponseRedirect(reverse('blog:view_post', kwargs={'post_id':post.id}))
+		
+
 
 @login_required(login_url='/login/')
 def my_posts(request):
@@ -317,6 +351,13 @@ def my_posts(request):
 	if count>6:
 		next=2
 	previous=0
+	categories=Category.objects.all()[:6]
+	cat=Category.objects.all()
+	for category in cat:
+		count=Posts.objects.filter(category=category).count()
+		category.total_posts=count
+		category.save()
+	context_dict['categories']=categories
 	context_dict['posts_list']=posts_list
 	context_dict['user']=user
 	context_dict['profile']=profile
@@ -369,40 +410,24 @@ def search(request):
 		profile=UserProfile.objects.get(user_id=user.id)
 	except:
 		profile=UserProfile()
-	if request.method=='POST' :
-		result_list=[]
-		query=request.POST['query'].strip()
-		posts=Posts.objects.filter(title__contains=query)
-		if query:
-			result_list=run_query(query)
-		return render(request,'blog/search.html',{'result_list': result_list, 'user':user, 'profile': profile, 'posts':posts, 'query':query})
-	return render(request,'blog/search.html',{'user':user, 'profile': profile})
-
-@login_required(redirect_field_name='/login')
-def post_search(request):
-	username=request.user.username
-	user=User.objects.get(username=username)
-	try:
-		profile=UserProfile.objects.get(user_id=user.id)
-	except:
-		profile=UserProfile()
-		context_dict['posts_list']=posts_list
 	context_dict['user']=user
 	context_dict['profile']=profile
 	if request.method=='POST' :
+		context_dict['view']=1
+		result_list=[]
 		query=request.POST['query'].strip()
 		posts=Posts.objects.filter(title__contains=query)
 		user_profile=User.objects.filter(username__contains=query)
 		context_dict['query']=query 
 		context_dict['posts']=posts
 		context_dict['user_profile']=user_profile
-		if posts or user_profile:
-			return render(request,'blog/post_search.html',context_dict)
-		else:
-			messages.error(request, "No Object Found.")
-			return render(request,'blog/post_search.html',context_dict)
-	return render(request,'blog/post_search.html',{'user':user, 'profile': profile})
+		if query:
+			result_list=run_query(query)
+		context_dict['result_list']=result_list
+		return render(request,'blog/search.html',context_dict)
+	return render(request,'blog/search.html',{'user':user, 'profile': profile})
 
+	
 @login_required(login_url='/login/')
 def category_list(request):
 	username=request.user.username
@@ -459,9 +484,6 @@ def add_post(request):
 			except:
 				pass			
 			post.save()
-			count=Posts.objects.filter(category=category).count()
-			category.total_posts=count
-			category.save()
 			return HttpResponseRedirect('/blog/')
 		else:
 			messages.error(request, "Details field is empty. ")
@@ -522,7 +544,7 @@ def user_profile(request,u_id):
 
 
 @login_required(login_url='/login/')
-def delete_comment(request, comment_id, post_id):
+def delete_comment(request, post_id, comment_id):
 	username=request.user.username
 	user=User.objects.get(username=username)
 	context_dict['user']=user
@@ -547,4 +569,14 @@ def delete_post(request, post_id):
 	return HttpResponseRedirect("/blog/my_posts/?post_deleted")
 
 
+@login_required(login_url='/login/')
+def delete_reply(request, post_id, reply_id):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	context_dict['user']=user
+	post=Posts.objects.get(id=post_id)
+	delete_reply=ReplyData.objects.get(id=reply_id)
+	delete_reply.delete()
+	return HttpResponseRedirect(reverse('blog:view_post', kwargs={'post_id':post.id}))
+	
 

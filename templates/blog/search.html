@@ -17,39 +17,72 @@
                             <div class="col-md-12">
                                 <form class="form-inline" id="user_form" method="post" action=".">
                                     {% csrf_token %}
-                                    <input class="form-control" type="text" size="50" name="query" value="{{query}}" id="query" />
+                                    <input class="form-control" type="text" size="50" name="query" value="{{query}}" placeholder="Enter Query" id="query" />
                                     <input class="btn btn-primary" type="submit" name="submit" value="Search" />
                                     <br />
                                 </form>
-                                <div class="panel">
-                                    {% if result_list %}
+                                {% if view %}
+                                    <div class="panel">
                                         <div class="panel-heading">
-                                            <h3 class="panel-title">Results</h3>
                                             <div class="panel-body">
                                                 <div class="list-group">
-                                                    {% for post in posts %}
-                                                        <div class="sr-item">
-                                                            <a href="{/blog/view_post/{{post.id}}" class="sr-item-title">{{ post.title }}</a>
-                                                            <div class="sr-item-link">/blog/view_post/{{post.id}}</div>
-                                                            <p>{{post.details | truncatechars:"100" | safe}}</p>
+                                                    <div class="page-title">                    
+                                                        <h4>Users:</h4>
+                                                    </div>
+                                                    {% if user_profile %}
+                                                        {% for users in user_profile %}
+                                                            <div class="sr-item">
+                                                                <a href="/blog/user_profile/{{users.id}}" class="sr-item-title">{{ users.first_name }} {{users.last_name}}</a>
+                                                                <div class="sr-item-link">{{users.email}}</div>
+                                                            </div><br>
+                                                        {% endfor %}<br>
+                                                    {% else %}
+                                                        <div class="alert alert-danger" role="alert">
+                                                            <strong>No User Found</strong>
                                                         </div>
-                                                    {% endfor %}
+                                                    {% endif %}
+                                                    <div class="page-title">                    
+                                                        <h4>Posts:</h4>
+                                                    </div>
+                                                    {% if posts %}
+                                                        {% for post in posts %}
+                                                            <div class="sr-item">
+                                                                <a href="/blog/view_post/{{post.id}}" class="sr-item-title">{{ post.title }}</a>
+                                                                <div class="sr-item-link">/blog/view_post/{{post.id}}</div>
+                                                                <p>{{post.details | truncatechars:"100" | safe}}</p>
+                                                            </div><br>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <div class="alert alert-danger" role="alert">
+                                                            <strong>No Post Found</strong>
+                                                        </div>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="list-group">
-                                                    {% for result in result_list %}
-                                                        <div class="sr-item">
-                                                            <a href="{{ result.link }}" class="sr-item-title">{{ result.title }}</a>
-                                                            <div class="sr-item-link">h{{ result.link }}</div>
-                                                            <p>{{ result.summary }}</p>
+                                                    <div class="page-title">                    
+                                                        <h4>Results:</h4>
+                                                    </div>
+
+                                                    {% if result_list %}
+                                                        {% for result in result_list %}
+                                                            <div class="sr-item">
+                                                                <a href="{{ result.link }}" class="sr-item-title">{{ result.title }}</a>
+                                                                <div class="sr-item-link">h{{ result.link }}</div>
+                                                                <p>{{ result.summary }}</p>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <div class="alert alert-danger" role="alert">
+                                                            <strong>No Result Found</strong>
                                                         </div>
-                                                    {% endfor %}
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
-                                    {% endif %}
-                                </div>
+                                    </div>
+                                {% endif %}
                             </div>  
                         </div>
                     </div>

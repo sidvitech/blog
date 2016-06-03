@@ -99,6 +99,8 @@
                                     <div class="post-date"><span class="fa fa-calendar"></span> {{posts.created_on}} / <a href="/blog/user_profile/{{posts.user_id}}">by {{posts.user}}</a></div>
                                     {%if posts.thumb %}
                                         <img src="/media/{{posts.thumb}}" class="img-responsive img-text" style="height:200px;" />
+                                    {% else %}
+                                        <img src="/media/blog/images/no-thumb.jpg" class="img-responsive img-text" style="height:200px;" />
                                     {% endif %}
                                     <div class="post-text">
                                         <p>{{posts.details | truncatechars:"250" | safe}}</p>

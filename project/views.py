@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from blog.models import Posts
 from django.contrib.auth.models import User
 from blog.models import UserProfile
+from django.contrib import messages
 
 @login_required(login_url='/login/')
 def home(request):
@@ -23,6 +24,38 @@ def home(request):
 	for post in all_posts:
 		views+=post.views
 	return render(request,'home.html', {'posts':posts, 'user':user, 'profile':profile, 'total':total, 'views':views})
+
+@login_required(login_url='/login/')
+def lock(request):
+	try:
+		username=request.user.username
+		user=User.objects.get(username=username)
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		user=0
+		profile=0
+		pass	
+	if request.method=='POST':
+		del request.user
+		logout(request)	
+		if request.POST.get('username'):
+			username=request.POST.get('username')
+		else:
+			username=username
+		password=request.POST.get('password')
+		new_user=authenticate(username=username, password=password)
+		if new_user:
+			del request.user
+			logout(request)
+			request.session['user_id'] = new_user.id
+			login(request, new_user)
+			return HttpResponseRedirect('/?login_successful')
+		else:
+			messages.error(request, "Invalid login details provided.")
+			return HttpResponseRedirect('.')
+	else:
+		return render(request, 'lock.html', {'user':user, 'profile':profile})
+
 
 
 def handler404(request):

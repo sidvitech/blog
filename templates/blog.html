@@ -70,7 +70,6 @@
                                 <li class="active"><a href="/blog/"><span class="fa fa-copy"></span> List of Posts</a></li>
                                 <li class="active"><a href="/blog/my_posts"><span class="fa fa-user"></span> My Post</a></li>
                                 <li class="active"><a href="/blog/add_post"><span class="fa fa-pencil"></span> Add Post</a></li>
-                                <li class="active"><a href="/blog/post_search"><span class="fa fa-search"></span> Search Post</a></li>
                             </ul>
                         </li>                   
                         <li class="xn-openable">
@@ -103,7 +102,7 @@
                         <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
                     </li>
                     <li class="xn-search">
-                        <form class="form-inline" id="user_form" method="post" action="/blog/post_search/">
+                        <form class="form-inline" id="user_form" method="post" action="/blog/search/">
                             {% csrf_token %}
                             <input class="form-control" placeholder="Search" type="text" size="50" name="query" value="" id="query" />
                         </form>
@@ -112,7 +111,7 @@
                         <li class="xn-icon-button pull-right last">
                             <a href="#"><span class="fa fa-power-off"></span></a>
                             <ul class="xn-drop-left animated zoomIn">
-                                <li><a href="pages-lock-screen.html"><span class="fa fa-lock"></span> Lock Screen</a></li>
+                                <li><a href="/lock/"><span class="fa fa-lock"></span> Lock Screen</a></li>
                                 <li><a href="{% url 'blog:logout' %}" class="mb-control" data-box="#mb-logout"><span class="fa fa-sign-out"></span> Log Out</a></li>
                             </ul>                        
                         </li> 
@@ -233,7 +232,7 @@
                                     <a href="/blog/category_list/"><h3>Categories</h3></a>
                                     <div class="links">
                                         {% for category in categories %}  
-                                          <a href="/blog/category/{{category.name}}">{{ category.name }} <span class="label label-default"></span></a>
+                                          <a href="/blog/category/{{category.name}}">{{ category.name }} <span class="label label-default">{{category.total_posts}}</span></a>
                                         {% endfor %}
                                       </div>
 

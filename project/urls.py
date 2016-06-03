@@ -15,7 +15,7 @@ urlpatterns = [
 	url(r'^password_reset_done/$', auth_views.password_reset_done),
 	url(r'^password_reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>[0-9A-Za-z]{1,3}-[0-9A-Za-z]{1,20})/$', auth_views.password_reset_confirm, {'post_reset_redirect': '/password_done/' }),
 	url(r'^password_done/$', auth_views.password_reset_complete),
-	
+	url(r'^lock/$', views.lock, name='lock'),
 ]
 
 if settings.DEBUG:

@@ -18,9 +18,12 @@ urlpatterns=[
 	url(r'^add_category/$', views.add_category, name='add_category'),
 	url(r'^category/(?P<category_name>[\w\-]+)/$', views.category, name='category'),
 	url(r'^user_profile/(?P<u_id>[\w\-]+)/$', views.user_profile, name='user_profile'),
-	url(r'^post_search/', views.post_search, name='post_search'),
-	url(r'^delete_comment/(?P<comment_id>[\w\-]+)-(?P<post_id>[\w\-]+)/$', views.delete_comment, name='delete_comment'),
+	url(r'^add_reply/(?P<post_id>[\w\-]+)-(?P<comment_id>[\w\-]+)/', views.add_reply, name='add_reply'),
+	
+	url(r'^delete_comment/(?P<post_id>[\w\-]+)-(?P<comment_id>[\w\-]+)/$', views.delete_comment, name='delete_comment'),
 	url(r'^delete_post/(?P<post_id>[\w\-]+)/', views.delete_post, name='delete_post'),
+	url(r'^delete_reply/(?P<post_id>[\w\-]+)-(?P<reply_id>[\w\-]+)/$', views.delete_reply, name='delete_reply'),
+	
 
 
 	url(r'^posts/(?P<page_no>[\w\-]+)/', views.posts_list, name='posts_list'),
