@@ -5,7 +5,7 @@
 {% endblock %}
 {% block body %}
     <div class="page-title">
-        <h2><span class="fa fa-cogs"></span> User Profile</h2>
+        <h2><span class="fa fa-cogs"></span> My Profile</h2>
     </div>
     <div class="page-content-wrap">
         <div class="row">
@@ -85,18 +85,20 @@
         </div>
     </div>
 
-    <div class="col-md-12">
+    <!-- <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-body posts">
                 <div class="row">
                     {% for posts in posts_list %}
-                        <div class="col-md-6 "><span class="pull-right">
+                        <div class="col-md-6" style="width:350px; height:462px; background-color:white;">
                             <div class="post-item">
                                 <ul>
                                     <div class="post-title"><a href="/blog/view_post/{{posts.id}}" title="{{posts.title}}">{{posts.title | truncatechars:"65"}}</a></div>
                                     <div class="post-date"><span class="fa fa-calendar"></span> {{posts.created_on}} / <a href="/blog/user_profile/{{posts.user_id}}">by {{posts.user}}</a></div>
                                     {%if posts.thumb %}
                                         <img src="/media/{{posts.thumb}}" class="img-responsive img-text" style="height:200px;" />
+                                    {% else %}
+                                        <img src="/media/blog/images/no-thumb.jpg" class="img-responsive img-text" style="height:200px;" />
                                     {% endif %}
                                     <div class="post-text">
                                         <p>{{posts.details | truncatechars:"250" | safe}}</p>
@@ -122,7 +124,7 @@
             </ul>
         </div>
     </div>
-    
+     -->
 {% endblock %}
 
 

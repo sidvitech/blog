@@ -19,6 +19,7 @@ urlpatterns=[
 	url(r'^category/(?P<category_name>[\w\-]+)/$', views.category, name='category'),
 	url(r'^user_profile/(?P<u_id>[\w\-]+)/$', views.user_profile, name='user_profile'),
 	url(r'^add_reply/(?P<post_id>[\w\-]+)-(?P<comment_id>[\w\-]+)/', views.add_reply, name='add_reply'),
+	url(r'^edit_post/(?P<post_id>[\w\-]+)/', views.edit_post, name='edit_post'),
 	
 	url(r'^delete_comment/(?P<post_id>[\w\-]+)-(?P<comment_id>[\w\-]+)/$', views.delete_comment, name='delete_comment'),
 	url(r'^delete_post/(?P<post_id>[\w\-]+)/', views.delete_post, name='delete_post'),

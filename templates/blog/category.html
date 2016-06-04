@@ -14,10 +14,10 @@
         <div class="row">
           {% if posts %}
             {% for post in posts %}
-              <div class="col-md-6">
+              <div class="col-md-6" style="width:350px; height:500px; word-wrap:break-word;">
                 <div class="post-item">
                   <ul>
-                    <div class="post-title"><a href="/blog/view_post/{{post.id}}" title="{{post.title}}">{{post.title | truncatechars:"45"}}</a></div>
+                    <div class="post-title"><a href="/blog/view_post/{{post.id}}" title="{{post.title}}">{{post.title | truncatewords:"8" | truncatechars:"45"}}</a></div>
                     <div class="post-date"><span class="fa fa-calendar"></span> {{post.created_on}} / <a href="pages-profile.html">by {{post.user}}</a></div>
                     {%if post.thumb %}
                       <img src="/media/{{post.thumb}}" class="img-responsive img-text" style="height:200px;" />

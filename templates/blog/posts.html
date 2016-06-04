@@ -16,15 +16,14 @@
             <div class="panel-body posts">
                 <div class="row">
                     {% for posts in posts_list %}
-                        <div class="col-md-6 ">
+                        <div class="col-md-6" style="width:350px; height:500px; word-wrap:break-word;">
                             <div class="post-item">
-                                <ul>
-                                    <div class="post-title"><a href="/blog/view_post/{{posts.id}}" title="{{posts.title}}">{{posts.title | truncatechars:"45"}}</a></div>
+                                    <div class="post-title"><a href="/blog/view_post/{{posts.id}}" title="{{posts.title}}">{{posts.title | truncatewords:"8" | truncatechars:"45"}}</a></div>
                                     <div class="post-date"><span class="fa fa-calendar"></span> {{posts.created_on}} / <a href="/blog/user_profile/{{posts.user_id}}">by {{posts.user}}</a></div>
                                     {%if posts.thumb %}
-                                        <img src="/media/{{posts.thumb}}" class="img-responsive img-text" style="height:200px;" />
+                                        <img src="/media/{{posts.thumb}}" class="img-responsive img-text" style="height:200px; width:250px" />
                                     {% else %}
-                                        <img src="/media/blog/images/no-thumb.jpg" class="img-responsive img-text" style="height:200px;" />
+                                        <img src="/media/blog/images/no-thumb.jpg" class="img-responsive img-text" style="height:200px; width:250px" />
                                     {% endif %}
                                     <div class="post-text">
                                         <p>{{posts.details | truncatechars:"250" | safe }}</p>
@@ -34,7 +33,6 @@
                                             <span class="fa fa-thumbs-up"></span> {{posts.likes}} - <span class="fa fa-eye"></span> {{posts.views}} - <span class="fa fa-star"></span> {{posts.stars}} - <span class="fa fa-comment"></span> {{posts.total_comments}}
                                         </div>
                                     </div>
-                                </ul>
                             </div>
                         </div>
                     {% endfor %}

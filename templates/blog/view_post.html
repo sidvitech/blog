@@ -17,16 +17,17 @@
         <div class="panel panel-default">
             <div class="panel-body posts">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12" style="word-wrap:break-word;">
                         <div class="post-item">
                             <div class="post-title">
-                                {{ post.title }}
+                                {{ post.title }} <a href="/blog/edit_post/{{post.id}}"  class="mb-control" data-box="#mb-edit" title="Edit Post"><span class="fa fa-pencil"></a></span>
                                 {% if auther %}
-                                    <div class="xn-icon-button pull-right"><a href="/blog/delete_comment/{{comments.id}}-{{post.id}}"  class="mb-control" data-box="#mb-delete" title="Delete Post"><span class="fa fa-remove"></a></span></div>
+                                    <div class="xn-icon-button pull-right">
+                                        <a href="/blog/delete_post/{{post.id}}"  class="mb-control" data-box="#mb-delete" title="Delete Post"><span class="fa fa-remove"></a></span>
+                                    </div>
                                 {% endif %}
                             </div>
                             <div class="post-date"><span class="fa fa-calendar"></span> {{post.created_on}} / <a href="/blog/user_profile/{{post.user_id}}">by {{post.user}}</a></div>
-                            <ul>
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         {%if post.thumb %}
@@ -154,7 +155,6 @@
                                         </div>    
                                     </div>
                                 </div>
-                            </ul>
                         </div>
                     </div>
                 </div>

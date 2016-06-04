@@ -157,6 +157,27 @@ def user_login(request):
 		else:
 			return render(request, 'blog/login.html')
 
+
+@login_required(login_url='/login/')
+def user_profile(request,u_id):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
+	user_user=User.objects.get(id=u_id)
+	user_profile=UserProfile.objects.get(user_id=u_id)
+	context_dict['user']=user
+	context_dict['profile']=profile
+	context_dict['user_profile']=user_profile
+	context_dict['user_user']=user_user
+	posts_list=Posts.objects.filter(user_id=u_id)
+	context_dict['posts_list']=posts_list
+	return render(request,'blog/user_profile.html',context_dict)
+
+
+
 @login_required(login_url='/login/')
 def my_profile(request):
 	username=request.user.username
@@ -496,6 +517,44 @@ def add_post(request):
 	return render(request,'blog/add_post.html', context_dict)
 
 
+@login_required(redirect_field_name='/login')
+def edit_post(request, post_id):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	post=Posts(id=post_id)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
+	context_dict['user']=user
+	context_dict['profile']=profile
+	if request.method=="POST":
+		title=request.POST.get('title')
+		details=request.POST.get('details')
+		category_name=request.POST.get('category_name')
+		category=Category.objects.get(name=category_name)
+		if details:
+			post.category=category
+			post.title=title
+			post.details=details
+			try:
+				thumb=request.FILES['thumb']
+				post.thumb=thumb
+			except:
+				pass			
+			post.save()
+			return HttpResponseRedirect('/blog/')
+		else:
+			messages.error(request, "Details field is empty. ")
+			context_dict['title']=title
+			context_dict['post']=post
+			context_dict['user']=user
+			context_dict['profile']=profile
+			return render(request,'blog/add_post.html', context_dict)
+	else:
+		context_dict['post']=post
+	return render(request,'blog/edit_post.html', context_dict)
+
 
 @login_required(redirect_field_name='/login')
 def add_category(request):
@@ -522,25 +581,6 @@ def add_category(request):
 			context_dict['name']=name
 			return render(request,'blog/add_category.html', context_dict)
 	return render(request,'blog/add_category.html',context_dict)
-
-
-@login_required(login_url='/login/')
-def user_profile(request,u_id):
-	username=request.user.username
-	user=User.objects.get(username=username)
-	try:
-		profile=UserProfile.objects.get(user_id=user.id)
-	except:
-		profile=UserProfile()
-	user_user=User.objects.get(id=u_id)
-	user_profile=UserProfile.objects.get(user_id=u_id)
-	context_dict['user']=user
-	context_dict['profile']=profile
-	context_dict['user_profile']=user_profile
-	context_dict['user_user']=user_user
-	posts_list=Posts.objects.filter(user_id=u_id)
-	context_dict['posts_list']=posts_list
-	return render(request,'blog/user_profile.html',context_dict)
 
 
 @login_required(login_url='/login/')
