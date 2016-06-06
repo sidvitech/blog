@@ -291,32 +291,6 @@ def view_post(request, post_id):
 			comments.comment=comment
 			comments.save()
 			return HttpResponseRedirect(".")
-		else:
-			if request.POST.get("like"):
-				if post_data.like==0:
-					post_data.like+=1
-					post.likes+=1
-					post_data.save()
-					post.save()
-			if request.POST.get("unlike"):
-				if post_data.like==1:
-					post_data.like-=1
-					post.likes-=1
-					post_data.save()
-					post.save()
-			if request.POST.get("star"):
-				if post_data.star==0:
-					post.stars+=1
-					post_data.star+=1
-					post_data.save()
-					post.save()
-			if request.POST.get("unstar"):
-				if post_data.star==1:
-					post_data.star-=1
-					post.stars-=1
-					post_data.save()
-					post.save()
-			return HttpResponseRedirect(".")
 	try:
 		view_comments=CommentData.objects.filter(post_title=post)
 		context_dict['view_comments']=view_comments
@@ -330,6 +304,107 @@ def view_post(request, post_id):
 	context_dict['profile']=profile
 	context_dict['post_data']=post_data
 	return render(request,'blog/view_post.html', context_dict)
+
+
+@login_required(login_url="/login/")
+def like_post(request):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
+	post_id = None
+	if request.method == "GET":
+		post_id = request.GET.get('postid')
+	likes = 0
+	if post_id:
+		post = Posts.objects.get(id=int(post_id))
+		post_data, condition=PostData.objects.get_or_create(user=user, post_title=post)
+		likes = post.likes
+		if post and post_data.like < 1:
+			post_data.like+=1
+			likes = likes + 1
+			post.likes =  likes
+			post_data.save()
+			post.save()
+	return HttpResponse(likes)
+
+
+@login_required(login_url="/login/")
+def unlike_post(request):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
+	post_id = None
+	if request.method == "GET":
+		post_id = request.GET.get('postid')
+	likes = 0
+	if post_id:
+		post = Posts.objects.get(id=int(post_id))
+		post_data, condition=PostData.objects.get_or_create(user=user, post_title=post)
+		likes = post.likes
+		if post and post_data.like > 0:
+			post_data.like-=1
+			likes = likes - 1
+			post.likes =  likes
+			post_data.save()
+			post.save()
+	return HttpResponse(likes)
+
+
+@login_required(login_url="/login/")
+def star_post(request):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
+	post_id = None
+	if request.method == "GET":
+		post_id = request.GET.get('postid')
+	stars = 0
+	if post_id:
+		post = Posts.objects.get(id=int(post_id))
+		post_data, condition=PostData.objects.get_or_create(user=user, post_title=post)
+		stars = post.stars
+		if post and post_data.star < 1:
+			post_data.star+=1
+			stars = stars + 1
+			post.stars =  stars
+			post_data.save()
+			post.save()
+	return HttpResponse(stars)
+
+
+@login_required(login_url="/login/")
+def unstar_post(request):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
+	post_id = None
+	if request.method == "GET":
+		post_id = request.GET.get('postid')
+	stars = 0
+	if post_id:
+		post = Posts.objects.get(id=int(post_id))
+		post_data, condition=PostData.objects.get_or_create(user=user, post_title=post)
+		stars = post.stars
+		if post and post_data.star > 0:
+			post_data.star-=1
+			stars = stars - 1
+			post.stars =  stars
+			post_data.save()
+			post.save()
+	return HttpResponse(stars)
+
 
 @login_required(login_url="/login/")
 def add_reply(request, post_id, comment_id):

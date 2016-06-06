@@ -15,7 +15,8 @@
         <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
         
         <link rel="stylesheet" type="text/css" id="theme" href="{% static 'css/theme-default.css' %}"/>
-
+        {% block head %}
+        {% endblock %}
         <style>
             {% block style %}
             {% endblock %} 
