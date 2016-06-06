@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 {% load customs_tags %}
 {% load staticfiles %}
+<script>
 {% block jquery %}
 
 {% endblock jquery %}
+</script>
 {% block body %}
+<li><a href="#" data-toggle="tooltip" data-placement="right" title="Hooray!">Right</a></li>
 <div class="panel panel-default">
 <div class="panel-body posts">
 <div class=" col-xs-12  col-md-12">
@@ -47,7 +50,7 @@
                 <button type="submit" class="glyphicon glyphicon-thumbs-up"></button>&nbsp;&nbsp;{{ like_count }}
             {% endif %}
         </form>
-    </div>
+    </div><h6>views {{post.views}}</h6>
 <br />
     <div>
         <h3><span>Comment :-</span></h3>
@@ -82,42 +85,68 @@
 {% if post_list %}
 {% for post in post_list.title|get_post %}
 <div class="row">
-<div class="col-md-10 col-xs-10"><br />
-<!--     <div class=" col-xs-2 col-sm-2">
-        <b style="color: dodgerblue;">{{ post.user }}</b>
-    </div> -->
-    <div class=" col-xs-2 col-sm-2 " style=" margin-left: -50px; " >
-        {% if profile.profile_picture.url %}
-            <div class="text-center" id="user_image">
-                <img src="/media/{{profile.profile_picture}}" style=" width: 50px; height: 50px; " />
+    <div class="col-md-10 col-xs-10"><br />
+        <div class=" col-xs-2 col-sm-2 " style=" margin-left: -50px; " >
+            {% if profile.profile_picture.url %}
+                <div class="text-center" id="user_image">
+                    <img src="/media/{{profile.profile_picture}}" style=" width: 50px; height: 50px; " />
+                </div>
+            {% else %}
+                <div class="text-center" id="user_image">
+                    <img src="/media/user/profile_pictures/no-image.jpg" style=" width: 50px; height: 50px " />
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <div class="col-md-12">
+                <div class=" col-xs-11 col-sm-11 ">
+                    <h5><span>{{ post.user.first_name }} {{ post.user.last_name }}</span></h5>
+                </div>
             </div>
-        {% else %}
-            <div class="text-center" id="user_image">
-                <img src="/media/user/profile_pictures/no-image.jpg" style=" width: 50px; height: 50px " />
-            </div>
-        {% endif %}
-    </div>
-    <div class="col-md-8">
-        <div class="col-md-12">
-            <div class=" col-xs-11 col-sm-11 ">
-                <span>{{ post.user.first_name }} {{ post.user.last_name }}</span>
+            <div class="col-xs-12 col-md-12">
+                <div class=" col-xs-10 col-sm-10 ">
+                    {{ post }}<br/>
+                    {{ post_list.created }}<br /><br />
+                  <!--   <h4>Comment on {{ post_list.user.first_name }} {{ post_list.user.last_name }} Post</h4>
+                    {% if rpy_comment %}
+                        {% for rpy in rpy_comment %}
+                            {{ rpy }}<br />
+                    {% endfor %}
+                    {% endif %}
+ -->
+                    <!-- <div class="row">
+                        <div class="col-md-2">
+                            {% if profile.profile_picture %}
+                                <div class="text-center" id="user_image">
+                                    <img src="/media/{{profile.profile_picture}}" style=" width: 30px; height: 30px;" />
+                                </div>
+                            {% else %}
+                                <div class="text-center" id="user_image">
+                                    <img src="/media/user/profile_pictures/no-image.jpg" style=" width: 50px; height: 70px " />
+                                </div>
+                            {% endif %}
+                        </div>
+                        <form enctype="multipart/form-data" action="." class="form-horizontal" method="post"  />
+                        {% csrf_token %}
+                        <div class="col-md-10">
+                            <textarea class="form-control" rows="1" id="comment_rpy" placeholder="Reply Comment" name="comment_rpy"></textarea>
+                        </div>
+                        <div class="col-md-6 col-xs-6">
+                            <button class="btn btn-info">Reply Comment</button><br><br>
+                        </div>
+                        </form>
+                    </div> -->
+                </div>
             </div>
         </div>
-        <div class="col-xs-12 col-md-12">
-            <div class=" col-xs-10 col-sm-10 ">
-                {{ post }}<br />
-                {{ comment_list.created }}
-            </div>
+    </div>
+    <div class="col-md-1 col-xs-1">
+         <div class=" col-xs-1 col-sm-1" style=" margin-top: 20px; " >
+            {% if post.post.user == request.user or post.user == request.user %}
+                <a href="{% url 'post:delete_comment' post.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+            {% endif %}
         </div>
     </div>
-</div>
-<div class="col-md-1 col-xs-1">
-     <div class=" col-xs-1 col-sm-1" style=" margin-top: 20px; " >
-        {% if post.post.user == request.user or post.user == request.user %}
-            <a href="{% url 'post:delete_comment' post.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
-        {% endif %}
-    </div>
-</div>
 </div>
 
 {% endfor %}

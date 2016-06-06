@@ -15,6 +15,17 @@ def get_post(value):
 
 register.filter('get_post', get_post)
 
+def get_rpy(value):
+	try:
+		comment = Mycomment.objects.get(post=post)
+		data = Reply.objects.filter(post=comment)
+	except:
+		data = []
+		print data
+	return data
+
+register.filter('get_rpy', get_rpy)
+
 def check_like(value, user):
 	is_like = False;
 	try:

@@ -21,7 +21,17 @@
                         <a href="pages-blog-post.html#comments">3 Comments</a>
                 </div>
                 <div class="post-text">
-                    <img src="{{ post.image.url }}" alt="{{ post.title }}" height="200" width="300" >
+                        {% if post.image.url %}
+                            <div class="text-center" id="user_post">
+                                <img src="{{ post.image.url }}" alt="{{ post.title }}" height="200" width="300" >
+                            </div>
+                        {% else %}
+                            <div class="text-center" id="user_post">
+                                <img src="/media/user/profile_pictures/no-image.jpg" style=" width: 50px; height: 50px " />
+                            </div>
+                        {% endif %}
+        
+                    <!-- <img src="{{ post.image.url }}" alt="{{ post.title }}" height="200" width="300" > -->
                 </div>
                 <div class="post-text">
                    {{ post.body | truncatechars:"250" | safe }}
@@ -33,7 +43,7 @@
                     <p>Likes:- {{ like_count }}</p> -->
                     <div class="post-row">
                         <div class="post-info">
-                            <span class="fa fa-thumbs-up"></span> {{ like_count }} - <span class="fa fa-eye"></span> 15,332 - <span class="fa fa-star"></span> 322
+                            <span class="fa fa-thumbs-up"></span> {{ like_count }} - <span class="fa fa-eye"></span> {{ view_count }} - <span class="fa fa-star"></span> 322
                         </div>
                         <form method="post" action="{% url 'post:post_detail' post.pk %}" name="{{ post.title }}" id="{{ post.title }}">
                             {% csrf_token %}

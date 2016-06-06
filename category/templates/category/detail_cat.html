@@ -4,13 +4,14 @@
 {% block jquery %}
 {% endblock jquery %}
 {% block body %}
+
 <div class="panel panel-default">
 <div class="panel-body posts">    
 <div class="post-item">
 <div class="row">
     {% if user_post %}
         {% for post in user_post %}                              
-            <div class="col-xs-12 col-md-6" ><br />
+            <div class="col-xs-12 col-md-6" >
                 <div class="post-title">
                     <a href="{% url 'post:post_detail' post.pk %}">{{ post.title|safe }}</a>
                 </div>
@@ -29,11 +30,17 @@
                                 <img src="/media/user/profile_pictures/no-image.jpg" style=" width: 50px; height: 50px " />
                             </div>
                         {% endif %}
+        
+                    <!-- <img src="{{ post.image.url }}" alt="{{ post.title }}" height="200" width="300" > -->
                 </div>
                 <div class="post-text">
                    {{ post.body | truncatechars:"250" | safe }}
                 </div>
                 <div class="caption">
+
+                    <!-- <p>Athor:- {{ post.author|safe }}</p>
+                    <p>Comments:- {{ comment_count }}</p>
+                    <p>Likes:- {{ like_count }}</p> -->
                     <div class="post-row">
                         <div class="post-info">
                             <span class="fa fa-thumbs-up"></span> {{ like_count }} - <span class="fa fa-eye"></span> 15,332 - <span class="fa fa-star"></span> 322
@@ -48,5 +55,5 @@
             </div>
         {% endfor %}
     {% endif %}
-</div>               
-{% endblock  %}
+</div>     
+ {% endblock  %}

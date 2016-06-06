@@ -392,7 +392,7 @@
         </ul>
         <!-- END X-NAVIGATION VERTICAL -->                    
         <!-- START BREADCRUMB -->
-        <ul class="breadcrumb">
+        <ul class="breadcrumb" class="nav nav-pills nav-stacked">
             <li><a href="{% url 'post:post_list' %}">Home</a></li>
             <li><a href="{% url 'category:category_list' %}">Category</a></li>
             <li><a href="{% url 'post:post_list' %}">Post</a></li>
@@ -400,9 +400,6 @@
         </ul>
         <!-- END BREADCRUMB -->
         <!-- PAGE TITLE -->
-        <div class="page-title">                    
-            <h2><span class="fa fa-arrow-circle-o-left"></span> Posts</h2>
-        </div>
         <!-- END PAGE TITLE -->                
         <!-- PAGE CONTENT W12APPER -->
         <div class="page-content-wrap">
@@ -433,11 +430,20 @@
                         <div class="panel-body">
                             <h3>Category</h3>
                             <div class="links">
-                                <a href="{% url 'post:category_android' %}">Android<span class="label label-default">195</span></a>
-                                <a href="{% url 'post:category_education' %}">Education <span class="label label-default">278</span></a>
-                                <a href="#">Frameworks <span class="label label-default">48</span></a>
-                                <a href="#">Programming <span class="label label-default">311</span></a>
-                                <a href="#">Management <span class="label label-default">94</span></a>
+                                {% if ca_list %}
+                                    {% for post in ca_list %}
+                                        <ul>
+                                        <a href="{% url 'category:category_detail' post.pk %}" style=" margin-left: -40px; ">{{ post.name }} 
+                                        <span class="label label-default">
+                                        {% if ca_list %}
+                                            {% for post in ca_list.post %}
+                                                {{ post.count }}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </span></a>
+                                        </ul>
+                                   {% endfor %}
+                                {% endif %}
                             </div>
                         </div>
                     </div>

@@ -4,21 +4,23 @@
 {% block jquery %}
 {% endblock jquery %}
 {% block body %}
-<div class="panel panel-default">
+<div class="page-title">                    
+    <h2><span class="glyphicon glyphicon-picture"></span> Gallery</h2>
+</div>
+<div class="panel panel-default" style="background-color: WhiteSmoke;">
 <div class="panel-body posts">    
 <div class="post-item">
 <div class="row">
-{% if post_image %}
-{% for post in post_image %}
-                               
-    <div class="col-xs-12 col-md-3" >
-	 	<img src="{{ post.image.url }}" alt="{{ post.title }}" height="100" width="160" ><br />
-	    <div class="caption">
-	    <h3>{{ post.title|safe }}</h3>
-		</div>
-  </div>
- 
-{% endfor %}
-{% endif %}
+	{% if post_image %}
+		{% for post in post_image %}                          
+		    <div class="col-xs-12 col-md-4" ><br />
+		    <a href="{{ post.image.url }}">
+		        <p><img src="{{ post.image.url }}" class="thumbnail" alt="Gallery Images" style="width:200px;height:120px"></p>
+		     </a>
+		     <p><b>{{ post.title| truncatechars:"25" |safe }}</b></p>
+			 	<!-- <img src="{{ post.image.url }}" alt="{{ post.title }}" alt="Moustiers Sainte Marie" height="100" width="150" ><br /> -->
+		  	</div>
+		{% endfor %}
+	{% endif %}
 </div>             
 {% endblock  %}
