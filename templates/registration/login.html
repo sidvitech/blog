@@ -10,7 +10,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
         <link rel="stylesheet" type="text/css" id="theme" href="{% static 'css/theme-default.css' %}"/>
-
+        {% if user.is_authenticated %}
+            <meta http-equiv="Refresh" content="0;url=/">
+        {% endif %}
+    
     </head>
     <body>
 
@@ -26,13 +29,6 @@
                         </div>
                     {% endif %}
 
-                    {% if next %}
-                        {% if user.is_authenticated %}
-                            <div class="alert alert-danger" role="alert">
-                                <strong>Your account doesn't have access to this page. To proceed, please login with an account that has access.</strong>
-                            </div>
-                        {% endif %}
-                    {% endif %}
                     <form action="." class="form-horizontal" method="post">
                         {% csrf_token %}
                         <div class="form-group">

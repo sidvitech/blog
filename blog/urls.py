@@ -16,6 +16,7 @@ urlpatterns=[
 	url(r'^unlike_post/', views.unlike_post, name="unlike_post"),
 	url(r'^star_post/', views.star_post, name="star_post"),
 	url(r'^unstar_post/', views.unstar_post, name="unstar_post"),
+	url(r'^post_comment/', views.post_comment, name="post_comment"),
 
 	url(r'^add_post/', views.add_post, name='add_post'),
 	url(r'^search/', views.search, name='search'),

@@ -281,18 +281,8 @@ def view_post(request, post_id):
 		post_data.view+=1
 		post_data.save()
 		post.save()
-	if request.method=="POST":
-		comment=request.POST.get("comment")
-		if comment:
-			comments=CommentData()
-			comments.user=user
-			comments.post_title=post
-			comments.userprofile=profile
-			comments.comment=comment
-			comments.save()
-			return HttpResponseRedirect(".")
 	try:
-		view_comments=CommentData.objects.filter(post_title=post)
+		view_comments=CommentData.objects.filter(post_title=post).order_by("-created_on")
 		context_dict['view_comments']=view_comments
 		replies=ReplyData.objects.filter(post_title=post)
 		context_dict['replies']=replies
@@ -407,6 +397,31 @@ def unstar_post(request):
 
 
 @login_required(login_url="/login/")
+def post_comment(request):
+	username=request.user.username
+	user=User.objects.get(username=username)
+	try:
+		profile=UserProfile.objects.get(user_id=user.id)
+	except:
+		profile=UserProfile()
+	post_id = None
+	comment_text=None
+	newcomment=None
+	if request.method == "GET":
+		comment_text = request.GET.get('comment')
+		post_id = request.GET.get('postid')
+	if post_id:
+		post = Posts.objects.get(id=int(post_id))
+		newcomment=CommentData()
+		newcomment.user=user
+		newcomment.post_title=post
+		newcomment.userprofile=profile
+		newcomment.comment=comment_text
+		newcomment.save()
+	return HttpResponse(newcomment)
+
+
+@login_required(login_url="/login/")
 def add_reply(request, post_id, comment_id):
 	username=request.user.username
 	user=User.objects.get(username=username)
@@ -414,10 +429,10 @@ def add_reply(request, post_id, comment_id):
 		profile=UserProfile.objects.get(user_id=user.id)
 	except:
 		profile=UserProfile()
-
+		
+	comment=CommentData.objects.get(id=comment_id)
+	post=Posts.objects.get(id=post_id)
 	if request.method=="POST":
-		comment=CommentData.objects.get(id=comment_id)
-		post=Posts.objects.get(id=post_id)
 		reply=request.POST.get("reply")
 		if reply:
 			add_reply=ReplyData()
@@ -428,6 +443,7 @@ def add_reply(request, post_id, comment_id):
 			add_reply.reply=reply
 			add_reply.save()
 			return HttpResponseRedirect(reverse('blog:view_post', kwargs={'post_id':post.id}))
+	return HttpResponseRedirect(reverse('blog:view_post', kwargs={'post_id':post.id}))
 		
 
 

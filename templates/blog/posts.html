@@ -11,12 +11,12 @@
     <div class="page-title">                    
         <h2>Posts</h2>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-9 col-xs-12">
         <div class="panel panel-default">
             <div class="panel-body posts">
                 <div class="row">
                     {% for posts in posts_list %}
-                        <div class="col-md-6" style="width:350px; height:500px; word-wrap:break-word;">
+                        <div class="col-md-6 col-xs-12" style="width:350px; height:500px; word-wrap:break-word;">
                             <div class="post-item">
                                     <div class="post-title"><a href="/blog/view_post/{{posts.id}}" title="{{posts.title}}">{{posts.title | truncatewords:"8" | truncatechars:"45"}}</a></div>
                                     <div class="post-date"><span class="fa fa-calendar"></span> {{posts.created_on}} / <a href="/blog/user_profile/{{posts.user_id}}">by {{posts.user}}</a></div>
