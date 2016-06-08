@@ -15,7 +15,6 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $("#commenttext").hide()
             
             {% if post_data.like == 1 %}
                 $("#like").hide()
@@ -75,19 +74,35 @@
             $("#addcomment").click(function() {
                 var comment = $('#comment').val();
                 var postid= {{post.id}};
-                $.get('/blog/post_comment/', {comment:comment, postid: postid}, function(data){
-                    $("#commenttext").show();        
-                    $("#showcomment").html(data);
-                    $("#comment").val("");
-                });
+                if(!comment | $.trim( $('#comment').val() ) == '' ){
+                    alert('Enter valid comment');
+                }
+                else{
+                    $.get('/blog/post_comment/', {comment:comment, postid: postid}, function(data){
+                        $("#commenttext").prepend('<li class="media"><a class="pull-left" href="/blog/user_profile/{{user.id}}">{% if profile.profile_picture %}<img class="media-object img-text" src="/media/{{profile.profile_picture}}" style="width:70px; height:70px; " alt="{{user.username}}" width="64">{% else %}<img class="media-object img-text" src="/media/user/no-image.jpg" style="width:70px; height:70px; " alt="{{user.username}}" width="64">{% endif %}</a><div class="media-body"><h4 class="media-heading"><a href="/blog/user_profile/{{user.id}}">{{user.first_name}} {{user.last_name}}</a><li class="xn-icon-button pull-right"><a href="/blog/delete_comment/{{post.id}}-'+data.newid+'" id="link"><span class="fa fa-remove"></a></span></h4><p style="word-break:break-all;">'+data.comment+'</p></div></li>')
+                        $("#comment").val("");
+                    });
+                }
             });
-
+            
         });
+        function add(commentid) {
+                var reply = $('#reply'+commentid).val();
+                var postid= {{post.id}};
+                if(!reply | $.trim( reply )== '' ){
+                    alert('Enter valid reply');
+                }else{
+                    $.get('/blog/add_reply/', {reply:reply, postid: postid, commentid:commentid }, function(data){
+                        $("#showreply"+commentid).prepend('<a class="pull-left " href="/blog/user_profile/{{user.id}}"><img class="media-object img-text" src="/media/{{profile.profile_picture}}" style="width:50px; height:50px; " alt="{{user.username}}" width="64"></a><div class="media-body"><h6 class="media-heading"><a href="/blog/user_profile/{{user.id}}">{{user.first_name}} {{user.last_name}}</a><li class="xn-icon-button pull-right"><a href="/blog/delete_reply/{{post.id}}-'+data.newid+'"><span class="fa fa-remove"></a></span></h6><p style="word-break:break-all;">'+data.reply+'"</p><br></div>')
+                        $("#reply"+commentid).val("");
+                    });
+                }
+            }
     </script>
 {% endblock %}
 {% block body %}
 
-    <div class="col-md-8">
+    <div class="col-md-8" style="word-wrap:break-word;">
         <div class="panel panel-default">
             <div class="panel-body posts">
                 <div class="row">
@@ -101,7 +116,7 @@
                                     </div>
                                 {% endif %}
                             </div>
-                            <div class="post-date"><span class="fa fa-calendar"></span> {{post.created_on}} / <a href="/blog/user_profile/{{post.user_id}}">by {{post.user}}</a></div>
+                            <div class="post-date"><span class="fa fa-calendar"></span> {{post.created_on}} / <a href="/blog/user_profile/{{post.user_id}}">by {{post.user}}</a>  <a href="/blog/category/{{post.category}}">in {{post.category}} Category</a></div>
                             <div class="form-group">
                                 <div class="col-md-12">
                                     {%if post.thumb %}
@@ -156,24 +171,7 @@
                                         </div>
                                    <div class="panel-body list-group list-group-contacts scroll">
                                         <ul class="media-list">
-                                            <div class="Comments">
-                                                <li class="media" id="commenttext">
-                                                        <a class="pull-left" href="/blog/user_profile/{{post.user_id}}">
-                                                            {% if profile.profile_picture %}
-                                                                <img class="media-object img-text" src="/media/{{profile.profile_picture}}" style="width:70px; height:70px; " alt="{{user.username}}" width="64">
-                                                            {% else %}
-                                                                <img class="media-object img-text" src="/media/user/no-image.jpg" style="width:70px; height:70px; " alt="{{user.username}}" width="64">
-                                                            {% endif %}
-                                                        </a>
-                                                        <div class="media-body">
-                                                            <h4 class="media-heading">
-                                                                <a href="/blog/user_profile/{{post.user_id}}">{{user.first_name}} {{user.last_name}}</a>
-                                                            </h4>
-                                                            <p id="showcomment"></p>
-                                                            <p id="showdate"></p><br>
-                                                        </div>
-                                                    </li><br><br>
-                                                </li>
+                                            <div class="Comments" id="commenttext">
                                                     
                                                 {% for comments in view_comments %}
                                                     <li class="media">
@@ -195,8 +193,26 @@
                                                                         {% endif %}
                                                                 {% endifequal %}
                                                             </h4>
-                                                            <p>{{comments.comment}}</p>
+                                                            <p style="word-break:break-all;">{{comments.comment}}</p>
                                                             <p>{{comments.created_on}}</p><br>
+                                                            <div class="form-group">
+                                                                <div class="col-md-2 col-sm-2 col-xs-4">
+                                                                    {% if profile.profile_picture %}
+                                                                        <img alt="{{user.username}}" class="img UFIActorImage _54ru img pull-left" src="/media/{{profile.profile_picture}}" style="width:50px; height:50px;" width="64" >
+                                                                    {% else %}
+                                                                        <img alt="{{user.username}}" class="img UFIActorImage _54ru img pull-left" src="/media/user/no-image.jpg" style="width:50px; height:50px;" width="64" >
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="col-md-10 col-sm-6 col-xs-8">
+                                                                    <textarea class="form-control" rows="1" placeholder="Add Reply" value="{{reply}}" id="reply{{comments.id}}" name="reply" required></textarea>
+                                                                    
+                                                                </div>
+                                                                <div class="col-md-2 col-sm-4">
+                                                                    <button class="btn btn-info btn-xs" id="addreply" onClick="add({{comments.id}})"><span class="fa fa-reply">Reply</span></button>
+                                                                </div>
+                                                            </div><br><br><br>
+                                                            <div id="showreply{{comments.id}}">
+                                                            </div>
                                                             {% for reply in replies %}
                                                                 {% ifequal reply.comment comments %}
                                                                     <a class="pull-left " href="/blog/user_profile/{{post.user_id}}">
@@ -208,7 +224,7 @@
                                                                     </a>
                                                                     <div class="media-body">
                                                                         <h6 class="media-heading">
-                                                                            <a href="/blog/user_profile/{{reply.user_id}}">{{reply.user.first_name}}{{reply.user.last_name}}</a>
+                                                                            <a href="/blog/user_profile/{{reply.user_id}}">{{reply.user.first_name}} {{reply.user.last_name}}</a>
                                                                             {% ifequal reply.user user%}
                                                                                 <li class="xn-icon-button pull-right"><a href="/blog/delete_reply/{{post.id}}-{{reply.id}}"><span class="fa fa-remove"></a></span>
                                                                             {% else %}
@@ -217,30 +233,11 @@
                                                                                     {% endif %}
                                                                             {% endifequal %}
                                                                         </h6>
-                                                                        <p>{{reply.reply}}</p><br>
+                                                                        <p  style="word-break:break-all;">{{reply.reply}}<br>
+                                                                        {{reply.created_on}}</p><br>
                                                                     </div>
                                                                 {% endifequal %}
-                                                            {% endfor %}    
-                                                            <form enctype="multipart/form-data" id="user_form" action="/blog/add_reply/{{post.id}}-{{comments.id}}/" class="form-horizontal" method="post"  />
-                                                                {% csrf_token %}
-                                                                <div class="form-group">
-                                                                    <div class="col-md-2 col-sm-3 col-xs-4">
-                                                                        {% if profile.profile_picture %}
-                                                                            <img alt="{{user.username}}" class="img UFIActorImage _54ru img pull-left" src="/media/{{profile.profile_picture}}" style="width:50px; height:50px;" width="64" >
-                                                                        {% else %}
-                                                                            <img alt="{{user.username}}" class="img UFIActorImage _54ru img pull-left" src="/media/user/no-image.jpg" style="width:50px; height:50px;" width="64" >
-                                                                        {% endif %}
-                                                                        
-                                                                    </div>
-                                                                    <div class="col-md-10 col-sm-6 col-xs-8">
-                                                                        <textarea class="form-control" rows="1" id="comment" placeholder="Add Comment" value="{{comment}}" name="reply" required></textarea>
-                                                                        
-                                                                    </div>
-                                                                    <div class="col-md-6 col-sm-2">
-                                                                        <button class="btn btn-info btn-xs"><span class="fa fa-reply">Reply</span></button><br><br>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
+                                                            {% endfor %}
                                                         </div>
                                                     </li><br><br>
                                                 {% endfor %}

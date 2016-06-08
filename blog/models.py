@@ -60,8 +60,8 @@ class ReplyData(models.Model):
 	user=models.ForeignKey(User)
 	post_title=models.ForeignKey(Posts, on_delete=models.CASCADE,)
 	comment=models.ForeignKey(CommentData, on_delete=models.CASCADE,)
-	reply=models.TextField()
 	userprofile=models.ForeignKey(UserProfile, blank=True)
+	reply=models.TextField()
 	created_on=models.DateTimeField(auto_now_add=True)
 
 	def __unicode__(self):

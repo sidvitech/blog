@@ -17,8 +17,8 @@ urlpatterns=[
 	url(r'^star_post/', views.star_post, name="star_post"),
 	url(r'^unstar_post/', views.unstar_post, name="unstar_post"),
 	url(r'^post_comment/', views.post_comment, name="post_comment"),
-
-	url(r'^add_post/', views.add_post, name='add_post'),
+	url(r'^add_reply/', views.add_reply, name="add_reply"),
+	url(r'^add_post/', views.add_post, name="add_post"),
 	url(r'^search/', views.search, name='search'),
 	url(r'^category_list/$', views.category_list, name='category_list'),
 	url(r'^add_category/$', views.add_category, name='add_category'),

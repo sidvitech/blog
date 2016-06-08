@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response, render
 from django.contrib.auth import authenticate, login, logout
@@ -284,7 +284,7 @@ def view_post(request, post_id):
 	try:
 		view_comments=CommentData.objects.filter(post_title=post).order_by("-created_on")
 		context_dict['view_comments']=view_comments
-		replies=ReplyData.objects.filter(post_title=post)
+		replies=ReplyData.objects.filter(post_title=post).order_by("-created_on")
 		context_dict['replies']=replies
 	except:
 		pass
@@ -406,7 +406,6 @@ def post_comment(request):
 		profile=UserProfile()
 	post_id = None
 	comment_text=None
-	newcomment=None
 	if request.method == "GET":
 		comment_text = request.GET.get('comment')
 		post_id = request.GET.get('postid')
@@ -418,33 +417,38 @@ def post_comment(request):
 		newcomment.userprofile=profile
 		newcomment.comment=comment_text
 		newcomment.save()
-	return HttpResponse(newcomment)
+		return JsonResponse({"comment":comment_text, "newid":newcomment.id})
+	return HttpResponse(None)
 
 
 @login_required(login_url="/login/")
-def add_reply(request, post_id, comment_id):
+def add_reply(request):
 	username=request.user.username
 	user=User.objects.get(username=username)
 	try:
 		profile=UserProfile.objects.get(user_id=user.id)
 	except:
 		profile=UserProfile()
-		
-	comment=CommentData.objects.get(id=comment_id)
-	post=Posts.objects.get(id=post_id)
-	if request.method=="POST":
-		reply=request.POST.get("reply")
-		if reply:
-			add_reply=ReplyData()
-			add_reply.user=user
-			add_reply.post_title=post
-			add_reply.userprofile=profile
-			add_reply.comment=comment
-			add_reply.reply=reply
-			add_reply.save()
-			return HttpResponseRedirect(reverse('blog:view_post', kwargs={'post_id':post.id}))
-	return HttpResponseRedirect(reverse('blog:view_post', kwargs={'post_id':post.id}))
-		
+	post_id = None
+	comment_id=None
+	reply_text=None
+	if request.method == "GET":
+		reply_text = request.GET.get('reply')
+		post_id = request.GET.get('postid')
+		comment_id = request.GET.get('commentid')
+	if post_id and comment_id:
+		post = Posts.objects.get(id=int(post_id))
+		comment=CommentData.objects.get(id=int(comment_id))
+		newreply=ReplyData()
+		newreply.user=user
+		newreply.post_title=post
+		newreply.userprofile=profile
+		newreply.comment=comment
+		newreply.reply=reply_text
+		newreply.save()
+		return JsonResponse({"reply":reply_text, "newid":newreply.id})
+	return HttpResponse(None)
+	
 
 
 @login_required(login_url='/login/')
