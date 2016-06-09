@@ -1,5 +1,7 @@
-{% extends 'blog.html' %}
+{% extends 'base.html' %}
 {% load staticfiles %}
+{% block title %}Category List{% endblock %}
+
 {% block address %}
 <li><a href="/blog/category_list">Category List</a></li>
 {% endblock %}
@@ -26,7 +28,7 @@
               </div>
               {%if user.is_authenticated%}
                 <div class="links">
-                  <a href="/blog/add_category/"> Add New Category <span class="label label-default">{{ category.total_posts }}</span></a>
+                  <center><a href="/blog/add_category/"><span class="fa fa-plus"></span> Add New Category</a></center>
                 </div>
               {%endif%}
             </div>
@@ -36,6 +38,18 @@
     </div>
   </div>
 
+  <div class="col-md-3">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h3>Most Viewed</h3>
+            <div class="links small">
+                {% for top in top_viewed %}
+                    <a href="/blog/view_post/{{top.id}}"><li>{{top.title}}</li></a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 

@@ -1,5 +1,7 @@
 {% extends 'blog.html' %}
 {% load staticfiles %}
+{% block title %}{{category}}{% endblock %}
+
 {% block address %}
   <li><a href="/blog/category_list">Category List</a></li>
   <li><a href="/blog/category/{{category_name}}">{{ category_name }}</a></li>

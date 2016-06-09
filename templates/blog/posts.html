@@ -1,5 +1,7 @@
 {% extends 'blog.html' %}
 {% load staticfiles %}
+{% block title %}All Posts{% endblock %}
+
 {% block address %}
     <li><a href="/blog/">Posts</a></li>
     {% if page_no %}

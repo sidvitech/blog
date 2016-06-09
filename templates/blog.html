@@ -7,7 +7,7 @@
         <link href="{% static 'css/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
         <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
 
-        <title>Atlant - Responsive Bootstrap Admin Template</title>
+        <title>{% block title %}{% endblock %}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,12 +15,13 @@
         <link rel="shortcut icon" href="{% static 'favicon.ico' %}" />
         
         <link rel="stylesheet" type="text/css" id="theme" href="{% static 'css/theme-default.css' %}"/>
-        {% block head %}
-        {% endblock %}
         <style>
             {% block style %}
             {% endblock %} 
         </style>
+        {% block scripts %}
+        {% endblock %}
+        
     </head>
     <body>
         <div class="page-container page-navigation-top-fixed">
@@ -52,7 +53,15 @@
 
                             <div class="profile-data">
                                 {% if user.is_authenticated %}    
-                                    <a href="/blog/my_profile/"><div class="profile-data-name">{{user.first_name}} {{user.last_name}}</div></a>
+                                    <a href="/blog/my_profile/">
+                                        <div class="profile-data-name">
+                                            {% if user.first_name or user.last_name %}
+                                                {{user.first_name}} {{user.last_name}}
+                                            {% else %}
+                                                {{user.username}}
+                                            {% endif %}
+                                        </div>
+                                    </a>
                                     <div class="profile-data-title">{{profile.profession}} </div>
                                 {% else %}
                                     <div class="profile-data-name">User</div>
@@ -277,6 +286,7 @@
         <audio id="audio-alert" src="{% static 'audio/alert.mp3' %}" preload="auto"></audio>
         <audio id="audio-fail" src="{% static 'audio/fail.mp3'%}" preload="auto"></audio>
 
+        
         <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery.min.js'%}"></script>
         <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery-ui.min.js'%}"></script>
         <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap.min.js'%}"></script>
@@ -290,6 +300,7 @@
         <script type="text/javascript" src="{% static 'js/plugins.js'%}"></script>
         <script type="text/javascript" src="{% static 'js/actions.js'%}"></script>
         <script type="text/javascript" src="{% static 'js/demo_edit_profile.js'%}"></script>
+        
 
     </body>
 

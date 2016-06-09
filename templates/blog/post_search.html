@@ -1,6 +1,8 @@
 
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block title %}Blog Search{% endblock %}
+
 {% block address %}
 <li><a href="{% url 'blog:post_search' %}">Post Search</a></li>
 {% endblock %}

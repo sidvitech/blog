@@ -1,5 +1,6 @@
 {% extends 'blog.html' %}
 {% load staticfiles %}
+{% block title %}{{post}}{% endblock %}
 {% block address %}
     <li><a href="/blog/">Posts</a></li>
     <li><a href="/blog/view_post/{{post.id}}">{{post.title}}</a></li>
@@ -11,94 +12,109 @@
             }
         
 {% endblock %}
-{% block head %}
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            
-            {% if post_data.like == 1 %}
-                $("#like").hide()
-            {% else %}
-                $("#unlike").hide()
-            {% endif %}
+{% block scripts %}
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                
+                {% if post_data.like == 1 %}
+                    $("#like").hide()
+                {% else %}
+                    $("#unlike").hide()
+                {% endif %}
 
-            {% if post_data.star == 1 %}
-                $("#star").hide()
-            {% else %}
-                $("#unstar").hide()
-            {% endif %}
+                {% if post_data.star == 1 %}
+                    $("#star").hide()
+                {% else %}
+                    $("#unstar").hide()
+                {% endif %}
 
-            $('#unlike').click(function(){
-                var postid;
-                postid = $(this).attr("data-postid");
-                $.get('/blog/unlike_post/', {postid: postid}, function(data){
-                    $("#unlike").hide();
-                    $("#like").show();        
-                    $("#likep").text(data);
-                    
-                });
-            });
-
-            $('#like').click(function(){
-                var postid;
-                postid = $(this).attr("data-postid");
-                $.get('/blog/like_post/', {postid: postid}, function(data){
-                    $("#unlike").show();
-                    $("#unlikep").text(data);
-                    $("#like").hide();
-                });
-            });
-
-            $('#unstar').click(function(){
-                var postid;
-                postid = $(this).attr("data-postid");
-                $.get('/blog/unstar_post/', {postid: postid}, function(data){
-                    $("#unstar").hide();
-                    $("#star").show();        
-                    $("#starp").text(data);
-                    
-                });
-            });
-
-            $('#star').click(function(){
-                var postid;
-                postid = $(this).attr("data-postid");
-                $.get('/blog/star_post/', {postid: postid}, function(data){
-                    $("#star").hide();
-                    $("#unstar").show();        
-                    $("#unstarp").text(data);
-                    
-                });
-            });
-
-            $("#addcomment").click(function() {
-                var comment = $('#comment').val();
-                var postid= {{post.id}};
-                if(!comment | $.trim( $('#comment').val() ) == '' ){
-                    alert('Enter valid comment');
-                }
-                else{
-                    $.get('/blog/post_comment/', {comment:comment, postid: postid}, function(data){
-                        $("#commenttext").prepend('<li class="media"><a class="pull-left" href="/blog/user_profile/{{user.id}}">{% if profile.profile_picture %}<img class="media-object img-text" src="/media/{{profile.profile_picture}}" style="width:70px; height:70px; " alt="{{user.username}}" width="64">{% else %}<img class="media-object img-text" src="/media/user/no-image.jpg" style="width:70px; height:70px; " alt="{{user.username}}" width="64">{% endif %}</a><div class="media-body"><h4 class="media-heading"><a href="/blog/user_profile/{{user.id}}">{{user.first_name}} {{user.last_name}}</a><li class="xn-icon-button pull-right"><a href="/blog/delete_comment/{{post.id}}-'+data.newid+'" id="link"><span class="fa fa-remove"></a></span></h4><p style="word-break:break-all;">'+data.comment+'</p></div></li>')
-                        $("#comment").val("");
+                $('#unlike').click(function(){
+                    var postid;
+                    postid = $(this).attr("data-postid");
+                    $.get('/blog/unlike_post/', {postid: postid}, function(data){
+                        $("#unlike").hide();
+                        $("#like").show();        
+                        $("#likep").text(data);
+                        
                     });
-                }
+                });
+
+                $('#like').click(function(){
+                    var postid;
+                    postid = $(this).attr("data-postid");
+                    $.get('/blog/like_post/', {postid: postid}, function(data){
+                        $("#unlike").show();
+                        $("#unlikep").text(data);
+                        $("#like").hide();
+                    });
+                });
+
+                $('#unstar').click(function(){
+                    var postid;
+                    postid = $(this).attr("data-postid");
+                    $.get('/blog/unstar_post/', {postid: postid}, function(data){
+                        $("#unstar").hide();
+                        $("#star").show();        
+                        $("#starp").text(data);
+                        
+                    });
+                });
+
+                $('#star').click(function(){
+                    var postid;
+                    postid = $(this).attr("data-postid");
+                    $.get('/blog/star_post/', {postid: postid}, function(data){
+                        $("#star").hide();
+                        $("#unstar").show();        
+                        $("#unstarp").text(data);
+                        
+                    });
+                });
+
+                
+                $("#addcomment").click(function() {
+                    var comment = $('#comment').val();
+                    var postid= {{post.id}};
+                    if(!comment | $.trim( $('#comment').val() ) == '' ){
+                        alert('Enter valid comment');
+                    }
+                    else{
+                        $.get('/blog/post_comment/', {comment:comment, postid: postid}, function(data){
+                            $("#commenttext").prepend('<li class="media" id="comment'+data.newid+'"><a class="pull-left" href="/blog/user_profile/{{user.id}}">{% if profile.profile_picture %}<img class="media-object img-text" src="/media/{{profile.profile_picture}}" style="width:70px; height:70px; " alt="{{user.username}}" width="64">{% else %}<img class="media-object img-text" src="/media/user/no-image.jpg" style="width:70px; height:70px; " alt="{{user.username}}" width="64">{% endif %}</a><div class="media-body"><h4 class="media-heading"><a href="/blog/user_profile/{{user.id}}">{% if user.first_name or user.last_name %}{{user.first_name}} {{user.last_name}}{% else %} {{user.username}}{%endif%}</a><li class="xn-icon-button pull-right"><a onClick="deletecomment('+data.newid+')"><span class="fa fa-remove"></a></span></h4><p style="word-break:break-all;">'+data.comment+'</p><br><br><div class="form-group"><div class="col-md-2 col-sm-2 col-xs-4">{% if profile.profile_picture %}<img alt="{{user.username}}" class="img UFIActorImage _54ru img pull-left" src="/media/{{profile.profile_picture}}" style="width:50px; height:50px;" width="64" >{% else %}<img alt="{{user.username}}" class="img UFIActorImage _54ru img pull-left" src="/media/user/no-image.jpg" style="width:50px; height:50px;" width="64" >{% endif %}</div><div class="col-md-10 col-sm-6 col-xs-8"><textarea class="form-control" rows="1" placeholder="Add Reply" value="{{reply}}" id="reply'+data.newid+'" name="reply" required></textarea></div><div class="col-md-2 col-sm-4 col-xs-12"><button class="btn btn-info btn-xs" id="addreply" onClick="addreply('+data.newid+')"><span class="fa fa-reply">Reply</span></button></div></div><br><br><br><div id="showreply'+data.newid+'"></div></div></li>');
+                            $("#comment").val("");
+                        });
+                    }
+                });
+                
+
             });
-            
-        });
-        function add(commentid) {
-                var reply = $('#reply'+commentid).val();
-                var postid= {{post.id}};
-                if(!reply | $.trim( reply )== '' ){
-                    alert('Enter valid reply');
-                }else{
-                    $.get('/blog/add_reply/', {reply:reply, postid: postid, commentid:commentid }, function(data){
-                        $("#showreply"+commentid).prepend('<a class="pull-left " href="/blog/user_profile/{{user.id}}"><img class="media-object img-text" src="/media/{{profile.profile_picture}}" style="width:50px; height:50px; " alt="{{user.username}}" width="64"></a><div class="media-body"><h6 class="media-heading"><a href="/blog/user_profile/{{user.id}}">{{user.first_name}} {{user.last_name}}</a><li class="xn-icon-button pull-right"><a href="/blog/delete_reply/{{post.id}}-'+data.newid+'"><span class="fa fa-remove"></a></span></h6><p style="word-break:break-all;">'+data.reply+'"</p><br></div>')
+            function addreply(commentid) {
+                    var reply = $('#reply'+commentid).val();
+                    var postid= {{post.id}};
+                    if(!reply | $.trim( reply )== '' ){
+                        alert('Enter valid reply');
+                    }
+                    else{
+                        $.get('/blog/add_reply/', {reply:reply, postid: postid, commentid:commentid }, function(data){$("#showreply"+commentid).prepend('</br><div id="reply'+data.newid+'"><a class="pull-left " href="/blog/user_profile/{{post.user_id}}">{% if profile.profile_picture %}<img class="media-object img-text" src="/media/{{profile.profile_picture}}" style="width:50px; height:50px; " alt="{{user.username}}" width="64">{% else %}<img class="media-object img-text" src="/media/user/no-image.jpg" style="width:50px; height:50px; " alt="{{user.username}}" width="64">{% endif %}</a><div class="media-body"><h6 class="media-heading"><a href="/blog/user_profile/{{user.id}}">{% if user.first_name or user.last_name %}{{user.first_name}} {{user.last_name}}{% else %} {{user.username}}{%endif%}</a><li class="xn-icon-button pull-right"><a onClick="deletereply('+data.newid+')"><span class="fa fa-remove"></a></span></li></h6><p style="word-break:break-all;">'+data.reply+'</p><br></div></div>').fadeIn("slow");
                         $("#reply"+commentid).val("");
                     });
                 }
             }
-    </script>
+
+            function deletecomment(commentid){
+                    $.get('/blog/delete_comment/', {commentid: commentid}, function(data){
+                        $("#comment"+data).hide();
+                    });
+                }
+
+            function deletereply(replyid){
+                    $.get('/blog/delete_reply/', {replyid: replyid}, function(data){
+                        $("#reply"+data).hide();
+                    });
+                }
+
+        </script>
 {% endblock %}
 {% block body %}
 
@@ -174,7 +190,7 @@
                                             <div class="Comments" id="commenttext">
                                                     
                                                 {% for comments in view_comments %}
-                                                    <li class="media">
+                                                    <li class="media" id="comment{{comments.id}}">
                                                         <a class="pull-left " href="/blog/user_profile/{{comments.user_id}}">
                                                             {% if comments.userprofile.profile_picture %}
                                                                 <img class="media-object img-text" src="/media/{{comments.userprofile.profile_picture}}" style="width:70px; height:70px; " alt="{{comments.user.username}}" width="64">
@@ -184,12 +200,18 @@
                                                         </a>
                                                         <div class="media-body">
                                                             <h4 class="media-heading">
-                                                                <a href="/blog/user_profile/{{comments.user_id}}">{{comments.user.first_name}} {{comments.user.last_name}}</a>
+                                                                <a href="/blog/user_profile/{{comments.user_id}}">
+                                                                    {% if comments.user.first_name or comments.user.last_name %}
+                                                                        {{comments.user.first_name}} {{comments.user.last_name}}
+                                                                    {% else %}
+                                                                        {{comments.user.username}}
+                                                                    {% endif %}
+                                                                </a>
                                                                 {% ifequal comments.user user%}
-                                                                    <li class="xn-icon-button pull-right"><a href="/blog/delete_comment/{{post.id}}-{{comments.id}}"><span class="fa fa-remove"></a></span>
+                                                                    <li class="xn-icon-button pull-right"><a onClick="deletecomment({{comments.id}})"><span class="fa fa-remove"></a></span></li>
                                                                 {% else %}
                                                                     {% if auther %}
-                                                                        <li class="xn-icon-button pull-right"><a href="/blog/delete_comment/{{post.id}}-{{comments.id}}"><span class="fa fa-remove"></a></span>
+                                                                        <li class="xn-icon-button pull-right"><a onClick="deletecomment({{comments.id}})"><span class="fa fa-remove"></a></span></li>
                                                                         {% endif %}
                                                                 {% endifequal %}
                                                             </h4>
@@ -207,36 +229,44 @@
                                                                     <textarea class="form-control" rows="1" placeholder="Add Reply" value="{{reply}}" id="reply{{comments.id}}" name="reply" required></textarea>
                                                                     
                                                                 </div>
-                                                                <div class="col-md-2 col-sm-4">
-                                                                    <button class="btn btn-info btn-xs" id="addreply" onClick="add({{comments.id}})"><span class="fa fa-reply">Reply</span></button>
-                                                                </div>
-                                                            </div><br><br><br>
+                                                                <div class="col-md-2 col-sm-4 col-xs-12">
+                                                                    <button class="btn btn-info btn-xs" id="addreply" onClick="addreply({{comments.id}})"><span class="fa fa-reply">Reply</span></button>
+                                                                </div></br></br></br></br>
+                                                            </div>
                                                             <div id="showreply{{comments.id}}">
                                                             </div>
                                                             {% for reply in replies %}
-                                                                {% ifequal reply.comment comments %}
-                                                                    <a class="pull-left " href="/blog/user_profile/{{post.user_id}}">
-                                                                        {% if reply.userprofile.profile_picture %}
-                                                                            <img class="media-object img-text" src="/media/{{reply.userprofile.profile_picture}}" style="width:50px; height:50px; " alt="{{reply.user.username}}" width="64">
-                                                                        {% else %}
-                                                                            <img class="media-object img-text" src="/media/user/no-image.jpg" style="width:50px; height:50px; " alt="{{reply.user.username}}" width="64">
-                                                                        {% endif %}
-                                                                    </a>
-                                                                    <div class="media-body">
-                                                                        <h6 class="media-heading">
-                                                                            <a href="/blog/user_profile/{{reply.user_id}}">{{reply.user.first_name}} {{reply.user.last_name}}</a>
-                                                                            {% ifequal reply.user user%}
-                                                                                <li class="xn-icon-button pull-right"><a href="/blog/delete_reply/{{post.id}}-{{reply.id}}"><span class="fa fa-remove"></a></span>
+                                                                <div id="reply{{reply.id}}">
+                                                                    {% ifequal reply.comment comments %}
+                                                                        <a class="pull-left " href="/blog/user_profile/{{post.user_id}}">
+                                                                            {% if reply.userprofile.profile_picture %}
+                                                                                <img class="media-object img-text" src="/media/{{reply.userprofile.profile_picture}}" style="width:50px; height:50px; " alt="{{reply.user.username}}" width="64">
                                                                             {% else %}
-                                                                                {% if auther %}
-                                                                                    <li class="xn-icon-button pull-right"><a href="/blog/delete_reply/{{post.id}}-{{reply.id}}"><span class="fa fa-remove"></a></span>
+                                                                                <img class="media-object img-text" src="/media/user/no-image.jpg" style="width:50px; height:50px; " alt="{{reply.user.username}}" width="64">
+                                                                            {% endif %}
+                                                                        </a>
+                                                                        <div class="media-body">
+                                                                            <h6 class="media-heading">
+                                                                                <a href="/blog/user_profile/{{reply.user_id}}">
+                                                                                    {% if reply.user.first_name or reply.user.last_name %}
+                                                                                        {{reply.user.first_name}} {{reply.user.last_name}}
+                                                                                    {% else %}
+                                                                                        {{reply.user.username}}
                                                                                     {% endif %}
-                                                                            {% endifequal %}
-                                                                        </h6>
-                                                                        <p  style="word-break:break-all;">{{reply.reply}}<br>
-                                                                        {{reply.created_on}}</p><br>
-                                                                    </div>
-                                                                {% endifequal %}
+                                                                                </a>
+                                                                                {% ifequal reply.user user%}
+                                                                                    <li class="xn-icon-button pull-right" id="reply{{reply.id}}"><a onClick="deletereply({{reply.id}})"><span class="fa fa-remove"></a></span>
+                                                                                {% else %}
+                                                                                    {% if auther %}
+                                                                                        <li class="xn-icon-button pull-right" id="reply{{reply.id}}"><a onClick="deletereply({{reply.id}})"><span class="fa fa-remove"></a></span>
+                                                                                        {% endif %}
+                                                                                {% endifequal %}
+                                                                            </h6>
+                                                                            <p  style="word-break:break-all;">{{reply.reply}}<br>
+                                                                            {{reply.created_on}}</p><br>
+                                                                        </div>
+                                                                    {% endifequal %}
+                                                                </div>
                                                             {% endfor %}
                                                         </div>
                                                     </li><br><br>
@@ -271,9 +301,6 @@
         </div>
     </div>
 
-
-
-    
 
 {% endblock %}
 

@@ -27,9 +27,9 @@ urlpatterns=[
 	url(r'^add_reply/(?P<post_id>[\w\-]+)-(?P<comment_id>[\w\-]+)/', views.add_reply, name='add_reply'),
 	url(r'^edit_post/(?P<post_id>[\w\-]+)/', views.edit_post, name='edit_post'),
 
-	url(r'^delete_comment/(?P<post_id>[\w\-]+)-(?P<comment_id>[\w\-]+)/$', views.delete_comment, name='delete_comment'),
 	url(r'^delete_post/(?P<post_id>[\w\-]+)/', views.delete_post, name='delete_post'),
-	url(r'^delete_reply/(?P<post_id>[\w\-]+)-(?P<reply_id>[\w\-]+)/$', views.delete_reply, name='delete_reply'),
+	url(r'^delete_comment/$', views.delete_comment, name='delete_comment'),
+	url(r'^delete_reply/$', views.delete_reply, name='delete_reply'),
 	
 
 

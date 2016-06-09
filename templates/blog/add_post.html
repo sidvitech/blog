@@ -38,10 +38,17 @@
                                             <div class="col-md-12">
                                                 <label for="sel1">Select Category:</label>
                                                 <select class="form-control" name="category_name" required>
-                                                    <option value=""> --Select Category -- </option>
-                                                        {% for category in categories %}
+                                                    {% if category_name %}
+                                                        <option value="{{category_name}}">{{category_name}}</option>
+                                                    {% else %}
+                                                        <option value=""> --Select Category -- </option>
+                                                    {% endif %}
+                                                    {% for category in categories %}
+                                                        {% if category_name %}
+                                                        {% else %}
                                                             <option value="{{category.name}}">{{category.name}}</option>
-                                                        {% endfor %}
+                                                        {% endif %}
+                                                    {% endfor %}
                                                 </select>
                                                 <br>
                                             </div>

@@ -240,17 +240,25 @@ def edit_profile(request):
 			profile.birthdate=birthdate
 		if firstname:
 			user.first_name=firstname
+		else:
+			user.first_name=''
 		if lastname:
 			user.last_name=lastname
+		else:
+			user.last_name=''
 		if profession:
 			profile.profession=profession
+		else:
+			profile.profession=''
 		if lives_in:
 			profile.lives_in=lives_in
+		else:
+			profile.lives_in=''
 
 		user.save()
 		profile.save()
 
-		return HttpResponseRedirect('.')
+		return HttpResponseRedirect('/blog/my_profile')
 
 	return render(request,'blog/edit_profile.html', {'user':user, 'profile':profile})
 
@@ -448,7 +456,6 @@ def add_reply(request):
 		newreply.save()
 		return JsonResponse({"reply":reply_text, "newid":newreply.id})
 	return HttpResponse(None)
-	
 
 
 @login_required(login_url='/login/')
@@ -600,13 +607,14 @@ def add_post(request):
 			except:
 				pass			
 			post.save()
-			return HttpResponseRedirect('/blog/')
+			return HttpResponseRedirect('/blog/my_posts/')
 		else:
 			messages.error(request, "Details field is empty. ")
 			context_dict['title']=title
 			context_dict['post']=post
 			context_dict['user']=user
 			context_dict['profile']=profile
+			context_dict['category_name']=category_name
 			return render(request,'blog/add_post.html', context_dict)
 	context_dict['post']=post
 	return render(request,'blog/add_post.html', context_dict)
@@ -676,17 +684,6 @@ def add_category(request):
 			context_dict['name']=name
 			return render(request,'blog/add_category.html', context_dict)
 	return render(request,'blog/add_category.html',context_dict)
-
-
-@login_required(login_url='/login/')
-def delete_comment(request, post_id, comment_id):
-	username=request.user.username
-	user=User.objects.get(username=username)
-	context_dict['user']=user
-	post=Posts.objects.get(id=post_id)
-	delete_comment=CommentData.objects.get(id=comment_id)
-	delete_comment.delete()
-	return HttpResponseRedirect(reverse('blog:view_post', kwargs={'post_id':post.id}))
 	
 
 @login_required(login_url='/login/')
@@ -704,14 +701,25 @@ def delete_post(request, post_id):
 	return HttpResponseRedirect("/blog/my_posts/?post_deleted")
 
 
-@login_required(login_url='/login/')
-def delete_reply(request, post_id, reply_id):
-	username=request.user.username
-	user=User.objects.get(username=username)
-	context_dict['user']=user
-	post=Posts.objects.get(id=post_id)
-	delete_reply=ReplyData.objects.get(id=reply_id)
-	delete_reply.delete()
-	return HttpResponseRedirect(reverse('blog:view_post', kwargs={'post_id':post.id}))
+def delete_comment(request):
+	comment_id=None
+	if request.method == "GET":
+		comment_id = request.GET.get('commentid')
+	if comment_id:
+		delete_comment=CommentData.objects.get(id=comment_id)
+		delete_comment.delete()
+		return HttpResponse(comment_id)
+	return HttpResponse(None)
+
+
+def delete_reply(request):
+	reply_id=None
+	if request.method=="GET":
+		reply_id=request.GET.get('replyid')
+	if reply_id:
+		delete_reply=ReplyData.objects.get(id=reply_id)
+		delete_reply.delete()
+		return HttpResponse(reply_id)
+	return HttpResponse(None)
 	
 

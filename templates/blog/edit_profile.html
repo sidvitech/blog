@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block title %}Edit Profile{% endblock %}
+
 {% block address %}
 <li><a href="/blog/edit_profile/">Edit Profile</a></li>
 {% endblock %}
@@ -79,7 +81,7 @@
                                 <div class="col-md-9 col-xs-7">
                                     <div class="input-group">
                                         <span class="input-group-addon add-on"><span class="fa fa-calendar"></span></span>
-                                        <input type="text" name="birthdate" class="form-control datepicker" value="{{profile.birthdate}}" required/>
+                                        <input type="text" name="birthdate" class="form-control datepicker" placeholder="{{profile.birthdate}}"/>
                                     </div>
                                 </div>
                             </div>

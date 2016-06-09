@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block title %}{{user.first_name}}'s Profile{% endblock %}
+
 {% block address %}
 <li><a href="/blog/view_profile/">View Profile</a></li>
 {% endblock %}
@@ -37,13 +39,15 @@
 
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <h3><span class="fa fa-pencil"></span> Profile</h3><a href="/blog/edit_profile/">edit</a>
+                            <h3><span class="fa fa-list-alt"></span> Profile</h3><a href="/blog/edit_profile/">edit</a>
                         </div>
                         <div class="panel-body form-group-separated">
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-5 control-label">Full Name</label>
-                                <label class="col-md-9 col-xs-7 control-label">{{user.first_name}} {{user.last_name}}</label>
-                            </div>
+                            {% if user.first_name or user.last_name %}
+                                <div class="form-group">
+                                    <label class="col-md-3 col-xs-5 control-label">Full Name</label>
+                                    <label class="col-md-9 col-xs-7 control-label">{{user.first_name}} {{user.last_name}}</label>
+                                </div>
+                            {% endif %}
                             <div class="form-group">
                                 <label class="col-md-3 col-xs-5 control-label">Birthdate</label>
                                 <label class="col-md-9 col-xs-7 control-label">{{profile.birthdate}}</label>
