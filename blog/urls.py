@@ -19,12 +19,13 @@ urlpatterns=[
 	url(r'^post_comment/', views.post_comment, name="post_comment"),
 	url(r'^add_reply/', views.add_reply, name="add_reply"),
 	url(r'^add_post/', views.add_post, name="add_post"),
+	url(r'^edit_comment/', views.edit_comment, name="edit_comment"),
+	
 	url(r'^search/', views.search, name='search'),
 	url(r'^category_list/$', views.category_list, name='category_list'),
 	url(r'^add_category/$', views.add_category, name='add_category'),
 	url(r'^category/(?P<category_name>[\w\-]+)/$', views.category, name='category'),
 	url(r'^user_profile/(?P<u_id>[\w\-]+)/$', views.user_profile, name='user_profile'),
-	url(r'^add_reply/(?P<post_id>[\w\-]+)-(?P<comment_id>[\w\-]+)/', views.add_reply, name='add_reply'),
 	url(r'^edit_post/(?P<post_id>[\w\-]+)/', views.edit_post, name='edit_post'),
 
 	url(r'^delete_post/(?P<post_id>[\w\-]+)/', views.delete_post, name='delete_post'),

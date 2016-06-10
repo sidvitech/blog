@@ -15,7 +15,7 @@ from django.core.urlresolvers import reverse
 context_dict={}
 top_viewed=Posts.objects.order_by(Value('views').desc())[:6]
 context_dict['top_viewed']=top_viewed
-categories=Category.objects.all()[:6]
+categories=Category.objects.all().order_by("-total_posts")[:5]
 context_dict['categories']=categories
 
 
@@ -33,13 +33,11 @@ def blog(request):
 	context_dict['posts_list']=posts_list
 	context_dict['user']=user
 	context_dict['profile']=profile
-	categories=Category.objects.all()[:6]
 	cat=Category.objects.all()
 	for category in cat:
 		count=Posts.objects.filter(category=category).count()
 		category.total_posts=count
 		category.save()
-	context_dict['categories']=categories
 	next=2
 	previous=0
 	for post in posts_list:
@@ -430,6 +428,28 @@ def post_comment(request):
 
 
 @login_required(login_url="/login/")
+def edit_comment(request):
+	print 1
+	comment_id=None
+	new_comment=None
+	if request.method=="GET":
+		new_comment=request.GET.get("newcomment")
+		comment_id=request.GET.get("commentid")
+	print 2
+	if comment_id and new_comment:
+		print 3
+		editcomment=CommentData.objects.get(id=comment_id)
+		print 4
+		editcomment.comment=new_comment
+		print 5
+		editcomment.save()
+		print 6
+		return JsonResponse({"comment":editcomment.comment, "newid":comment_id})
+	print 7
+	return HttpResponse(None)
+
+
+@login_required(login_url="/login/")
 def add_reply(request):
 	username=request.user.username
 	user=User.objects.get(username=username)
@@ -559,6 +579,8 @@ def category_list(request):
 		profile=UserProfile.objects.get(user_id=user.id)
 	except:
 		profile=UserProfile()
+	categories=Category.objects.all().order_by("name")
+	context_dict['categories']=categories
 	context_dict['user']=user
 	context_dict['profile']=profile
 	return render(request, 'blog/category_list.html', context_dict)

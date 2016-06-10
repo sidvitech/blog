@@ -3,7 +3,7 @@
 {% block title %}{{post}}{% endblock %}
 {% block address %}
     <li><a href="/blog/">Posts</a></li>
-    <li><a href="/blog/view_post/{{post.id}}">{{post.title}}</a></li>
+    <li><a href="/blog/view_post/{{post.id}}" title="{{post.title}}">{{post.title | truncatechars:"45"}}</a></li>
 {% endblock %}
 
 {% block style %}
@@ -16,7 +16,7 @@
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
         <script type="text/javascript">
             $(document).ready(function(){
-                
+                $("edit_comment_block").hide()
                 {% if post_data.like == 1 %}
                     $("#like").hide()
                 {% else %}
@@ -81,25 +81,65 @@
                     }
                     else{
                         $.get('/blog/post_comment/', {comment:comment, postid: postid}, function(data){
-                            $("#commenttext").prepend('<li class="media" id="comment'+data.newid+'"><a class="pull-left" href="/blog/user_profile/{{user.id}}">{% if profile.profile_picture %}<img class="media-object img-text" src="/media/{{profile.profile_picture}}" style="width:70px; height:70px; " alt="{{user.username}}" width="64">{% else %}<img class="media-object img-text" src="/media/user/no-image.jpg" style="width:70px; height:70px; " alt="{{user.username}}" width="64">{% endif %}</a><div class="media-body"><h4 class="media-heading"><a href="/blog/user_profile/{{user.id}}">{% if user.first_name or user.last_name %}{{user.first_name}} {{user.last_name}}{% else %} {{user.username}}{%endif%}</a><li class="xn-icon-button pull-right"><a onClick="deletecomment('+data.newid+')"><span class="fa fa-remove"></a></span></h4><p style="word-break:break-all;">'+data.comment+'</p><br><br><div class="form-group"><div class="col-md-2 col-sm-2 col-xs-4">{% if profile.profile_picture %}<img alt="{{user.username}}" class="img UFIActorImage _54ru img pull-left" src="/media/{{profile.profile_picture}}" style="width:50px; height:50px;" width="64" >{% else %}<img alt="{{user.username}}" class="img UFIActorImage _54ru img pull-left" src="/media/user/no-image.jpg" style="width:50px; height:50px;" width="64" >{% endif %}</div><div class="col-md-10 col-sm-6 col-xs-8"><textarea class="form-control" rows="1" placeholder="Add Reply" value="{{reply}}" id="reply'+data.newid+'" name="reply" required></textarea></div><div class="col-md-2 col-sm-4 col-xs-12"><button class="btn btn-info btn-xs" id="addreply" onClick="addreply('+data.newid+')"><span class="fa fa-reply">Reply</span></button></div></div><br><br><br><div id="showreply'+data.newid+'"></div></div></li>');
+                            $("#commenttext").prepend('<li class="media" id="comment'+data.newid+'"><a class="pull-left" href="/blog/user_profile/{{user.id}}">{% if profile.profile_picture %}<img class="media-object img-text" src="/media/{{profile.profile_picture}}" style="width:70px; height:70px; " alt="{{user.username}}" width="64">{% else %}<img class="media-object img-text" src="/media/user/no-image.jpg" style="width:70px; height:70px; " alt="{{user.username}}" width="64">{% endif %}</a><div class="media-body"><h4 class="media-heading"><a href="/blog/user_profile/{{user.id}}">{% if user.first_name or user.last_name %}{{user.first_name}} {{user.last_name}}{% else %} {{user.username}}{%endif%}</a> <a class="show-comments" onClick="editcommentbutton('+data.newid+')" style="font-size:12px; display:inline;">(Edit)</a><li class="xn-icon-button pull-right"><a onClick="deletecomment('+data.newid+')" title="Remove Comment"><span class="fa fa-remove"></a></span></h4><p style="word-break:break-all;">'+data.comment+'</p><br><br><div class="form-group"><div class="col-md-2 col-sm-2 col-xs-4">{% if profile.profile_picture %}<img alt="{{user.username}}" class="img UFIActorImage _54ru img pull-left" src="/media/{{profile.profile_picture}}" style="width:50px; height:50px;" width="64" >{% else %}<img alt="{{user.username}}" class="img UFIActorImage _54ru img pull-left" src="/media/user/no-image.jpg" style="width:50px; height:50px;" width="64" >{% endif %}</div><div class="col-md-10 col-sm-6 col-xs-8"><textarea class="form-control" rows="1" placeholder="Add Reply" value="{{reply}}" id="reply'+data.newid+'" name="reply" required></textarea></div><div class="col-md-2 col-sm-4 col-xs-12"><button class="btn btn-info btn-xs" id="addreply" onClick="addreply('+data.newid+')"><span class="fa fa-reply">Reply</span></button></div></div><br><br><br><div id="showreply'+data.newid+'"></div></div></li>');
                             $("#comment").val("");
                         });
                     }
                 });
                 
-
-            });
-            function addreply(commentid) {
-                    var reply = $('#reply'+commentid).val();
-                    var postid= {{post.id}};
-                    if(!reply | $.trim( reply )== '' ){
-                        alert('Enter valid reply');
+                $(".editcomment").click(function() {
+                    var commentid=$(this).attr("data-commentid");
+                    var newcomment = $('#editedcomment'+commentid).val();
+                    if(!newcomment | $.trim( $('#editedcomment'+commentid).val() ) == '' ){
+                        alert('Enter valid comment');
                     }
                     else{
-                        $.get('/blog/add_reply/', {reply:reply, postid: postid, commentid:commentid }, function(data){$("#showreply"+commentid).prepend('</br><div id="reply'+data.newid+'"><a class="pull-left " href="/blog/user_profile/{{post.user_id}}">{% if profile.profile_picture %}<img class="media-object img-text" src="/media/{{profile.profile_picture}}" style="width:50px; height:50px; " alt="{{user.username}}" width="64">{% else %}<img class="media-object img-text" src="/media/user/no-image.jpg" style="width:50px; height:50px; " alt="{{user.username}}" width="64">{% endif %}</a><div class="media-body"><h6 class="media-heading"><a href="/blog/user_profile/{{user.id}}">{% if user.first_name or user.last_name %}{{user.first_name}} {{user.last_name}}{% else %} {{user.username}}{%endif%}</a><li class="xn-icon-button pull-right"><a onClick="deletereply('+data.newid+')"><span class="fa fa-remove"></a></span></li></h6><p style="word-break:break-all;">'+data.reply+'</p><br></div></div>').fadeIn("slow");
+                        $.get('/blog/edit_comment/', {newcomment:newcomment, commentid:commentid}, function(data){
+                            $("#comment_data"+data.newid).text(data.comment);
+                            $("#comment_created_on"+data.newid).text(data.created_on);
+                              
+                        });
+                        $("#comment_data"+commentid).show();
+                        $("#comment_created_on"+commentid).show();
+                        $("#editcommentblock"+commentid).hide();
+                    }
+                });
+
+                $(".canceleditcomment").click(function() {
+                    commentid = $(this).attr("data-commentid");
+                    $("#comment_data"+commentid).show();
+                    $("#comment_created_on"+commentid).show();
+                    $("#editcommentblock"+commentid).hide();
+                    $("#edit_comment"+commentid).show();
+                    $("#delcomment"+commentid).show();
+                });
+            });
+            function addreply(commentid) {
+                var reply = $('#reply'+commentid).val();
+                var postid= {{post.id}};
+                if(!reply | $.trim( reply )== '' ){
+                    alert('Enter valid reply');
+                }
+                else{
+                    $.get('/blog/add_reply/', {reply:reply, postid: postid, commentid:commentid }, function(data){$("#showreply"+commentid).prepend('</br><div id="reply'+data.newid+'"><a class="pull-left " href="/blog/user_profile/{{post.user_id}}">{% if profile.profile_picture %}<img class="media-object img-text" src="/media/{{profile.profile_picture}}" style="width:50px; height:50px; " alt="{{user.username}}" width="64">{% else %}<img class="media-object img-text" src="/media/user/no-image.jpg" style="width:50px; height:50px; " alt="{{user.username}}" width="64">{% endif %}</a><div class="media-body"><h6 class="media-heading"><a href="/blog/user_profile/{{user.id}}">{% if user.first_name or user.last_name %}{{user.first_name}} {{user.last_name}}{% else %} {{user.username}}{%endif%}</a> <a class="show-comments" onClick="editreply('+data.newid+')" style="font-size:10px; display:inline;">(Edit)</a><li class="xn-icon-button pull-right"><a onClick="deletereply('+data.newid+')" title="Remove Reply"><span class="fa fa-remove"></a></span></li></h6><p style="word-break:break-all;">'+data.reply+'</p><br></div></div>').fadeIn("slow");
                         $("#reply"+commentid).val("");
                     });
                 }
+            }
+
+            function editcommentbutton(commentid) {
+                $("#comment_data"+commentid).hide();
+                $("#comment_created_on"+commentid).hide();
+                $("#editcommentblock"+commentid).show();
+                $("#edit_comment"+commentid).hide();
+                $("#delcomment"+commentid).hide();
+
+            }
+
+            function editreplybutton(commentid) {
+                $.get('/blog/edit_comment/', {commentid:commentid }, function(data){
+
+                });
             }
 
             function deletecomment(commentid){
@@ -125,10 +165,10 @@
                     <div class="col-md-12" style="word-wrap:break-word;">
                         <div class="post-item">  
                             <div class="post-title">
-                                {{ post.title }} <a href="/blog/edit_post/{{post.id}}"  class="mb-control" data-box="#mb-edit" title="Edit Post"><span class="fa fa-pencil"></a></span>
+                                {{ post.title }} <a href="/blog/edit_post/{{post.id}}"  class="mb-control" data-box="#mb-edit" title="Edit Post"><span class="fa fa-pencil"></span></a>
                                 {% if auther %}
                                     <div class="xn-icon-button pull-right">
-                                        <a href="/blog/delete_post/{{post.id}}"  class="mb-control" data-box="#mb-delete" title="Delete Post"><span class="fa fa-remove"></a></span>
+                                        <a href="/blog/delete_post/{{post.id}}"  class="mb-control" data-box="#mb-delete" title="Delete Post"><span class="fa fa-remove"></span></a>
                                     </div>
                                 {% endif %}
                             </div>
@@ -165,7 +205,7 @@
                                     
                                     <button id ="like" type="button" class="btn" data-postid="{{post.id}}" title="Like"><span class="fa fa-heart"></span><p id="likep" style="display:inline;">{{post.likes}}</p></button>
                                     
-                                     - <b><span class="fa fa-eye"></span> {{post.views}}</b> - 
+                                     - <b title="Post Views"><span class="fa fa-eye"></span> {{post.views}}</b> - 
                                     
                                     <button type="button" class="btn btn-warning" data-postid="{{post.id}}" id="unstar" title="Read Later"><span class="fa fa-star-o "></span><p id="unstarp" style="display:inline;">{{post.stars}}</p></button>
                                     
@@ -175,17 +215,17 @@
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <h3>Comments:</h3>
-                                        <div class="form-group">
-                                            <div class="col-md-12">
-                                                <textarea class="form-control" rows="3" id="comment" placeholder="Add Comment" name="comment"></textarea>
-                                            </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <textarea class="form-control" rows="3" id="comment" placeholder="Add Comment" name="comment"></textarea>
                                         </div>
-                                        <div class="form-group push-up-30">
-                                            <div class="col-md-6">
-                                                <button class="btn btn-info"  id="addcomment">Post Comment</button><br><br>
-                                            </div>
+                                    </div>
+                                    <div class="form-group push-up-30">
+                                        <div class="col-md-6">
+                                            <button class="btn btn-info"  id="addcomment">Post Comment</button><br><br>
                                         </div>
-                                   <div class="panel-body list-group list-group-contacts scroll">
+                                    </div>
+                                    <div class="panel-body list-group list-group-contacts scroll">
                                         <ul class="media-list">
                                             <div class="Comments" id="commenttext">
                                                     
@@ -208,16 +248,33 @@
                                                                     {% endif %}
                                                                 </a>
                                                                 {% ifequal comments.user user%}
-                                                                    <li class="xn-icon-button pull-right"><a onClick="deletecomment({{comments.id}})"><span class="fa fa-remove"></a></span></li>
+                                                                    <a class="show-comments" onClick="editcommentbutton({{comments.id}})" style="font-size:12px; display:inline;" id="edit_comment{{comments.id}}">(Edit)</a>
+                                                                    <li class="xn-icon-button pull-right" id="delcomment{{comments.id}}">
+                                                                        <a onClick="deletecomment({{comments.id}})"><span class="fa fa-remove" title="Remove Comment"></span></a>
+                                                                    </li>
                                                                 {% else %}
                                                                     {% if auther %}
-                                                                        <li class="xn-icon-button pull-right"><a onClick="deletecomment({{comments.id}})"><span class="fa fa-remove"></a></span></li>
+                                                                        <li class="xn-icon-button pull-right"><a onClick="deletecomment({{comments.id}})"><span class="fa fa-remove" title="Remove Comment"></a></span></li>
                                                                         {% endif %}
                                                                 {% endifequal %}
                                                             </h4>
-                                                            <p style="word-break:break-all;">{{comments.comment}}</p>
-                                                            <p>{{comments.created_on}}</p><br>
-                                                            <div class="form-group">
+                                                            <p style="word-break:break-all;" id="comment_data{{comments.id}}">{{comments.comment}}</p>
+                                                            <p id="comment_created_on{{comments.id}}" >{{comments.created_on}}</p><br>
+                                                            <div id="editcommentblock{{comments.id}}" style="display:none;">
+                                                                    <div class="col-md-12">
+                                                                        <textarea class="form-control" rows="3" id="editedcomment{{comments.id}}"  name="comment">{{comments.comment}}</textarea>
+                                                                    </div>
+                                                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                                                        <br><button class="editcomment btn btn-info" data-commentid="{{comments.id}}">Edit Comment</button>
+                                                                    </div>
+                                                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                                                        <br><button class="canceleditcomment btn btn-info" data-commentid="{{comments.id}}">Cancel</button><br><br><br>
+                                                                    </div>
+                                                                        
+                                                                
+                                                            </div>
+                                                            
+                                                            <div class="form-group" id="replyblock">
                                                                 <div class="col-md-2 col-sm-2 col-xs-4">
                                                                     {% if profile.profile_picture %}
                                                                         <img alt="{{user.username}}" class="img UFIActorImage _54ru img pull-left" src="/media/{{profile.profile_picture}}" style="width:50px; height:50px;" width="64" >
@@ -227,13 +284,13 @@
                                                                 </div>
                                                                 <div class="col-md-10 col-sm-6 col-xs-8">
                                                                     <textarea class="form-control" rows="1" placeholder="Add Reply" value="{{reply}}" id="reply{{comments.id}}" name="reply" required></textarea>
-                                                                    
                                                                 </div>
-                                                                <div class="col-md-2 col-sm-4 col-xs-12">
+                                                                <div class="col-md-10 col-sm-10 col-xs-12">
+                                                                    <br>
                                                                     <button class="btn btn-info btn-xs" id="addreply" onClick="addreply({{comments.id}})"><span class="fa fa-reply">Reply</span></button>
-                                                                </div></br></br></br></br>
-                                                            </div>
-                                                            <div id="showreply{{comments.id}}">
+                                                                </div>
+                                                            </div></br></br>
+                                                            <br><br><div id="showreply{{comments.id}}">
                                                             </div>
                                                             {% for reply in replies %}
                                                                 <div id="reply{{reply.id}}">
@@ -255,15 +312,20 @@
                                                                                     {% endif %}
                                                                                 </a>
                                                                                 {% ifequal reply.user user%}
-                                                                                    <li class="xn-icon-button pull-right" id="reply{{reply.id}}"><a onClick="deletereply({{reply.id}})"><span class="fa fa-remove"></a></span>
+                                                                                    <a onClick="editreply({{reply.id}})" style="font-size:10px; display:inline;"> (Edit)</a> 
+                                                                                    <li class="xn-icon-button pull-right" id="reply{{reply.id}}">
+                                                                                        <a onClick="deletereply({{reply.id}})"><span class="fa fa-remove" title="Remove Reply"></span></a>
+                                                                                    </li>
                                                                                 {% else %}
                                                                                     {% if auther %}
-                                                                                        <li class="xn-icon-button pull-right" id="reply{{reply.id}}"><a onClick="deletereply({{reply.id}})"><span class="fa fa-remove"></a></span>
+                                                                                        <li class="xn-icon-button pull-right" id="reply{{reply.id}}">
+                                                                                            <a onClick="deletereply({{reply.id}})" title="Remove Reply"><span class="fa fa-remove"></span></a>
+                                                                                        </li>
                                                                                         {% endif %}
                                                                                 {% endifequal %}
                                                                             </h6>
-                                                                            <p  style="word-break:break-all;">{{reply.reply}}<br>
-                                                                            {{reply.created_on}}</p><br>
+                                                                            <p  style="word-break:break-all;">{{reply.reply}}</p>
+                                                                            <p>{{reply.created_on}}</p><br>
                                                                         </div>
                                                                     {% endifequal %}
                                                                 </div>
